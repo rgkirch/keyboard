@@ -39,14 +39,13 @@ void loop()
         for(char j = 0; j < sizeof(inputs) / sizeof(char); j++)
         {
             char state = digitalRead(inputs[j]);
-            char offset = i*(sizeof(outputs) / sizeof(char))+j;
-            if(state != matrix[offset]) // if there is a change
+            if(state != matrix[i*j]) // if there is a change
             {
                 if(state)
                 {
-                    matrix[offset] = 1;
+                    matrix[i*j] = 1;
                 } else {
-                    matrix[offset] = 0;
+                    matrix[i*j] = 0;
                 }
                 Serial.println((i+1)*(i+1)*(j+1));
             }

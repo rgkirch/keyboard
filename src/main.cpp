@@ -41,16 +41,17 @@ void loop()
 //    Mouse.move(-4, 0);
 //    delay(25);
 //    Serial.println("loop");
+    delay(200);
+    for (auto c :matrix) {
+        Serial.print(c);
+        Serial.print(" ");
+    }
+    Serial.println();
     for(int i = 0; i < sizeof(outputs) / sizeof(char); i++)
     {
         digitalWrite(outputs[i], HIGH);
         for(int j = 0; j < sizeof(inputs) / sizeof(char); j++)
         {
-            for (auto c :matrix) {
-                Serial.print(c);
-                Serial.print(" ");
-            }
-            Serial.println();
             bool state = digitalRead(inputs[j]);
 //            Serial.print("state ");
 //            Serial.println(state);
@@ -64,6 +65,7 @@ void loop()
                     matrix[location] = 0;
                 }
                 Serial.print(i);
+                Serial.print(" ");
                 Serial.println(j);
             }
         }

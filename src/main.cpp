@@ -42,7 +42,7 @@ void loop()
 //    delay(25);
 //    Serial.println("loop");
     delay(200);
-    for (auto c :matrix) {
+    for (auto c : matrix) {
         Serial.print(c);
         Serial.print(" ");
     }
@@ -55,7 +55,7 @@ void loop()
             bool state = digitalRead(inputs[j]);
 //            Serial.print("state ");
 //            Serial.println(state);
-            int location = (sizeof(outputs) / sizeof(char)) * i + j;
+            int location = (sizeof(outputs) / sizeof(char)) * j + i;
             if(state != matrix[location]) // if there is a change
             {
                 if(state)

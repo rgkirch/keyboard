@@ -2,10 +2,12 @@
 
 char inputs[] = {6,  7,  8,  9};
 char outputs[] = {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
-int keymap[] = {KEY_TAB, '\'', ',', '.', 'p', 'y', 'f', 'g', 'c', 'r', 'l', KEY_SLASH,
-KEY_ESC, 'a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', '-',
-KEY_LEFT_SHIFT, ';', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z', KEY_RIGHT_SHIFT,
-, KEY_LEFT_GUI, KEY_LEFT_ALT, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, ' ', ' ', KEY_SPACE, KEY_ENTER, KEY_RIGHT_ARROW, KEY_RIGHT_ALT, KEY_RIGHT_CTRL};
+int keymap[] = {
+        KEY_TAB,	    KEY_SLASH,     KEY_COMMA,    KEY_PERIOD,	        KEY_P,         KEY_Y,     KEY_F,     KEY_G,     KEY_C,     KEY_R,           KEY_L,         KEY_SLASH,
+        KEY_ESC,	    KEY_A,         KEY_O,        KEY_E,	                KEY_U,         KEY_I,     KEY_D,     KEY_H,     KEY_T,     KEY_N,           KEY_S,         KEY_MINUS,
+        KEY_LEFT_SHIFT, KEY_SEMICOLON, KEY_Q,	     KEY_J,                 KEY_K,         KEY_X,     KEY_B,     KEY_M,     KEY_W,     KEY_V,           KEY_Z,         KEY_RIGHT_SHIFT,
+        KEY_ESC,        KEY_LEFT_GUI,  KEY_LEFT_ALT, MODIFIERKEY_LEFT_CTRL,	KEY_BACKSPACE, KEY_SPACE, KEY_SPACE, KEY_SPACE, KEY_ENTER, KEY_RIGHT_ARROW, KEY_RIGHT_ALT, KEY_RIGHT_CTRL
+};
 bool matrix[48] = {false}; // state of keys last scanned (pressed on not pressed) // 12 * 4
 int times[48] = {0}; // state of keys last scanned (pressed on not pressed) // 12 * 4
 // in 14, 15, 16, 17

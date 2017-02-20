@@ -41,10 +41,11 @@ int function[] {
 };
 
 static const int keyMapLength = 4;
-static int *keymap[keyMapLength] {modifiers, dvorak, 0};
+static int *keymap[keyMapLength] {modifiers, dvorak, nullptr, nullptr};
 int get(int layer, int key)
 {
     if(layer < 0) return 0;
+    if(keymap[layer] == nullptr) return get(layer - 1, key);
     if(keymap[layer][key] > 0)
     {
         return keymap[layer][key];
@@ -64,6 +65,7 @@ void setup()
 {
 //    memset(states, 0, 48 * sizeof(char));
     Serial.begin(9600);
+    delay(1000);
     Keyboard.begin();
 //    Mouse.begin();
     for(char i = 0; i < inputsLength; i++)
@@ -75,6 +77,7 @@ void setup()
         pinMode(outputs[i], OUTPUT);
         digitalWrite(outputs[i], LOW);
     }
+    delay(1000);
 }
 void loop()
 {

@@ -1,7 +1,10 @@
 #include "Arduino.h"
 
-char inputs[] {6,  7,  8,  9};
-char outputs[] {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+typedef char pin_t;
+pin_t inputs[] {6,  7,  8,  9};
+pin_t outputs[] {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+const inputsLength = sizeof(inputs) / sizeof(pin_t);
+const outputsLength = sizeof(outputs) / sizeof(pin_t);
 int modifiers[] {
         KEY_TAB,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_ESC,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
@@ -26,20 +29,25 @@ int function[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
-void(*customFunctions[4])() {};
+
+void action(int key, int action)
+{
+    static const keyMapLength = 4;
+    static const int *keymap[keyMapLength] {modifiers, dvorak, 0};
+    int get(int layer, int key)
+    {
+        if(layer < 0) return 0;
+        if(keymap[layer][key] > 0)
+        {
+            return keymap[layer][key];
+        } else return get(layer - 1, key);
+    }
+    if(action) Keyboard.press(get(key));
+    else Keyboard.release(keymap[location]);
+}
+
 bool matrix[48] = {false}; // state of keys last scanned (pressed on not pressed) // 12 * 4
 int times[48] = {0}; // state of keys last scanned (pressed on not pressed) // 12 * 4
-int getKey()
-{
-}
-void release(int location)
-{
-    Keyboard.release(keymap[location]);
-}
-void press(int location)
-{
-    Keyboard.press(keymap[location]);
-}
 void setup()
 {
 //    memset(matrix, 0, 48 * sizeof(char));
@@ -48,11 +56,11 @@ void setup()
     Serial.print("test print");
     Keyboard.begin();
 //    Mouse.begin();
-    for(char i = 0; i < sizeof(inputs) / sizeof(char); i++)
+    for(char i = 0; i < inputsLength; i++)
     {
         pinMode(inputs[i], INPUT_PULLDOWN);
     }
-    for(char i = 0; i < sizeof(outputs) / sizeof(char); i++)
+    for(char i = 0; i < outputsLength; i++)
     {
         pinMode(outputs[i], OUTPUT);
         digitalWrite(outputs[i], LOW);
@@ -76,12 +84,12 @@ void loop()
     for(int i = 0; i < sizeof(outputs) / sizeof(char); i++)
     {
         digitalWrite(outputs[i], HIGH);
-        for(int j = 0; j < sizeof(inputs) / sizeof(char); j++)
+        for(int j = 0; j < inputsLength; j++)
         {
             bool state = digitalRead(inputs[j]);
 //            Serial.print("state ");
 //            Serial.println(state);
-            int location = (sizeof(outputs) / sizeof(char)) * j + i;
+            int location = outputsLength * j + i;
             if(state != matrix[location]) // if there is a change
             {
                 if(state)
@@ -89,13 +97,13 @@ void loop()
                     if(millis() - times[location] > 20) {
                         times[location] = millis();
                         matrix[location] = 1;
-                        press(location);
+                        action(location, 1);
                     }
                 } else {
                     if(millis() - times[location] > 20) {
                         times[location] = millis();
                         matrix[location] = 0;
-                        release(location);
+                        action(location, 0);
                     }
                 }
 //                Serial.print(i);

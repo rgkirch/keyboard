@@ -1,7 +1,19 @@
 #include "Arduino.h"
+//#undef isascii
+//#undef toascii
+//#define isascii(__c)	((unsigned)(__c)<=0177)
+//#define toascii(__c)	((__c)&0177)
+#include <ctype.h>
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+
+extern "C" {
+    int _getpid(){ return -1;}
+    int _kill(int pid, int sig){ return -1; }
+    int _write(){ return -1; }
+}
+
 
 std::unordered_set<int> keysCurrentlyPressed;
 std::vector<int*>keymapLayers;
@@ -17,11 +29,11 @@ const int outputsLength = sizeof(outputs) / sizeof(pin);
 const int statesLength = sizeof(states) / sizeof(key);
 const int timesLength = sizeof(times) / sizeof(time);
 
-int modifiers[] {
+int  modifiers[] {
         KEY_TAB,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_ESC,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_LEFT_SHIFT, -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, KEY_RIGHT_SHIFT,
-        -1, KEY_ESC,        KEY_LEFT_GUI,  KEY_LEFT_GUI, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_SPACE, KEY_LEFT_ALT, -2, -3, -4, -5
+        -1, -1,        -1,  -1, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_SPACE, KEY_LEFT_ALT, -2, -3, -4, -5
 };
 int qwerty[] {
         -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
@@ -64,6 +76,8 @@ int get(int layer, int key)
 void action(int key, int action)
 {
     int val = get(keymapLayers.size() - 1, key);
+    bool leftShiftPressed;
+    bool rightShiftPressed;
     switch (val) {
         case -1: // wont happen
             break;
@@ -87,18 +101,29 @@ void action(int key, int action)
             break;
             // bug, if you press shift, press space, release shift, release space it will have added a delete to the set and try to remove a backspace from the set
         case KEY_BACKSPACE:
-            if (keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end() || keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end()) {
-                if(action)
+            leftShiftPressed = keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end();
+            rightShiftPressed = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end();
+            if (!leftShiftPressed && !rightShiftPressed) { // send backspace (fall through)
+            } else if (leftShiftPressed && !rightShiftPressed) { // send shift backspace (fall through)
+            } else if (!leftShiftPressed && rightShiftPressed) { // send delete
+                if (action)
                 {
-                    keysCurrentlyPressed.insert(KEY_DELETE);
+                    Keyboard.release(KEY_RIGHT_SHIFT);
+//                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
+//                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
                     Keyboard.press(KEY_DELETE);
-                } else {
-                    auto it = keysCurrentlyPressed.find(KEY_DELETE);
-                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
-                    Keyboard.release(KEY_DELETE);
-                }
+                    Keyboard.release(KEY_DELETE); // goes in delete handler?
+                    Keyboard.press(KEY_RIGHT_SHIFT);
+                } else {}
+                break;
+            } else if (leftShiftPressed && rightShiftPressed) { // send shift delete
+                if (action)
+                {
+                    Keyboard.press(KEY_DELETE);
+                    Keyboard.release(KEY_DELETE); // goes in delete handler?
+                } else {}
+                break;
             }
-            break;
         default:
             if (action) {
                 keysCurrentlyPressed.insert(val);

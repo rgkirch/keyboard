@@ -127,10 +127,8 @@ void action(int key, int action)
                 if (action)
                 {
                     Keyboard.release(KEY_RIGHT_SHIFT);
-//                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
-//                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
                     Keyboard.press(KEY_DELETE);
-                    Keyboard.release(KEY_DELETE); // goes in delete handler?
+                    Keyboard.release(KEY_DELETE);
                     Keyboard.press(KEY_RIGHT_SHIFT);
                 } else {}
                 break;
@@ -138,7 +136,7 @@ void action(int key, int action)
                 if (action)
                 {
                     Keyboard.press(KEY_DELETE);
-                    Keyboard.release(KEY_DELETE); // goes in delete handler?
+                    Keyboard.release(KEY_DELETE);
                 } else {}
                 break;
             }
@@ -149,12 +147,10 @@ void action(int key, int action)
             } else if (leftShiftPressed && !rightShiftPressed) { // send shift + matched key (fall through)
                 if (action)
                 {
-                    Keyboard.release(KEY_RIGHT_SHIFT);
-//                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
-//                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
+                    Keyboard.release(KEY_LEFT_SHIFT);
                     Keyboard.press(KEY_ENTER);
-                    Keyboard.release(KEY_ENTER); // goes in delete handler?
-                    Keyboard.press(KEY_RIGHT_SHIFT);
+                    Keyboard.release(KEY_ENTER);
+                    Keyboard.press(KEY_LEFT_SHIFT);
                 } else {}
                 break;
             } else if (!leftShiftPressed && rightShiftPressed) { // send alternate key
@@ -227,7 +223,7 @@ void loop()
                         times[key] = millis();
                         states[key] = 0;
                         action(key, 0);
-                    }
+
                 }
 //                Serial.print(o);
 //                Serial.print(" ");
@@ -241,3 +237,4 @@ void loop()
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
 
+// you don't press and release the alt key much, you could use press and release to be a space but when it's used in a combo, it works like the al

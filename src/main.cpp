@@ -39,21 +39,38 @@ int function[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
+int numberRow[] {
+        KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
+        -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
+        -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
+        -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
+};
 
 static const int keyMapLength = 4;
 static int *keymap[keyMapLength] {modifiers, dvorak, nullptr, nullptr};
 int get(int layer, int key)
 {
-    if(layer < 0) return 0;
-    if(keymap[layer] == nullptr) return get(layer - 1, key);
+    Serial.println("get(int, int)");
+    if(layer < 0) {
+        Serial.println("return 0");
+        return 0;
+    }
+    if(keymap[layer] == nullptr) {
+        Serial.println("get(layer - 1, key)");
+        return get(layer - 1, key);
+    }
     if(keymap[layer][key] > 0)
     {
+        Serial.println("return keymap[layer][key]");
         return keymap[layer][key];
-    } else return get(layer - 1, key);
+    } else {
+        Serial.println("recurse");
+        return get(layer - 1, key);
+    }
 }
 int get(int key)
 {
-    return get(keyMapLength, key);
+    return get(keyMapLength - 1, key);
 }
 void action(int key, int action)
 {
@@ -81,6 +98,7 @@ void setup()
 }
 void loop()
 {
+//    Serial.println("loop");
 //    Mouse.move(4, 0);
 //    delay(25);
 //    Mouse.move(-4, 0);

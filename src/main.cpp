@@ -40,7 +40,7 @@ int function[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
 int numberRow[] {
-        KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
+        -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
@@ -50,21 +50,12 @@ static const int keyMapLength = 4;
 static int *keymap[keyMapLength] {modifiers, dvorak, nullptr, nullptr};
 int get(int layer, int key)
 {
-    Serial.println("get(int, int)");
-    if(layer < 0) {
-        Serial.println("return 0");
-        return 0;
-    }
-    if(keymap[layer] == nullptr) {
-        Serial.println("get(layer - 1, key)");
-        return get(layer - 1, key);
-    }
+    if(layer < 0) return 0;
+    if(keymap[layer] == nullptr) return get(layer - 1, key);
     if(keymap[layer][key] > 0)
     {
-        Serial.println("return keymap[layer][key]");
         return keymap[layer][key];
     } else {
-        Serial.println("recurse");
         return get(layer - 1, key);
     }
 }
@@ -74,15 +65,20 @@ int get(int key)
 }
 void action(int key, int action)
 {
-    if(get(key) > 0) if(action) Keyboard.press(get(key)); else Keyboard.release(get(key));
+    if(get(key) > 0)
+    {
+        if (action) {
+            Keyboard.press(get(key));
+        } else {
+            Keyboard.release(get(key));
+        }
+    }
 }
-
 
 void setup()
 {
 //    memset(states, 0, 48 * sizeof(char));
     Serial.begin(9600);
-    delay(1000);
     Keyboard.begin();
 //    Mouse.begin();
     for(char i = 0; i < inputsLength; i++)
@@ -94,7 +90,6 @@ void setup()
         pinMode(outputs[i], OUTPUT);
         digitalWrite(outputs[i], LOW);
     }
-    delay(1000);
 }
 void loop()
 {
@@ -133,9 +128,9 @@ void loop()
                         action(key, 0);
                     }
                 }
-                Serial.print(o);
-                Serial.print(" ");
-                Serial.println(i);
+//                Serial.print(o);
+//                Serial.print(" ");
+//                Serial.println(i);
             }
         }
         digitalWrite(outputs[o], LOW);

@@ -30,11 +30,18 @@ const int outputsLength = sizeof(outputs) / sizeof(pin);
 const int statesLength = sizeof(states) / sizeof(key);
 const int timesLength = sizeof(times) / sizeof(time);
 
-int  modifiers[] {
-        KEY_TAB,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
-        KEY_ESC,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
-        KEY_LEFT_SHIFT, -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, KEY_RIGHT_SHIFT,
-        -1, -1,        -1,  -1, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_LEFT_ALT, KEY_SPACE, -2, -3, -4, -5
+int layerModifiers[] {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -7, -6, -1, -2, -3, -4, -5
+//       0   1   2   3   4   5 | 6   7   8   9  10  11
+};
+int modifiers[] {
+        KEY_TAB, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        KEY_ESC, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_RIGHT_SHIFT,
+        -1, -1, -1, -1, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_SPACE, KEY_LEFT_ALT, -2, -3, -4, -5
 };
 int qwerty[] {
         -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
@@ -101,18 +108,17 @@ void action(int key, int action)
                 keymapLayers.erase(it);
             }
             break;
+        case -6:
+            if (action)
+            {
+                keymapLayers.push_back(layerModifiers);
+            } else {
+                auto it = std::find(keymapLayers.begin(), keymapLayers.end(), numberRow);
+                if (it != keymapLayers.end()) keymapLayers.erase(it);
+            }
+            break;
             // bug, if you press shift, press space, release shift, release space it will have added a delete to the set and try to remove a backspace from the set
         case KEY_BACKSPACE: // alternate key is delete
-            if (!alternateKey)
-            {
-                alternateKey = KEY_DELETE;
-            }
-        case KEY_SPACE:
-            if (!alternateKey)
-            {
-                alternateKey = KEY_ENTER;
-            } // alternate key is enter
-
             leftShiftPressed = keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end();
             rightShiftPressed = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end();
             if (!leftShiftPressed && !rightShiftPressed) { // send matched key (fall through)
@@ -123,16 +129,40 @@ void action(int key, int action)
                     Keyboard.release(KEY_RIGHT_SHIFT);
 //                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
 //                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
-                    Keyboard.press(alternateKey);
-                    Keyboard.release(alternateKey); // goes in delete handler?
+                    Keyboard.press(KEY_DELETE);
+                    Keyboard.release(KEY_DELETE); // goes in delete handler?
                     Keyboard.press(KEY_RIGHT_SHIFT);
                 } else {}
                 break;
             } else if (leftShiftPressed && rightShiftPressed) { // send shift delete
                 if (action)
                 {
-                    Keyboard.press(alternateKey);
-                    Keyboard.release(alternateKey); // goes in delete handler?
+                    Keyboard.press(KEY_DELETE);
+                    Keyboard.release(KEY_DELETE); // goes in delete handler?
+                } else {}
+                break;
+            }
+        case KEY_SPACE:
+            leftShiftPressed = keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end();
+            rightShiftPressed = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end();
+            if (!leftShiftPressed && !rightShiftPressed) { // send matched key (fall through)
+            } else if (leftShiftPressed && !rightShiftPressed) { // send shift + matched key (fall through)
+                if (action)
+                {
+                    Keyboard.release(KEY_RIGHT_SHIFT);
+//                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
+//                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
+                    Keyboard.press(KEY_ENTER);
+                    Keyboard.release(KEY_ENTER); // goes in delete handler?
+                    Keyboard.press(KEY_RIGHT_SHIFT);
+                } else {}
+                break;
+            } else if (!leftShiftPressed && rightShiftPressed) { // send alternate key
+            } else if (leftShiftPressed && rightShiftPressed) { // send shift delete
+                if (action)
+                {
+                    Keyboard.press(KEY_ENTER);
+                    Keyboard.release(KEY_ENTER); // goes in delete handler?
                 } else {}
                 break;
             }

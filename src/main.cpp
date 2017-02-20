@@ -1,10 +1,10 @@
 #include "Arduino.h"
 #include <vector>
 #include <algorithm>
+#include <unordered_set>
 
-// because it's c and not c++ - don't call get(int, int) just call get(int)
-// don't modify keymap
-
+std::unordered_set<int> keysCurrentlyPressed;
+std::vector<int*>keymapLayers;
 typedef int pin;
 typedef int key;
 typedef int time;
@@ -21,7 +21,7 @@ int modifiers[] {
         KEY_TAB,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_ESC,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_LEFT_SHIFT, -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, KEY_RIGHT_SHIFT,
-        KEY_ESC,        KEY_LEFT_GUI,  KEY_LEFT_GUI,  MODIFIERKEY_LEFT_CTRL, KEY_LEFT_ALT, KEY_BACKSPACE, KEY_ENTER, KEY_SPACE, -2, -3, -4, -5
+        -1, KEY_ESC,        KEY_LEFT_GUI,  KEY_LEFT_GUI, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_SPACE, KEY_LEFT_ALT, -2, -3, -4, -5
 };
 int qwerty[] {
         -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
@@ -48,15 +48,14 @@ int numberRow[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
 
-std::vector<int*>keymap;
 
 int get(int layer, int key)
 {
     if(layer < 0) return 0;
-//    if(keymap[layer] == nullptr) return get(layer - 1, key);
-    if(keymap[layer][key] != -1)
+//    if(keymapLayers[layer] == nullptr) return get(layer - 1, key);
+    if(keymapLayers[layer][key] != -1)
     {
-        return keymap[layer][key];
+        return keymapLayers[layer][key];
     } else {
         return get(layer - 1, key);
     }
@@ -64,31 +63,59 @@ int get(int layer, int key)
 
 void action(int key, int action)
 {
-    int val = get(keymap.size() - 1, key);
-    if(val > 0)
-    {
-        if (action) {
-            Keyboard.press(val);
-        } else {
-            Keyboard.release(val);
-        }
-    } else switch (val) {
+    int val = get(keymapLayers.size() - 1, key);
+    switch (val) {
         case -1: // wont happen
             break;
         case -2:
-            if (action) keymap.push_back(numberRow); else keymap.erase(std::find(keymap.begin(), keymap.end(), numberRow));
+            if (action)
+            {
+                keymapLayers.push_back(numberRow);
+            } else {
+                auto it = std::find(keymapLayers.begin(), keymapLayers.end(), numberRow);
+                if (it != keymapLayers.end()) keymapLayers.erase(it);
+            }
             break;
         case -3:
-            if (action) keymap.push_back(function); else keymap.erase(std::find(keymap.begin(), keymap.end(), function));
+            if (action)
+            {
+                keymapLayers.push_back(function);
+            } else {
+                auto it = std::find(keymapLayers.begin(), keymapLayers.end(), function);
+                keymapLayers.erase(it);
+            }
+            break;
+            // bug, if you press shift, press space, release shift, release space it will have added a delete to the set and try to remove a backspace from the set
+        case KEY_BACKSPACE:
+            if (keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end() || keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end()) {
+                if(action)
+                {
+                    keysCurrentlyPressed.insert(KEY_DELETE);
+                    Keyboard.press(KEY_DELETE);
+                } else {
+                    auto it = keysCurrentlyPressed.find(KEY_DELETE);
+                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
+                    Keyboard.release(KEY_DELETE);
+                }
+            }
+            break;
+        default:
+            if (action) {
+                keysCurrentlyPressed.insert(val);
+                Keyboard.press(val);
+            } else {
+                auto it = keysCurrentlyPressed.find(val);
+                if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
+                Keyboard.release(val);
+            }
             break;
     }
 }
 
 void setup()
 {
-    keymap.push_back(modifiers);
-    keymap.push_back(dvorak);
-//    memset(states, 0, 48 * sizeof(char));
+    keymapLayers.push_back(modifiers);
+    keymapLayers.push_back(dvorak);
     Serial.begin(9600);
     Keyboard.begin();
 //    Mouse.begin();
@@ -111,10 +138,6 @@ void loop()
 //    delay(25);
 //    Serial.println("loop");
 //    delay(200);
-//    for (auto c : states) {
-//        Serial.print(c);
-//        Serial.print(" ");
-//    }
 //    Serial.println();
     for(int o = 0; o < outputsLength; o++)
     {

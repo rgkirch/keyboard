@@ -33,7 +33,7 @@ int  modifiers[] {
         KEY_TAB,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_ESC,        -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, -1,
         KEY_LEFT_SHIFT, -1,            -1,            -1,                    -1,           -1,            -1,        -1,        -1,        -1,              -1, KEY_RIGHT_SHIFT,
-        -1, -1,        -1,  -1, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_SPACE, KEY_LEFT_ALT, -2, -3, -4, -5
+        -1, -1,        -1,  -1, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_LEFT_ALT, KEY_SPACE, -2, -3, -4, -5
 };
 int qwerty[] {
         -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
@@ -124,6 +124,30 @@ void action(int key, int action)
                 } else {}
                 break;
             }
+        case KEY_SPACE:
+            leftShiftPressed = keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end();
+            rightShiftPressed = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end();
+            if (!leftShiftPressed && !rightShiftPressed) { // send space (fall through)
+            } else if (leftShiftPressed && !rightShiftPressed) { // send shift space (fall through)
+            } else if (!leftShiftPressed && rightShiftPressed) { // send enter
+                if (action)
+                {
+                    Keyboard.release(KEY_RIGHT_SHIFT);
+//                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
+//                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
+                    Keyboard.press(KEY_ENTER);
+                    Keyboard.release(KEY_ENTER); // goes in delete handler?
+                    Keyboard.press(KEY_RIGHT_SHIFT);
+                } else {}
+                break;
+            } else if (leftShiftPressed && rightShiftPressed) { // send shift enter
+                if (action)
+                {
+                    Keyboard.press(KEY_ENTER);
+                    Keyboard.release(KEY_ENTER); // goes in delete handler?
+                } else {}
+                break;
+            }
         default:
             if (action) {
                 keysCurrentlyPressed.insert(val);
@@ -198,3 +222,4 @@ void loop()
 }
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
+

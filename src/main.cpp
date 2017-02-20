@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+#include <bitset>
 
 extern "C" {
     int _getpid(){ return -1;}
@@ -78,6 +79,7 @@ void action(int key, int action)
     int val = get(keymapLayers.size() - 1, key);
     bool leftShiftPressed;
     bool rightShiftPressed;
+    int alternateKey = 0;
     switch (val) {
         case -1: // wont happen
             break;
@@ -100,51 +102,37 @@ void action(int key, int action)
             }
             break;
             // bug, if you press shift, press space, release shift, release space it will have added a delete to the set and try to remove a backspace from the set
-        case KEY_BACKSPACE:
+        case KEY_BACKSPACE: // alternate key is delete
+            if (!alternateKey)
+            {
+                alternateKey = KEY_DELETE;
+            }
+        case KEY_SPACE:
+            if (!alternateKey)
+            {
+                alternateKey = KEY_ENTER;
+            } // alternate key is enter
+
             leftShiftPressed = keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end();
             rightShiftPressed = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end();
-            if (!leftShiftPressed && !rightShiftPressed) { // send backspace (fall through)
-            } else if (leftShiftPressed && !rightShiftPressed) { // send shift backspace (fall through)
-            } else if (!leftShiftPressed && rightShiftPressed) { // send delete
+            if (!leftShiftPressed && !rightShiftPressed) { // send matched key (fall through)
+            } else if (leftShiftPressed && !rightShiftPressed) { // send shift + matched key (fall through)
+            } else if (!leftShiftPressed && rightShiftPressed) { // send alternate key
                 if (action)
                 {
                     Keyboard.release(KEY_RIGHT_SHIFT);
 //                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
 //                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
-                    Keyboard.press(KEY_DELETE);
-                    Keyboard.release(KEY_DELETE); // goes in delete handler?
+                    Keyboard.press(alternateKey);
+                    Keyboard.release(alternateKey); // goes in delete handler?
                     Keyboard.press(KEY_RIGHT_SHIFT);
                 } else {}
                 break;
             } else if (leftShiftPressed && rightShiftPressed) { // send shift delete
                 if (action)
                 {
-                    Keyboard.press(KEY_DELETE);
-                    Keyboard.release(KEY_DELETE); // goes in delete handler?
-                } else {}
-                break;
-            }
-        case KEY_SPACE:
-            leftShiftPressed = keysCurrentlyPressed.find(KEY_LEFT_SHIFT) != keysCurrentlyPressed.end();
-            rightShiftPressed = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT) != keysCurrentlyPressed.end();
-            if (!leftShiftPressed && !rightShiftPressed) { // send space (fall through)
-            } else if (leftShiftPressed && !rightShiftPressed) { // send shift space (fall through)
-            } else if (!leftShiftPressed && rightShiftPressed) { // send enter
-                if (action)
-                {
-                    Keyboard.release(KEY_RIGHT_SHIFT);
-//                    auto it = keysCurrentlyPressed.find(KEY_RIGHT_SHIFT);
-//                    if (it != keysCurrentlyPressed.end()) keysCurrentlyPressed.erase(it);
-                    Keyboard.press(KEY_ENTER);
-                    Keyboard.release(KEY_ENTER); // goes in delete handler?
-                    Keyboard.press(KEY_RIGHT_SHIFT);
-                } else {}
-                break;
-            } else if (leftShiftPressed && rightShiftPressed) { // send shift enter
-                if (action)
-                {
-                    Keyboard.press(KEY_ENTER);
-                    Keyboard.release(KEY_ENTER); // goes in delete handler?
+                    Keyboard.press(alternateKey);
+                    Keyboard.release(alternateKey); // goes in delete handler?
                 } else {}
                 break;
             }

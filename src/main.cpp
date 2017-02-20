@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include <vector>
+#include <algorithm>
 
 // because it's c and not c++ - don't call get(int, int) just call get(int)
 // don't modify keymap
@@ -48,24 +49,22 @@ int numberRow[] {
 };
 
 std::vector<int*>keymap;
+
 int get(int layer, int key)
 {
     if(layer < 0) return 0;
-    if(keymap[layer] == nullptr) return get(layer - 1, key);
-    if(keymap[layer][key] > 0)
+//    if(keymap[layer] == nullptr) return get(layer - 1, key);
+    if(keymap[layer][key] != -1)
     {
         return keymap[layer][key];
     } else {
         return get(layer - 1, key);
     }
 }
-int get(int key)
-{
-    return get(keymap.size() - 1, key);
-}
+
 void action(int key, int action)
 {
-    int val = get(key);
+    int val = get(keymap.size() - 1, key);
     if(val > 0)
     {
         if (action) {
@@ -73,6 +72,15 @@ void action(int key, int action)
         } else {
             Keyboard.release(val);
         }
+    } else switch (val) {
+        case -1: // wont happen
+            break;
+        case -2:
+            if (action) keymap.push_back(numberRow); else keymap.erase(std::find(keymap.begin(), keymap.end(), numberRow));
+            break;
+        case -3:
+            if (action) keymap.push_back(function); else keymap.erase(std::find(keymap.begin(), keymap.end(), function));
+            break;
     }
 }
 

@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include <vector>
 
 // because it's c and not c++ - don't call get(int, int) just call get(int)
 // don't modify keymap
@@ -46,8 +47,7 @@ int numberRow[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
 
-static const int keyMapLength = 4;
-static int *keymap[keyMapLength] {modifiers, dvorak, nullptr, nullptr};
+std::vector<int*>keymap;
 int get(int layer, int key)
 {
     if(layer < 0) return 0;
@@ -61,22 +61,25 @@ int get(int layer, int key)
 }
 int get(int key)
 {
-    return get(keyMapLength - 1, key);
+    return get(keymap.size() - 1, key);
 }
 void action(int key, int action)
 {
-    if(get(key) > 0)
+    int val = get(key);
+    if(val > 0)
     {
         if (action) {
-            Keyboard.press(get(key));
+            Keyboard.press(val);
         } else {
-            Keyboard.release(get(key));
+            Keyboard.release(val);
         }
     }
 }
 
 void setup()
 {
+    keymap.push_back(modifiers);
+    keymap.push_back(dvorak);
 //    memset(states, 0, 48 * sizeof(char));
     Serial.begin(9600);
     Keyboard.begin();

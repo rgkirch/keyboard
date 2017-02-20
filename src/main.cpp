@@ -223,7 +223,7 @@ void loop()
                         times[key] = millis();
                         states[key] = 0;
                         action(key, 0);
-
+                    }
                 }
 //                Serial.print(o);
 //                Serial.print(" ");

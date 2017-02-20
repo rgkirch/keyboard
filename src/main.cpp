@@ -56,7 +56,7 @@ int get(int key)
 }
 void action(int key, int action)
 {
-    if(action) Keyboard.press(get(key)); else Keyboard.release(get(key));
+    if(get(key) > 0) if(action) Keyboard.press(get(key)); else Keyboard.release(get(key));
 }
 
 

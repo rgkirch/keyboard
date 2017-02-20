@@ -15,7 +15,6 @@ extern "C" {
     int _write(){ return -1; }
 }
 
-
 std::unordered_set<int> keysCurrentlyPressed;
 std::vector<int*>keymapLayers;
 typedef int pin;
@@ -29,6 +28,10 @@ const int inputsLength = sizeof(inputs) / sizeof(pin);
 const int outputsLength = sizeof(outputs) / sizeof(pin);
 const int statesLength = sizeof(states) / sizeof(key);
 const int timesLength = sizeof(times) / sizeof(time);
+
+std::vector<int> keyBuffer;
+
+void (*action)(int,int);
 
 int layerModifiers[] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -81,7 +84,7 @@ int get(int layer, int key)
     }
 }
 
-void action(int key, int action)
+void matchWithCase(int key, int action)
 {
     int val = get(keymapLayers.size() - 1, key);
     bool leftShiftPressed;
@@ -177,6 +180,7 @@ void action(int key, int action)
 
 void setup()
 {
+    action = matchWithCase;
     keymapLayers.push_back(modifiers);
     keymapLayers.push_back(dvorak);
     Serial.begin(9600);

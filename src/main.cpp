@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <bitset>
+#include <functional>
 
 extern "C" {
     int _getpid(){ return -1;}
@@ -29,9 +30,62 @@ const int outputsLength = sizeof(outputs) / sizeof(pin);
 const int statesLength = sizeof(states) / sizeof(key);
 const int timesLength = sizeof(times) / sizeof(time);
 
-std::vector<int> keyBuffer;
+int get(int key) {
+    return get(keymapLayers.size() - 1, key);
+}
 
-void (*action)(int,int);
+int get(int layer, int key)
+{
+    if(layer < 0) return 0;
+//    if(keymapLayers[layer] == nullptr) return get(layer - 1, key);
+    if(keymapLayers[layer][key] != -1)
+    {
+        return keymapLayers[layer][key];
+    } else {
+        return get(layer - 1, key);
+    }
+}
+
+std::function<void(int,int)> controller; //
+std::function<void(int,int)> handle; // the loop function calls this whenever stuff happens
+std::function<void(int,int)> pressRelease = std::function([](int key, int action)->void { if(action) Keyboard.press(key); else Keyboard.release(key);} );
+std::function<void(int,int)> actionArray[48] {
+    pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease,
+    pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease,
+    pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease, pressRelease,
+    pressRelease, pressRelease, pressRelease, pressRelease, pressRelease,
+//41
+    // 41_p 41_r                                     -> KEY_BACKSPACE
+    // 41_p (42_p 42_r)+                             -> KEY_DELETE+ <- 41_r
+    // (41_p 42_p) | (42_p 41_p) (ANY_KEY_p ANY_KEY_R)+ => ctrl + alt + ANY_KEY
+    std::function([](int key, int action)->void { // left thumb - backspace or ctrl + other key
+        enum {start, first_p_41, mode_two, mode_three};
+        int state = start;
+        switch (key) {
+            case 41:
+            case 42:
+            default:
+                break;
+        }
+        controller = actionArray[41];
+        static mode = 0;
+        static std::vector<int> buffer;
+        if (p(val) && mode == 0) mode = 1;
+        if (!action && !keys.empty() && keys[0] == 0) { keys.clear(); Keyboard.press(KEY_BACKSPACE); Keyboard.release(KEY_BACKSPACE); }
+    }),
+//42   this key pressed and released with no other keys pressed in between will send a space key
+    std::function([](int action)->void {
+        if(action) Keyboard.press(KEY_TAB); else Keyboard.release(KEY_TAB);
+    }),
+    pressRelease, pressRelease, pressRelease, pressRelease, pressRelease
+};
+void parseKey(int key, int action) {
+    if (controller) {
+        controller(key, action);
+    } else {
+        actionArray[key](key, action);
+    }
+}
 
 int layerModifiers[] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -71,22 +125,9 @@ int numberRow[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
 
-
-int get(int layer, int key)
-{
-    if(layer < 0) return 0;
-//    if(keymapLayers[layer] == nullptr) return get(layer - 1, key);
-    if(keymapLayers[layer][key] != -1)
-    {
-        return keymapLayers[layer][key];
-    } else {
-        return get(layer - 1, key);
-    }
-}
-
 void matchWithCase(int key, int action)
 {
-    int val = get(keymapLayers.size() - 1, key);
+    int val = get(key);
     bool leftShiftPressed;
     bool rightShiftPressed;
     int alternateKey = 0;
@@ -180,7 +221,7 @@ void matchWithCase(int key, int action)
 
 void setup()
 {
-    action = matchWithCase;
+    handle = parseKey;
     keymapLayers.push_back(modifiers);
     keymapLayers.push_back(dvorak);
     Serial.begin(9600);
@@ -220,13 +261,13 @@ void loop()
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 1;
-                        action(key, 1);
+                        handle(key, 1);
                     }
                 } else {
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 0;
-                        action(key, 0);
+                        handle(key, 0);
                     }
                 }
 //                Serial.print(o);

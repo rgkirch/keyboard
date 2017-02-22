@@ -1,4 +1,7 @@
-// for every key that's pressed, it must be released
+KEYp (41p|42r)
+KEYr (41r|42r)
+
+%%
 
 41p 41r
     send(KEY_BACKSPACE); pop(2); assert(stack.empty());
@@ -16,10 +19,12 @@
     send(KEY_ENTER); pop(2);
 41p 42p 42r 41r
     pop(4); assert(stack.empty());
-(41p 42p | 42p 41p) KEYp
+(41p 42p|42p 41p) KEYp
     press(KEY_CTRL); press(KEY_ALT); press(stack[3]);
 (41p 42p | 42p 41p) KEYp{2,}
     press(stack[-1]);
+(?:41p 42p | 42p 41p) (?:?=KEYp{2,}) (?:KEYp* (KEYp) KEYp*) \1r
+    release(stack.back()); stack.remove(p(stack.back()));
 (41p 42p | 42p 41p) KEYp{2,} KEYr-[41r 42r]
     stack.remove(stack[-1]p); pop(1);
 (41p 42p | 42p 41p) KEYp{2,} 41r
@@ -41,16 +46,5 @@
 (41p 42p | 42p 41p) (KEYp) (41r | 42r) ([41r 42r]-\3)
     release(stack[4]); pop(5); assert(stack.empty());
 
-
-
-tab
-    0p 0r
-escape
-    12p 12r
-l_shift
-    24p 24r
-char(c)
-    cp pr
-char(C)
-    
+%%
 

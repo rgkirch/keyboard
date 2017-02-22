@@ -1,31 +1,32 @@
 // for every key that's pressed, it must be released
 
-backspace pop 2
-    41p 41r
-delete
-    42p 41p 41r
-delete pop 2
-    42p (41p 41r){2}
-pop 4
-    42p 41p 41r 42r
-space pop 2
-    42p 42r
-enter
-    41p 42p 42r
-enter pop 2
-    41p (42p 42r){2}
-pop 4
-    41p 42p 42r 41r
-ctrl_p alt_p \1_p
-    41p 42p (KEYp)
-\1_r
-    41p 42p (KEYp) \1r
-\2_p; t = \2; pop3; push t
-    41p 42p (KEYp) \1r (KEYp)
-\1_r alt_r ctrl_r
-    41p 42p (KEYp) \1r
-alt ctrl  KEY
-    42p 41p KEY+
+41p 41r
+    send(KEY_BACKSPACE); pop(2);
+42p 41p 41r
+    send(KEY_DELETE);
+42p (41p 41r){2}
+    send(KEY_DELETE); pop(2);
+42p 41p 41r 42r
+    pop(4);
+42p 42r
+    send(KEY_SPACE); pop(2);
+41p 42p 42r
+    send(KEY_ENTER);
+41p (42p 42r){2}
+    send(KEY_ENTER); pop(2);
+41p 42p 42r 41r
+    pop(4);
+(41p 42p | 42p 41p) (KEYp)            // ctrl_r, alt_r, other_key_p
+    press(ctrl); press(alt); press(\2);
+(41p 42p | 42p 41p) (KEYp) \2r        // key_p, ctrl_r, alt_r
+    release(\2);
+(41p 42p | 42p 41p) (KEYp) \2r (KEYp)
+    \3_p; t = \3; pop3; push t
+(41p 42p | 42p 41p) (KEYp)            // ctrl_r, alt_r, other_key_p
+    ctrl_p alt_p \2_p
+
+
+
 tab
     0p 0r
 escape

@@ -1,50 +1,42 @@
-KEYp (41p|42r)
-KEYr (41r|42r)
-
-%%
-
-41p 41r
-    send(KEY_BACKSPACE); pop(2); assert(stack.empty());
-42p 41p 41r
-    send(KEY_DELETE);
-42p (41p 41r){2}
-    send(KEY_DELETE); pop(2);
-42p 41p 41r 42r
-    pop(4); assert(stack.empty());
+// space and backspace
 42p 42r
-    send(KEY_SPACE); pop(2); assert(stack.empty());
+    send(KEY_SPACE); stack.pop_back(2); assert(stack.empty());
+41p 41r
+    send(KEY_BACKSPACE); stack.pop_back(2); assert(stack.empty());
+// enter and delete
 41p 42p 42r
     send(KEY_ENTER);
 41p (42p 42r){2}
-    send(KEY_ENTER); pop(2);
+    send(KEY_ENTER); stack.pop_back(2);
 41p 42p 42r 41r
-    pop(4); assert(stack.empty());
-(41p 42p|42p 41p) KEYp
-    press(KEY_CTRL); press(KEY_ALT); press(stack[3]);
-(41p 42p | 42p 41p) KEYp{2,}
-    press(stack[-1]);
-(?:41p 42p | 42p 41p) (?:?=KEYp{2,}) (?:KEYp* (KEYp) KEYp*) \1r
+    stack.pop_back(4); assert(stack.empty());
+42p 41p 41r
+    send(KEY_DELETE);
+42p (41p 41r){2}
+    send(KEY_DELETE); stack.pop_back(2);
+42p 41p 41r 42r
+    stack.pop_back(4); assert(stack.empty());
+// ctrl alt other_key
+(?:41p 42p | 42p 41p) KEYp
+    press(KEY_CTRL); press(KEY_ALT); press(stack.back());
+(?:41p 42p | 42p 41p) (KEYp) (?:41r|42r)* \1r
+    release(stack.back());
+(?:41p 42p | 42p 41p) (KEYp) (?:41r|42r)* \1r (?:41r|42r)* KEYp
+    press(stack.back()); t = stack.back(); stack.pop_back(3); stack.push_back(t);
+(?:41p 42p | 42p 41p) (?:KEYp (?:41r|42r)*)+ KEYp
+    press(stack.back());
+(?:41p 42p | 42p 41p) (?:?=(?:KEYp (?:41r|42r)*)+ KEYp) (?:KEYp* (KEYp) KEYp*) \1r
     release(stack.back()); stack.remove(p(stack.back()));
-(41p 42p | 42p 41p) KEYp{2,} KEYr-[41r 42r]
-    stack.remove(stack[-1]p); pop(1);
-(41p 42p | 42p 41p) KEYp{2,} 41r
+// ctrl alt done
+(?:41p 42p | 42p 41p) KEYp+ 41r
     release(KEY_CTRL);
-(41p 42p | 42p 41p) KEYp{2,} 42r
-
-(41p 42p | 42p 41p) (KEYp) 41r
-    relase(KEY_CTRL);
-(41p 42p | 42p 41p) (KEYp) 41r 42r
-    relase(KEY_CTRL); release(KEY_ALT); t = stack[2]; pop(4); push(t);
-(41p 42p | 42p 41p) (KEYp) 41r 41p
-    press(KEY_CTRL); pop(2);
-(41p 42p | 42p 41p) (KEYp) \2r        // key_p, ctrl_r, alt_r
-    release(stack[3]); assert(pressed(KEY_CTRL)); assert(pressed(KEY_ALT));
-(41p 42p | 42p 41p) (KEYp) \2r (KEYp)
-    press(stack[4]); t = stack[4]; pop(3); push(t);
-(41p 42p | 42p 41p) (KEYp) (41r | 42r) // other_key_p
-    release(stack[3]);
-(41p 42p | 42p 41p) (KEYp) (41r | 42r) ([41r 42r]-\3)
-    release(stack[4]); pop(5); assert(stack.empty());
-
-%%
-
+(?:41p 42p | 42p 41p) KEYp+ 42r
+    release(KEY_ALT);
+(?:41p 42p | 42p 41p) KEYp+ 41r 42r
+    release(KEY_CTRL); release(KEY_ALT); stack.pop_back(2); stack.pop_front(2);
+(?:41p 42p | 42p 41p) KEYp+ 42r 41r
+    release(KEY_ALT); release(KEY_CTRL); stack.pop_back(2); stack.pop_front(2);
+(?:41p 42p | 42p 41p) KEYp+ 42r 42p
+    press(KEY_ALT); stack.pop(2);
+(?:41p 42p | 42p 41p) KEYp+ 41r 41p
+    press(KEY_CTRL); stack.pop(2);

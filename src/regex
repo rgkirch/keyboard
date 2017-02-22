@@ -1,0 +1,39 @@
+// for every key that's pressed, it must be released
+
+backspace pop 2
+    41p 41r
+delete
+    42p 41p 41r
+delete pop 2
+    42p (41p 41r){2}
+pop 4
+    42p 41p 41r 42r
+space pop 2
+    42p 42r
+enter
+    41p 42p 42r
+enter pop 2
+    41p (42p 42r){2}
+pop 4
+    41p 42p 42r 41r
+ctrl_p alt_p \1_p
+    41p 42p (KEYp)
+\1_r
+    41p 42p (KEYp) \1r
+\2_p; t = \2; pop3; push t
+    41p 42p (KEYp) \1r (KEYp)
+\1_r alt_r ctrl_r
+    41p 42p (KEYp) \1r
+alt ctrl  KEY
+    42p 41p KEY+
+tab
+    0p 0r
+escape
+    12p 12r
+l_shift
+    24p 24r
+char(c)
+    cp pr
+char(C)
+    
+

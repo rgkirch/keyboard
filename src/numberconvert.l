@@ -43,7 +43,9 @@ int index(char* chars)
 
 
 %%
+
 [0-9]{1,2}(p|r) { printf("%c", ascii[index(yytext)]); }
+
 %%
 
 int main()

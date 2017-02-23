@@ -14,8 +14,9 @@ int main() {
     //printf("the char as a char %c\n", c);
     const char* ptr = &c;
     try {
-        char str[] = {'o',byte};
-        if (std::regex_match("oA", std::regex { str } )) {
+        //char str[] = {'o','b',byte,'{','2','}'};
+        std::string match = "aA";
+        if (std::regex_match(match, std::regex {'a',byte} )) {
             std::cout << "we got a match" << std::endl;
         }
     } catch (std::regex_error e) {

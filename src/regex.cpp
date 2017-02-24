@@ -43,9 +43,9 @@
 #define k37p 0x25
 #define k38p 0x26
 #define k39p 0x27
-#define k40p 0x28
-#define k41p 0x29
-#define k42p 0x2a
+#define k40p 0x5c,0x28
+#define k41p 0x5c,0x29
+#define k42p 0x5c,0x2a
 #define k43p 0x2b
 #define k44p 0x2c
 #define k45p 0x2d
@@ -131,23 +131,38 @@ private:
 Stack<int> stack;
 
 int main() {
-    std::string inputString;
-    while(std::getline(std::cin, inputString)) {
+    std::string inputString = {'*',k42r};
+    //printf("%s", inputString);
+    //while(std::getline(std::cin, inputString))
+    if(1)
+    {
         // space and backspace
-        try {
-            if (std::regex_match(inputString, std::regex {k42p,k42r} )) {
+        try
+        {
+            if (std::regex_match(inputString, std::regex {k42p,k42r} ))
+            {
                 send(KEY_SPACE);// stack.pop(2); assert(stack.empty());
             }
-            if (std::regex_match(inputString, std::regex {k41p,k41r} )) {
+            if (std::regex_match(inputString, std::regex {k41p,k41r} ))
+            {
                 send(KEY_BACKSPACE);// stack.pop(2); assert(stack.empty());
             }
             // enter and delete
-            if (std::regex_match(inputString, std::regex {k41p,k42p,k42r} )) {
+            if (std::regex_match(inputString, std::regex {k41p,k42p,k42r} ))
+            {
                 send(KEY_ENTER);//
             }
-            if (std::regex_match(inputString, std::regex {k41p,'(',k42p,k42r,')','{','2','}'} )) {
+        } catch (std::regex_error e) {
+            std::cout << e.what() << std::endl;
+        }
+        try
+        {
+            if (std::regex_match(inputString, std::regex {k41p,'(',k42p,k42r,')','\\','{','2','\\','}'} )) {
                 send(KEY_ENTER);// stack.pop(2);
             }
+        } catch (std::regex_error e) {
+            std::cout << "error on " << "std::regex" << std::endl;
+        } try {
             if (std::regex_match(inputString, std::regex { k41p,k42p,k42r,k41r } )) {
                 //stack.pop(4); assert(stack.empty());
             }
@@ -161,9 +176,9 @@ int main() {
                 //stack.pop(4); assert(stack.empty());
             }
             // ctrl alt other_key
-            if (std::regex_match(inputString, std::regex {'(','?',':',k41p,k42p,'|',k42p,k41p,')',KEYp} )) {
-                press(KEY_CTRL); press(KEY_ALT);// press(stack.back());
-            }
+            //if (std::regex_match(inputString, std::regex {'(','?',':',k41p,k42p,'|',k42p,k41p,')',KEYp} )) {
+                //press(KEY_CTRL); press(KEY_ALT);// press(stack.back());
+            //}
 //            if (std::regex_match(inputString, std::regex {'(','?',':',k41p,k42p,'|', k42p,k41p,')', '(',KEYp,')', ('?',':',k41r'|',k42r,')',* \1r} )) {
 //                //release(stack.back());
 //            }

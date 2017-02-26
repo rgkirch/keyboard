@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_REGEX_H
 #define KEYBOARD_REGEX_H
 
+#include "Arduino.h"
 #include <regex>
 #include <iostream>
 #include <vector>
@@ -106,9 +107,8 @@
 #define KEYp [0x00-0x2f]
 #define KEYr [0x2e-0x5f]
 
-enum {KEY_ENTER, KEY_CTRL, KEY_ALT, KEY_DELETE, KEY_BACKSPACE, KEY_SPACE};
-std::string keyStrings[] {"KEY_ENTER", "KEY_CTRL", "KEY_ALT", "KEY_DELETE", "KEY_BACKSPACE", "KEY_SPACE"};
-
+//enum {KEY_ENTER, KEY_CTRL, KEY_ALT, KEY_DELETE, KEY_BACKSPACE, KEY_SPACE};
+//std::string keyStrings[] {"KEY_ENTER", "KEY_CTRL", "KEY_ALT", "KEY_DELETE", "KEY_BACKSPACE", "KEY_SPACE"};
 
 template <typename T>
 class Stack {

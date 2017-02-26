@@ -1,32 +1,18 @@
 #include "Arduino.h"
 #include "regex.h"
 
-//#undef isascii
-//#undef toascii
-//#define isascii(__c)	((unsigned)(__c)<=0177)
-//#define toascii(__c)	((__c)&0177)
-#include <ctype.h>
-#include <vector>
-#include <algorithm>
-#include <unordered_set>
-#include <bitset>
-#include <functional>
-
 extern "C" {
     int _getpid(){ return -1;}
     int _kill(int pid, int sig){ return -1; }
     int _write(){ return -1; }
 }
 
-typedef int pin;
-typedef int key;
-typedef int time;
-pin inputs[] {6,  7,  8,  9};
-pin outputs[] {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
-key states[48] = {0};
-time times[48] = {0};
-const int inputsLength = sizeof(inputs) / sizeof(pin);
-const int outputsLength = sizeof(outputs) / sizeof(pin);
+int inputs[] {6,  7,  8,  9};
+int outputs[] {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+int states[48] = {0};
+int times[48] = {0};
+const int inputsLength = sizeof(inputs) / sizeof(int);
+const int outputsLength = sizeof(outputs) / sizeof(int);
 
 void setup()
 {

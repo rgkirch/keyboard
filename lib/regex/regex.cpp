@@ -3,11 +3,13 @@
 Stack stack;
 
 void press(int key) {
-//    std::cout << "press " << keyStrings[key] << std::endl;
+    Serial.print("keyboard press ");
+    Serial.println(key);
     Keyboard.press(key);
 }
 void release(int key) {
-//    std::cout << "release " << keyStrings[key] << std::endl;
+    Serial.print("keyboard release ");
+    Serial.println(key);
     Keyboard.release(key);
 }
 void send(int key) {
@@ -20,19 +22,15 @@ void push(int key) {
     for(char c:stack.getString()) Serial.print(c);
     Serial.println();
     // space and backspace
-    if (std::regex_match(stack.getString(), std::regex {k42p,k42r} ))
-    {
+    if (std::regex_match(stack.getString(), std::regex {k42p,k42r} )) {
         send(KEY_SPACE); stack.pop(2);// assert(stack.empty());
-    } else if (std::regex_match(stack.getString(), std::regex {k41p,k41r} ))
-    {
+    } else if (std::regex_match(stack.getString(), std::regex {k41p,k41r} )) {
         send(KEY_BACKSPACE); stack.pop(2);// assert(stack.empty());
-    } else if (std::regex_match(stack.getString(), std::regex {k41p,k42p,k42r} )) // enter and delete
-    {
+    } else if (std::regex_match(stack.getString(), std::regex {k41p,k42p,k42r} )) { // enter and delete
         send(KEY_ENTER);
     } else if (std::regex_match(stack.getString(), std::regex {k41p,'(',k42p,k42r,')','{','2','}'} )) {
         send(KEY_ENTER); stack.pop(2);
-    } else if (std::regex_match(stack.getString(), std::regex { k41p,k42p,k42r,k41r } )) {
-//        std::clog << "stack.pop(4); assert(stack.empty());" << std::endl;
+    } else if (std::regex_match(stack.getString(), std::regex {k41p,k42p,k42r,k41r} )) {
         stack.pop(4);// assert(stack.empty());
     } else if (std::regex_match(stack.getString(), std::regex {k42p,k41p,k41r} )) {
         send(KEY_DELETE);
@@ -41,6 +39,8 @@ void push(int key) {
     } else if (std::regex_match(stack.getString(), std::regex {k42p,k41p,k41r,k42r} )) {
 //        std::clog << "stack.pop(4); assert(stack.empty());" << std::endl;
         stack.pop(4);// assert(stack.empty());
+    } else {
+        Serial.println("reched end of cascading if else");
     }
 
 

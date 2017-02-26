@@ -51,7 +51,7 @@ void loop()
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 0;
-                        Serial.println("release");
+                        Serial.println("anti-push");
                         push(key + 48);
                     }
                 }

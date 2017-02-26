@@ -17,7 +17,33 @@ void send(int key) {
     release(key);
 }
 
+void Serialprintln(std::string s)
+{
+    for(char c:s)
+    {
+        Serial.print(c);
+    }
+    Serial.println();
+}
+
 void push(int key) {
+    std::string testString;
+
+    testString {')', '*', 'Z', '*', 'Z'};
+    Serial.print("testString ");
+    Serialprintln(testString);
+    if (std::regex_match(testString, std::regex {k41p,'(',k42p,k42r,')','{','2','}'} )) Serial.println("matched first test"); else Serial.println("didn't match first test");
+
+    testString = {')', '*', 'Z'};
+    Serial.print("testString ");
+    Serialprintln(testString);
+    if (std::regex_match(testString, std::regex {k41p,'(',k42p,k42r,')'} )) Serial.println("matched second test"); else Serial.println("didn't match second test");
+
+    testString = {')', '*', 'Z'};
+    Serial.print("testString ");
+    Serialprintln(testString);
+    if (std::regex_match(testString, std::regex {k41p,k42p,k42r} )) Serial.println("matched third test"); else Serial.println("didn't match third test");
+
     stack.push(key);
     for(char c:stack.getString()) Serial.print(c);
     Serial.println();

@@ -110,18 +110,19 @@
 //enum {KEY_ENTER, KEY_CTRL, KEY_ALT, KEY_DELETE, KEY_BACKSPACE, KEY_SPACE};
 //std::string keyStrings[] {"KEY_ENTER", "KEY_CTRL", "KEY_ALT", "KEY_DELETE", "KEY_BACKSPACE", "KEY_SPACE"};
 
-template <typename T>
 class Stack {
 public:
-    void push(T key) { stack.push_back(key); }
+    void push(int key) { stack.push_back((char)key); }
     void pop(int number) { for(int i=0; i < number; i++) stack.pop_back(); }
     bool empty() { return stack.empty(); }
-    T& back() { return stack.back(); }
+    const char& back() { return stack.back(); }
+    std::string getString() { return stack; };
 private:
-    std::vector<T> stack;
+    std::string stack;
 };
 
-Stack<int> stack;
+Stack stack;
+
 
 void press(int key);
 void release(int key);

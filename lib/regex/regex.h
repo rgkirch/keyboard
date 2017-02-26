@@ -113,7 +113,7 @@
 class Stack {
 public:
     void push(int key) { data.push_back((char)key); }
-    void pop(int number) { for(int i=0; i < number; i++) data.pop_back(); }
+    void pop(int number) { for(int i=0; i < number; i++) { Serial.println("pop"); data.pop_back(); } }
     bool empty() { return data.empty(); }
     const char& back() { return data.back(); }
     std::string getString() { return data; };

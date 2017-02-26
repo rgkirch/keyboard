@@ -44,12 +44,14 @@ void loop()
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 1;
+                        Serial.println("push");
                         push(key);
                     }
                 } else {
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 0;
+                        Serial.println("release");
                         push(key + 48);
                     }
                 }

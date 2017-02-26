@@ -17,36 +17,30 @@ void send(int key) {
 
 void push(int key) {
     stack.push(key);
+    for(char c:stack.getString()) Serial.print(c);
+    Serial.println();
     // space and backspace
     if (std::regex_match(stack.getString(), std::regex {k42p,k42r} ))
     {
-        send(KEY_SPACE); stack.pop(2); assert(stack.empty());
-    }
-    if (std::regex_match(stack.getString(), std::regex {k41p,k41r} ))
+        send(KEY_SPACE); stack.pop(2);// assert(stack.empty());
+    } else if (std::regex_match(stack.getString(), std::regex {k41p,k41r} ))
     {
-        send(KEY_BACKSPACE); stack.pop(2); assert(stack.empty());
-    }
-    // enter and delete
-    if (std::regex_match(stack.getString(), std::regex {k41p,k42p,k42r} ))
+        send(KEY_BACKSPACE); stack.pop(2);// assert(stack.empty());
+    } else if (std::regex_match(stack.getString(), std::regex {k41p,k42p,k42r} )) // enter and delete
     {
         send(KEY_ENTER);
-    }
-    if (std::regex_match(stack.getString(), std::regex {k41p,'(',k42p,k42r,')','{','2','}'} )) {
+    } else if (std::regex_match(stack.getString(), std::regex {k41p,'(',k42p,k42r,')','{','2','}'} )) {
         send(KEY_ENTER); stack.pop(2);
-    }
-    if (std::regex_match(stack.getString(), std::regex { k41p,k42p,k42r,k41r } )) {
+    } else if (std::regex_match(stack.getString(), std::regex { k41p,k42p,k42r,k41r } )) {
 //        std::clog << "stack.pop(4); assert(stack.empty());" << std::endl;
-        stack.pop(4); assert(stack.empty());
-    }
-    if (std::regex_match(stack.getString(), std::regex {k42p,k41p,k41r} )) {
+        stack.pop(4);// assert(stack.empty());
+    } else if (std::regex_match(stack.getString(), std::regex {k42p,k41p,k41r} )) {
         send(KEY_DELETE);
-    }
-    if (std::regex_match(stack.getString(), std::regex {k42p,'(',k41p,k41r,')','{','2','}'} )) {
+    } else if (std::regex_match(stack.getString(), std::regex {k42p,'(',k41p,k41r,')','{','2','}'} )) {
         send(KEY_DELETE); stack.pop(2);
-    }
-    if (std::regex_match(stack.getString(), std::regex {k42p,k41p,k41r,k42r} )) {
+    } else if (std::regex_match(stack.getString(), std::regex {k42p,k41p,k41r,k42r} )) {
 //        std::clog << "stack.pop(4); assert(stack.empty());" << std::endl;
-        stack.pop(4); assert(stack.empty());
+        stack.pop(4);// assert(stack.empty());
     }
 
 

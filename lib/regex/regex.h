@@ -112,17 +112,14 @@
 
 class Stack {
 public:
-    void push(int key) { stack.push_back((char)key); }
-    void pop(int number) { for(int i=0; i < number; i++) stack.pop_back(); }
-    bool empty() { return stack.empty(); }
-    const char& back() { return stack.back(); }
-    std::string getString() { return stack; };
+    void push(int key) { data.push_back((char)key); }
+    void pop(int number) { for(int i=0; i < number; i++) data.pop_back(); }
+    bool empty() { return data.empty(); }
+    const char& back() { return data.back(); }
+    std::string getString() { return data; };
 private:
-    std::string stack;
+    std::string data;
 };
-
-Stack stack;
-
 
 void press(int key);
 void release(int key);

@@ -104,22 +104,8 @@
 #define k46r 0x5c,0x5e
 #define k47r 0x5f
 
-#define KEYp [0x00-0x2f]
-#define KEYr [0x2e-0x5f]
-
 //enum {KEY_ENTER, KEY_CTRL, KEY_ALT, KEY_DELETE, KEY_BACKSPACE, KEY_SPACE};
 //std::string keyStrings[] {"KEY_ENTER", "KEY_CTRL", "KEY_ALT", "KEY_DELETE", "KEY_BACKSPACE", "KEY_SPACE"};
-
-class Stack {
-public:
-    void push(int key) { data.push_back((char)key); }
-    void pop(int number) { for(int i=0; i < number; i++) { Serial.println("pop"); data.pop_back(); } }
-    bool empty() { return data.empty(); }
-    const char& back() { return data.back(); }
-    std::string getString() { return data; };
-private:
-    std::string data;
-};
 
 void press(int key);
 void release(int key);

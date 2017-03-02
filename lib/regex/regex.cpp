@@ -1,6 +1,17 @@
 #include "regex.h"
 
-Stack stack;
+void push(std::string, int key)
+{
+    if(key < 0)
+    {
+        Serial.println("pushed a negative char onto the buffer");
+    }
+    buffer.push_back((char)key);
+}
+void pop(std::string,int number) { for(int i=0; i < number; i++) { Serial.println("pop"); data.pop_back(); } }
+bool empty() { return data.empty(); }
+const char& back() { return data.back(); }
+std::string buffer;
 
 void press(int key) {
     Serial.print("keyboard press ");
@@ -27,28 +38,11 @@ void Serialprintln(std::string s)
 }
 
 void push(int key) {
-    std::string testString;
-
-    testString {')', '*', 'Z', '*', 'Z'};
-    Serial.print("testString ");
-    Serialprintln(testString);
-    if (std::regex_match(testString, std::regex {k41p,'(',k42p,k42r,')','{','2','}'} )) Serial.println("matched first test"); else Serial.println("didn't match first test");
-
-    testString = {')', '*', 'Z'};
-    Serial.print("testString ");
-    Serialprintln(testString);
-    if (std::regex_match(testString, std::regex {k41p,'(',k42p,k42r,')'} )) Serial.println("matched second test"); else Serial.println("didn't match second test");
-
-    testString = {')', '*', 'Z'};
-    Serial.print("testString ");
-    Serialprintln(testString);
-    if (std::regex_match(testString, std::regex {k41p,k42p,k42r} )) Serial.println("matched third test"); else Serial.println("didn't match third test");
-
     stack.push(key);
     for(char c:stack.getString()) Serial.print(c);
     Serial.println();
     // space and backspace
-    if (std::regex_match(stack.getString(), std::regex {k42p,k42r} )) {
+    if () {
         send(KEY_SPACE); stack.pop(2);// assert(stack.empty());
     } else if (std::regex_match(stack.getString(), std::regex {k41p,k41r} )) {
         send(KEY_BACKSPACE); stack.pop(2);// assert(stack.empty());

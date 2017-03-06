@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include <vector>
 
 int numKeys = 48;
 
@@ -123,7 +124,7 @@ int modifiers[] {
         KEY_TAB, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         KEY_ESC, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_RIGHT_SHIFT,
-        -1, -1, -1, -1, MODIFIERKEY_LEFT_CTRL, KEY_BACKSPACE, KEY_SPACE, KEY_LEFT_ALT, -2, -3, -4, -5
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 };
 int qwerty[] {
         -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
@@ -144,19 +145,38 @@ int numberFunction[] {
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
 
+std::vector<int*> keymapLayers;
+int get(int layer, int key)
+{
+    if(layer < 0) return -1;
+//    if(keymapLayers[layer] == nullptr) return get(layer - 1, key);
+    if(keymapLayers[layer][key] != -1)
+    {
+        return keymapLayers[layer][key];
+    } else {
+        return get(layer - 1, key);
+    }
+}
+int get(int key) {
+    return get(keymapLayers.size() - 1, key);
+}
+
 void send(int action)
 {
+    int key;
     if (action >= 0 and action < numKeys)
     {
-        Keyboard.press(action);
+        key = get(action);
+        Keyboard.press(key);
     } else if (action < 2 * 48) {
-        Keyboard.release(action - numKeys);
+        key = get(action);
+        Keyboard.release(key);
     }
 }
 void push(int action)
 {
-    static k41pressed = false;
-    static k42pressed = false;
+    static bool k41pressed = false;
+    static bool k42pressed = false;
     enum {start, not_yet_mod, mod, both_mods, mods_and_key};
     static int state;
     switch (state) {

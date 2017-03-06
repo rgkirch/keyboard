@@ -8,7 +8,12 @@ void push(std::string, int key)
     }
     buffer.push_back((char)key);
 }
-void pop(std::string,int number) { for(int i=0; i < number; i++) { Serial.println("pop"); data.pop_back(); } }
+void pop(std::string,int number)
+{
+    for(int i=0; i < number; i++)
+    { Serial.println("pop"); data.pop_back();
+}
+}
 bool empty() { return data.empty(); }
 const char& back() { return data.back(); }
 std::string buffer;

@@ -141,7 +141,7 @@ int dvorak[] {
 int numberFunction[] {
         KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
         -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
-        -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1,
+        -1, ASCII_21, ASCII_40, ASCII_23, ASCII_24, ASCII_25, ASCII_5E, ASCII_26, ASCII_2A, ASCII_28, ASCII_29, -1
         -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
 };
 

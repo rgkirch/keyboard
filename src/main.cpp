@@ -386,6 +386,8 @@ void loop()
 //    delay(1000);
 }
 
-//https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h
+// current problem. there's a way for the ctrl key to get stuck, probably the same for the alt key as well
+// the ctrl alt mod keys happen at the lowest level. they work off of the raw inputs before they get mapped at all which means that they can't get mapped to anything later
+// need better debuging
 
-// you don't press and release the alt key much, you could use press and release to be a space but when it's used in a combo, it works like the al
+//https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

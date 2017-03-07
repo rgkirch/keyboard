@@ -173,94 +173,156 @@ void send(int action)
         Keyboard.release(key);
     }
 }
+bool otherKeysPressed()
+{
+    for (int i = 0; i < numKeys; ++i) {
+        if(i != 41 and i != 42 and states[i] == 1) return true;
+    }
+    return false;
+}
 void push(int action)
 {
+    bool okp;
     static bool k41pressed = false;
     static bool k42pressed = false;
-    enum {start, not_yet_mod, mod, both_mods, mods_and_key};
+    enum {start, one_thumb, one_thumb_prime, both_thumb, one_mod, both_mod};
+    const char* enums[] {"start", "not_yet_mod", "mod", "both_mods", "mods_and_key"};
     static int state;
     switch (state) {
         case start:
-            if (action == k41p) {
+            if (action == k41p)
+            {
                 k41pressed = true;
-                state = not_yet_mod;
+                state = one_thumb;
             } else if (action == k42p) {
                 k42pressed = true;
-                state = not_yet_mod;
+                state = one_thumb;
             } else send(action);
             break;
-        case not_yet_mod:
-            if (k41pressed and action == k41r) {
+        case one_thumb:
+            if (action == k41r and k41pressed)
+            {
+                k41pressed = false;
                 Keyboard.press(KEY_BACKSPACE);
                 Keyboard.release(KEY_BACKSPACE);
-                k41pressed = false;
                 state = start;
-            } else if (k42pressed and action == k42r) {
+            } else if (action == k42r and k42pressed) {
+                k42pressed = false;
                 Keyboard.press(KEY_SPACE);
                 Keyboard.release(KEY_SPACE);
-                k42pressed = false;
                 state = start;
-            } else if (k41pressed and action == k42p) {
-                k42pressed = true;
-                state = both_mods;
-            } else if (k42pressed and action == k41p) {
+            } else if (action == k41p and k42pressed) {
                 k41pressed = true;
-                state = both_mods;
-            } else if (k41pressed and !k42pressed) {
-                Keyboard.press(MODIFIERKEY_CTRL);
+                state = both_thumb;
+            } else if (action == k42p and k41pressed) {
+                k42pressed = true;
+                state = both_thumb;
+            } else {
+                if(k41pressed) {
+                    Keyboard.press(MODIFIERKEY_CTRL);
+                } else if(k42pressed) {
+                    Keyboard.press(MODIFIERKEY_ALT);
+                } else {
+                    Serial.println("error: should have a thumb key pressed in one_thumb");
+                }
                 send(action);
-                state = mod;
-            } else if (!k41pressed and k42pressed) {
-                Keyboard.press(MODIFIERKEY_ALT);
-                send(action);
-                state = mod;
+                state = one_mod;
             }
             break;
-        case both_mods:
+        case both_thumb:
+            if (!k41pressed or !k42pressed) Serial.println("something wrong 1488853974");
             if (action == k41r) {
+                k41pressed = false;
                 Keyboard.press(KEY_DELETE);
                 Keyboard.release(KEY_DELETE);
-                k41pressed = false;
-                state = mod;
+                state = one_thumb_prime;
             } else if (action == k42r) {
-                Keyboard.press(KEY_RETURN);
-                Keyboard.release(KEY_RETURN);
                 k42pressed = false;
-                state = mod;
-            } else if (action != k41p and action != k42p) {
-                state = mods_and_key;
+                Keyboard.press(KEY_ENTER);
+                Keyboard.release(KEY_ENTER);
+                state = one_thumb_prime;
+            } else {
+                Keyboard.press(MODIFIERKEY_CTRL);
+                Keyboard.press(MODIFIERKEY_ALT);
+                state = both_mod;
                 send(action);
             }
             break;
-        case mods_and_key:
-            if (action == k41r)
+        case both_mod:
+            okp = otherKeysPressed();
+            if (not okp and action == k41r)
             {
                 k41pressed = false;
-                state = mod;
-            } else if (action == k42r) {
+                Keyboard.release(MODIFIERKEY_CTRL);
+                state = one_thumb_prime;
+            } else if (not okp and action == k42r) {
                 k42pressed = false;
-                state = mod;
+                Keyboard.release(MODIFIERKEY_ALT);
+                state = one_thumb_prime;
+            } else if (okp and action == k41r)
+            {
+                k41pressed = false;
+                Keyboard.release(MODIFIERKEY_CTRL);
+                state = one_mod;
+            } else if (okp and action == k42r) {
+                k42pressed = false;
+                Keyboard.release(MODIFIERKEY_ALT);
+                state = one_mod;
             } else send(action);
             break;
-        case mod:
-            if (!k41pressed and action == k41p)
+        case one_mod:
+            if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488855253");
+            if (action == k41p and !k41pressed) {
+                k41pressed = true;
+                Keyboard.press(MODIFIERKEY_CTRL);
+                state = both_mod;
+            } else if (action == k42p and !k42pressed) {
+                k42pressed = true;
+                Keyboard.press(MODIFIERKEY_ALT);
+                state = both_mod;
+            } else if (action == k41r and k41pressed) {
+                k41pressed = false;
+                Keyboard.release(MODIFIERKEY_CTRL);
+                state = start;
+            } else if (action == k42r and k42pressed) {
+                k42pressed = false;
+                Keyboard.release(MODIFIERKEY_ALT);
+                state = start;
+            } else if (not otherKeysPressed()) {
+                send(action);
+                if (k41pressed) Keyboard.release(MODIFIERKEY_CTRL);
+                if (k42pressed) Keyboard.release(MODIFIERKEY_ALT);
+                state = one_thumb_prime;
+            } else send(action);
+            break;
+        case one_thumb_prime:
+            if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488856884");
+            if (action == k41p and not k41pressed)
             {
                 k41pressed = true;
-                state = both_mods;
-            } else if (!k42pressed and action == k42p) {
+                state = both_thumb;
+            } else if (action == k42p and not k42pressed) {
                 k42pressed = true;
-                state = both_mods;
-            } else if (k41pressed and k41r) {
-                Keyboard.release(MODIFIERKEY_CTRL);
+                state = both_thumb;
+            } else if (action == k41r and k41pressed) {
                 k41pressed = false;
                 state = start;
-            } else if (k42pressed and k42r) {
-                Keyboard.release(MODIFIERKEY_ALT);
+            } else if (action == k42r and k42pressed) {
                 k42pressed = false;
                 state = start;
-            } else send(action);
+            } else if (k41pressed) {
+                Keyboard.press(MODIFIERKEY_CTRL);
+                send(action);
+            } else if (k42pressed) {
+                Keyboard.press(MODIFIERKEY_ALT);
+                send(action);
+            }
             break;
     }
+    if(k41pressed) Serial.println("k41pressed");
+    if(k42pressed) Serial.println("k42pressed");
+    Serial.println(enums[state]);
+    Serial.println();
 }
 
 void setup()

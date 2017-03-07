@@ -186,7 +186,7 @@ void push(int action)
     static bool k41pressed = false;
     static bool k42pressed = false;
     enum {start, one_thumb, one_thumb_prime, both_thumb, one_mod, both_mod};
-    const char* enums[] {"start", "not_yet_mod", "mod", "both_mods", "mods_and_key"};
+    const char* enums[] {"start", "one_thumb", "one_thumb_prime", "both_thumb", "one_mod", "both_mod"};
     static int state;
     switch (state) {
         case start:
@@ -313,9 +313,11 @@ void push(int action)
             } else if (k41pressed) {
                 Keyboard.press(MODIFIERKEY_CTRL);
                 send(action);
+                state = one_mod;
             } else if (k42pressed) {
                 Keyboard.press(MODIFIERKEY_ALT);
                 send(action);
+                state = one_mod;
             }
             break;
     }

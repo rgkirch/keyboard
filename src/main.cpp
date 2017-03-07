@@ -331,6 +331,8 @@ void setup()
 {
     Serial.begin(9600);
     Keyboard.begin();
+    keymapLayers.push_back(modifiers);
+    keymapLayers.push_back(dvorak);
     for(int i = 0; i < inputsLength; i++)
     {
         pinMode(inputs[i], INPUT_PULLDOWN);

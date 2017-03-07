@@ -128,7 +128,7 @@ int modifiers[] {
 };
 int qwerty[] {
         -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
-                                                                                                   -1, KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K,     KEY_L,      KEY_SEMICOLON, KEY_QUOTE,
+        -1, KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K,     KEY_L,      KEY_SEMICOLON, KEY_QUOTE,
         -1, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,     -1,
         -1, -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,        -1,         -1,             -1
 };
@@ -169,7 +169,7 @@ void send(int action)
         key = get(action);
         Keyboard.press(key);
     } else if (action < 2 * 48) {
-        key = get(action);
+        key = get(action - 48);
         Keyboard.release(key);
     }
 }
@@ -288,11 +288,11 @@ void push(int action)
                 k42pressed = false;
                 Keyboard.release(MODIFIERKEY_ALT);
                 state = start;
-            } else if (not otherKeysPressed()) {
-                send(action);
-                if (k41pressed) Keyboard.release(MODIFIERKEY_CTRL);
-                if (k42pressed) Keyboard.release(MODIFIERKEY_ALT);
-                state = one_thumb_prime;
+//            } else if (not otherKeysPressed()) {
+//                send(action);
+//                if (k41pressed) Keyboard.release(MODIFIERKEY_CTRL);
+//                if (k42pressed) Keyboard.release(MODIFIERKEY_ALT);
+//                state = one_thumb_prime;
             } else send(action);
             break;
         case one_thumb_prime:

@@ -135,7 +135,7 @@ int qwerty[] {
 int dvorak[] {
         -1, KEY_QUOTE,     KEY_COMMA, KEY_PERIOD, KEY_P, KEY_Y, KEY_F, KEY_G, KEY_C, KEY_R, KEY_L, KEY_SLASH,
         -1, KEY_A,         KEY_O,     KEY_E,	  KEY_U, KEY_I, KEY_D, KEY_H, KEY_T, KEY_N, KEY_S, KEY_MINUS,
-        -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
+        -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, KEY_EQUAL,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
 int numberFunction[] {
@@ -188,7 +188,40 @@ bool otherKeysPressed()
     }
     return false;
 }
-void push(int action)
+int shiftEquals(int action)
+{
+    enum {start, pressed, shift};
+    static int state;
+    switch (state)
+    {
+        case start:
+            if (action == k35p)
+            {
+                state = pressed;
+            }
+            break;
+        case pressed:
+            if (action == k35r)
+            {
+                Keyboard.press(KEY_EQUAL);
+                Keyboard.release(KEY_EQUAL);
+                state = start;
+            } else if (action != k24p and isPress(action)) {
+                Keyboard.press(KEY_RIGHT_SHIFT);
+                state = shift;
+                send(action);
+            } else send(action);
+            break;
+        case shift:
+            if (action == k35r)
+            {
+                Keyboard.release(KEY_RIGHT_SHIFT);
+                state = start;
+            } else send(action);
+            break;
+    }
+}
+void thumbs(int action)
 {
     bool okp;
     static bool k41pressed = false;
@@ -332,7 +365,14 @@ void push(int action)
     Serial.println(enums[state]);
     Serial.println();
 }
-
+int(*listeners[])(int action) = {shiftEquals, push};
+void push(int action)
+{
+    for(auto f:listeners)
+    {
+        f(action);
+    }
+}
 void setup()
 {
     Serial.begin(9600);

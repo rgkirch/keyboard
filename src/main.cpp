@@ -161,6 +161,14 @@ int get(int key) {
     return get(keymapLayers.size() - 1, key);
 }
 
+bool isPress(int action)
+{
+    return action >= 0 and action < numKeys;
+}
+bool isRelease(int action)
+{
+    return action > numKeys and action < 2 * 48;
+}
 void send(int action)
 {
     int key;
@@ -217,17 +225,15 @@ void push(int action)
             } else if (action == k42p and k41pressed) {
                 k42pressed = true;
                 state = both_thumb;
-            } else {
-                if(k41pressed) {
-                    Keyboard.press(MODIFIERKEY_CTRL);
-                } else if(k42pressed) {
-                    Keyboard.press(MODIFIERKEY_ALT);
-                } else {
-                    Serial.println("error: should have a thumb key pressed in one_thumb");
-                }
+            } else if (isPress(action) and k41pressed) {
+                Keyboard.press(MODIFIERKEY_CTRL);
                 send(action);
                 state = one_mod;
-            }
+            } else if(isPress(action) and k42pressed) {
+                Keyboard.press(MODIFIERKEY_ALT);
+                send(action);
+                state = one_mod;
+            } else send(action);
             break;
         case both_thumb:
             if (!k41pressed or !k42pressed) Serial.println("something wrong 1488853974");

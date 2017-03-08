@@ -59,7 +59,7 @@ int qwerty[] {
 int dvorak[] {
         -1, KEY_QUOTE,     KEY_COMMA, KEY_PERIOD, KEY_P, KEY_Y, KEY_F, KEY_G, KEY_C, KEY_R, KEY_L, KEY_SLASH,
         -1, KEY_A,         KEY_O,     KEY_E,	  KEY_U, KEY_I, KEY_D, KEY_H, KEY_T, KEY_N, KEY_S, KEY_MINUS,
-        -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, KEY_EQUAL,
+        -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
 int numberFunction[] {
@@ -168,7 +168,7 @@ bool thumbs(int action)
                 k42pressed = true;
                 consumed = true;
                 state = one_thumb;
-            } else send(action);
+            }
             break;
         case one_thumb:
             if (action == k41r and k41pressed)

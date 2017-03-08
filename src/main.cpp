@@ -65,8 +65,8 @@ int dvorak[] {
 int numbers[] {
         KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
         -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
-        -1, ASCII_21, ASCII_40, ASCII_23, ASCII_24, ASCII_25, ASCII_5E, ASCII_26, ASCII_2A, ASCII_28, ASCII_29, -1
-        -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,      -1,      -1
+        -1, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_RIGHT, -1, -1, KEY_HOME, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
 
 std::vector<int*> keymapLayers;
@@ -132,6 +132,7 @@ bool layer(int action)
                 if (keymapLayers.back() == numbers)
                 {
                     keymapLayers.pop_back();
+                    state = start;
                 } else Serial.println("error: 1488939791"); // todo - a more robust layering scheme
                 consumed = true;
             }
@@ -327,7 +328,7 @@ bool thumbs(int action)
     }
     return consumed;
 }
-bool(*listeners[])(int action) = {shiftEquals, thumbs};
+bool(*listeners[])(int action) = {shiftEquals, thumbs, layer};
 void push(int action)
 {
     bool consumed = false;
@@ -399,5 +400,6 @@ void loop()
 // the ctrl alt mod keys happen at the lowest level. they work off of the raw inputs before they get mapped at all which means that they can't get mapped to anything later
 // need better debuging
 // todo - i broke it so that on alt tab, the first tab doesn't go through
+// todo - idea - sticky keys - press alt, press other key, release alt, press space, sends alt space
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

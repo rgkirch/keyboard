@@ -9,102 +9,26 @@ extern "C" {
     int _write(){ return -1; }
 }
 
-#define k0p 0x00
-#define k1p 0x01
-#define k2p 0x02
-#define k3p 0x03
-#define k4p 0x04
-#define k5p 0x05
-#define k6p 0x06
-#define k7p 0x07
-#define k8p 0x08
-#define k9p 0x09
-#define k10p 0x0a
-#define k11p 0x0b
-#define k12p 0x0c
-#define k13p 0x0d
-#define k14p 0x0e
-#define k15p 0x0f
-#define k16p 0x10
-#define k17p 0x11
-#define k18p 0x12
-#define k19p 0x13
-#define k20p 0x14
-#define k21p 0x15
-#define k22p 0x16
-#define k23p 0x17
-#define k24p 0x18
-#define k25p 0x19
-#define k26p 0x1a
-#define k27p 0x1b
-#define k28p 0x1c
-#define k29p 0x1d
-#define k30p 0x1e
-#define k31p 0x1f
-#define k32p 0x20
-#define k33p 0x21
-#define k34p 0x22
-#define k35p 0x23
-#define k36p 0x24
-#define k37p 0x25
-#define k38p 0x26
-#define k39p 0x27
-#define k40p 0x28
-#define k41p 0x29
-#define k42p 0x2a
-#define k43p 0x2b
-#define k44p 0x2c
-#define k45p 0x2d
-#define k46p 0x2e
-#define k47p 0x2f
-#define k0r 0x30
-#define k1r 0x31
-#define k2r 0x32
-#define k3r 0x33
-#define k4r 0x34
-#define k5r 0x35
-#define k6r 0x36
-#define k7r 0x37
-#define k8r 0x38
-#define k9r 0x39
-#define k10r 0x3a
-#define k11r 0x3b
-#define k12r 0x3c
-#define k13r 0x3d
-#define k14r 0x3e
-#define k15r 0x3f
-#define k16r 0x40
-#define k17r 0x41
-#define k18r 0x42
-#define k19r 0x43
-#define k20r 0x44
-#define k21r 0x45
-#define k22r 0x46
-#define k23r 0x47
-#define k24r 0x48
-#define k25r 0x49
-#define k26r 0x4a
-#define k27r 0x4b
-#define k28r 0x4c
-#define k29r 0x4d
-#define k30r 0x4e
-#define k31r 0x4f
-#define k32r 0x50
-#define k33r 0x51
-#define k34r 0x52
-#define k35r 0x53
-#define k36r 0x54
-#define k37r 0x55
-#define k38r 0x56
-#define k39r 0x57
-#define k40r 0x58
-#define k41r 0x59
-#define k42r 0x5a
-#define k43r 0x5b
-#define k44r 0x5c
-#define k45r 0x5d
-#define k46r 0x5e
-#define k47r 0x5f
+enum actions {
+    k00p, k01p, k02p, k03p, k04p, k05p, k06p, k07p, k08p, k09p, k10p, k11p,
+    k12p, k13p, k14p, k15p, k16p, k17p, k18p, k19p, k20p, k21p, k22p, k23p,
+    k24p, k25p, k26p, k27p, k28p, k29p, k30p, k31p, k32p, k33p, k34p, k35p,
+    k36p, k37p, k38p, k39p, k40p, k41p, k42p, k43p, k44p, k45p, k46p, k47p,
+    k00r, k01r, k02r, k03r, k04r, k05r, k06r, k07r, k08r, k09r, k10r, k11r,
+    k12r, k13r, k14r, k15r, k16r, k17r, k18r, k19r, k20r, k21r, k22r, k23r,
+    k24r, k25r, k26r, k27r, k28r, k29r, k30r, k31r, k32r, k33r, k34r, k35r,
+    k36r, k37r, k38r, k39r, k40r, k41r, k42r, k43r, k44r, k45r, k46r, k47r
+};
+const char* actionStrings[] {
+    "k00p", "k01p", "k02p", "k03p", "k04p", "k05p", "k06p", "k07p", "k08p", "k09p", "k10p", "k11p",
+    "k12p", "k13p", "k14p", "k15p", "k16p", "k17p", "k18p", "k19p", "k20p", "k21p", "k22p", "k23p",
+    "k24p", "k25p", "k26p", "k27p", "k28p", "k29p", "k30p", "k31p", "k32p", "k33p", "k34p", "k35p",
+    "k36p", "k37p", "k38p", "k39p", "k40p", "k41p", "k42p", "k43p", "k44p", "k45p", "k46p", "k47p",
+    "k00r", "k01r", "k02r", "k03r", "k04r", "k05r", "k06r", "k07r", "k08r", "k09r", "k10r", "k11r",
+    "k12r", "k13r", "k14r", "k15r", "k16r", "k17r", "k18r", "k19r", "k20r", "k21r", "k22r", "k23r",
+    "k24r", "k25r", "k26r", "k27r", "k28r", "k29r", "k30r", "k31r", "k32r", "k33r", "k34r", "k35r",
+    "k36r", "k37r", "k38r", "k39r", "k40r", "k41r", "k42r", "k43r", "k44r", "k45r", "k46r", "k47r"
+};
 
 int inputs[] {6,  7,  8,  9};
 int outputs[] {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
@@ -172,8 +96,7 @@ bool isRelease(int action)
 void send(int action)
 {
     int key;
-    if (action >= 0 and action < numKeys)
-    {
+    if (action >= 0 and action < numKeys) {
         key = get(action);
         Keyboard.press(key);
     } else if (action < 2 * 48) {
@@ -188,8 +111,9 @@ bool otherKeysPressed()
     }
     return false;
 }
-int shiftEquals(int action)
+bool shiftEquals(int action)
 {
+    bool consumed = false;
     enum {start, pressed, shift};
     static int state;
     switch (state)
@@ -197,6 +121,7 @@ int shiftEquals(int action)
         case start:
             if (action == k35p)
             {
+                consumed = true;
                 state = pressed;
             }
             break;
@@ -205,24 +130,27 @@ int shiftEquals(int action)
             {
                 Keyboard.press(KEY_EQUAL);
                 Keyboard.release(KEY_EQUAL);
+                consumed = true;
                 state = start;
-            } else if (action != k24p and isPress(action)) {
+            } else if (isPress(action)) {
                 Keyboard.press(KEY_RIGHT_SHIFT);
                 state = shift;
-                send(action);
-            } else send(action);
+            }
             break;
         case shift:
             if (action == k35r)
             {
                 Keyboard.release(KEY_RIGHT_SHIFT);
+                consumed = true;
                 state = start;
-            } else send(action);
+            }
             break;
     }
+    return consumed;
 }
-void thumbs(int action)
+bool thumbs(int action)
 {
+    bool consumed = false;
     bool okp;
     static bool k41pressed = false;
     static bool k42pressed = false;
@@ -234,9 +162,11 @@ void thumbs(int action)
             if (action == k41p)
             {
                 k41pressed = true;
+                consumed = true;
                 state = one_thumb;
             } else if (action == k42p) {
                 k42pressed = true;
+                consumed = true;
                 state = one_thumb;
             } else send(action);
             break;
@@ -246,45 +176,49 @@ void thumbs(int action)
                 k41pressed = false;
                 Keyboard.press(KEY_BACKSPACE);
                 Keyboard.release(KEY_BACKSPACE);
+                consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
                 Keyboard.press(KEY_SPACE);
                 Keyboard.release(KEY_SPACE);
+                consumed = true;
                 state = start;
             } else if (action == k41p and k42pressed) {
                 k41pressed = true;
+                consumed = true;
                 state = both_thumb;
             } else if (action == k42p and k41pressed) {
                 k42pressed = true;
+                consumed = true;
                 state = both_thumb;
             } else if (isPress(action) and k41pressed) {
                 Keyboard.press(MODIFIERKEY_CTRL);
-                send(action);
                 state = one_mod;
             } else if(isPress(action) and k42pressed) {
                 Keyboard.press(MODIFIERKEY_ALT);
-                send(action);
+                consumed = true;
                 state = one_mod;
-            } else send(action);
+            }
             break;
         case both_thumb:
-            if (!k41pressed or !k42pressed) Serial.println("something wrong 1488853974");
+            if (not k41pressed or not k42pressed) Serial.println("something wrong 1488853974");
             if (action == k41r) {
                 k41pressed = false;
                 Keyboard.press(KEY_DELETE);
                 Keyboard.release(KEY_DELETE);
+                consumed = true;
                 state = one_thumb_prime;
             } else if (action == k42r) {
                 k42pressed = false;
                 Keyboard.press(KEY_ENTER);
                 Keyboard.release(KEY_ENTER);
+                consumed = true;
                 state = one_thumb_prime;
             } else {
                 Keyboard.press(MODIFIERKEY_CTRL);
                 Keyboard.press(MODIFIERKEY_ALT);
                 state = both_mod;
-                send(action);
             }
             break;
         case both_mod:
@@ -293,85 +227,96 @@ void thumbs(int action)
             {
                 k41pressed = false;
                 Keyboard.release(MODIFIERKEY_CTRL);
+                consumed = true;
                 state = one_thumb_prime;
             } else if (not okp and action == k42r) {
                 k42pressed = false;
                 Keyboard.release(MODIFIERKEY_ALT);
+                consumed = true;
                 state = one_thumb_prime;
             } else if (okp and action == k41r)
             {
                 k41pressed = false;
                 Keyboard.release(MODIFIERKEY_CTRL);
+                consumed = true;
                 state = one_mod;
             } else if (okp and action == k42r) {
                 k42pressed = false;
                 Keyboard.release(MODIFIERKEY_ALT);
+                consumed = true;
                 state = one_mod;
-            } else send(action);
+            }
             break;
         case one_mod:
             if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488855253");
             if (action == k41p and !k41pressed) {
                 k41pressed = true;
                 Keyboard.press(MODIFIERKEY_CTRL);
+                consumed = true;
                 state = both_mod;
             } else if (action == k42p and !k42pressed) {
                 k42pressed = true;
                 Keyboard.press(MODIFIERKEY_ALT);
+                consumed = true;
                 state = both_mod;
             } else if (action == k41r and k41pressed) {
                 k41pressed = false;
                 Keyboard.release(MODIFIERKEY_CTRL);
+                consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
                 Keyboard.release(MODIFIERKEY_ALT);
+                consumed = true;
                 state = start;
-//            } else if (not otherKeysPressed()) {
-//                send(action);
-//                if (k41pressed) Keyboard.release(MODIFIERKEY_CTRL);
-//                if (k42pressed) Keyboard.release(MODIFIERKEY_ALT);
-//                state = one_thumb_prime;
-            } else send(action);
+            }
             break;
         case one_thumb_prime:
             if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488856884");
             if (action == k41p and not k41pressed)
             {
                 k41pressed = true;
+                consumed = true;
                 state = both_thumb;
             } else if (action == k42p and not k42pressed) {
                 k42pressed = true;
+                consumed = true;
                 state = both_thumb;
             } else if (action == k41r and k41pressed) {
                 k41pressed = false;
+                consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
+                consumed = true;
                 state = start;
             } else if (k41pressed) {
                 Keyboard.press(MODIFIERKEY_CTRL);
-                send(action);
                 state = one_mod;
             } else if (k42pressed) {
                 Keyboard.press(MODIFIERKEY_ALT);
-                send(action);
                 state = one_mod;
             }
             break;
     }
-    if(k41pressed) Serial.println("k41pressed");
-    if(k42pressed) Serial.println("k42pressed");
-    Serial.println(enums[state]);
-    Serial.println();
+    return consumed;
 }
-int(*listeners[])(int action) = {shiftEquals, push};
+bool(*listeners[])(int action) = {shiftEquals, thumbs};
 void push(int action)
 {
+    bool consumed = false;
     for(auto f:listeners)
     {
-        f(action);
+        if (f(action))
+        {
+            consumed = true;
+        }
     }
+    if (not consumed)
+    {
+        send(action);
+    }
+    Serial.println(actionStrings[action]);
 }
 void setup()
 {
@@ -405,14 +350,12 @@ void loop()
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 1;
-                        Serial.println("push");
                         push(key);
                     }
                 } else {
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 0;
-                        Serial.println("anti-push");
                         push(key + 48);
                     }
                 }
@@ -429,5 +372,7 @@ void loop()
 // current problem. there's a way for the ctrl key to get stuck, probably the same for the alt key as well
 // the ctrl alt mod keys happen at the lowest level. they work off of the raw inputs before they get mapped at all which means that they can't get mapped to anything later
 // need better debuging
+// todo - i broke it so that on alt tab, the first tab doesn't go through
+// todo - left shift sends equals on first press
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

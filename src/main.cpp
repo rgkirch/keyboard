@@ -197,7 +197,6 @@ bool thumbs(int action)
                 state = one_mod;
             } else if(isPress(action) and k42pressed) {
                 Keyboard.press(MODIFIERKEY_ALT);
-                consumed = true;
                 state = one_mod;
             }
             break;
@@ -373,6 +372,5 @@ void loop()
 // the ctrl alt mod keys happen at the lowest level. they work off of the raw inputs before they get mapped at all which means that they can't get mapped to anything later
 // need better debuging
 // todo - i broke it so that on alt tab, the first tab doesn't go through
-// todo - left shift sends equals on first press
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

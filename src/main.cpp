@@ -47,7 +47,7 @@ int layerModifiers[] {
 int modifiers[] {
         KEY_TAB, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         KEY_ESC, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_RIGHT_SHIFT,
+        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 };
 int qwerty[] {
@@ -62,7 +62,7 @@ int dvorak[] {
         -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
-int numberFunction[] {
+int numbers[] {
         KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
         -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
         -1, ASCII_21, ASCII_40, ASCII_23, ASCII_24, ASCII_25, ASCII_5E, ASCII_26, ASCII_2A, ASCII_28, ASCII_29, -1
@@ -111,11 +111,38 @@ bool otherKeysPressed()
     }
     return false;
 }
+bool layer(int action)
+{
+    bool consumed = false;
+    enum {start, numberLayer};
+    static int state = start;
+    switch (state) {
+        case start:
+            if (action == k43p)
+            {
+                keymapLayers.push_back(numbers);
+                // todo - release all keys of the layer getting replaced
+                state = numberLayer;
+                consumed = true;
+            }
+            break;
+        case numberLayer:
+            if (action == k43r)
+            {
+                if (keymapLayers.back() == numbers)
+                {
+                    keymapLayers.pop_back();
+                } else Serial.println("error: 1488939791"); // todo - a more robust layering scheme
+                consumed = true;
+            }
+    }
+    return consumed;
+}
 bool shiftEquals(int action)
 {
     bool consumed = false;
     enum {start, pressed, shift};
-    static int state;
+    static int state = start;
     switch (state)
     {
         case start:

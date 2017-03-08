@@ -65,7 +65,7 @@ int dvorak[] {
 int numbers[] {
         KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
         -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
-        -1, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_RIGHT, -1, -1, KEY_HOME, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, -1,
+        -1, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_RIGHT, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_HOME, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
 

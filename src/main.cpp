@@ -125,6 +125,7 @@ bool otherKeysPressed()
 }
 bool mouse(int action)
 {
+    int unit = 100;
     bool consumed = false;
     enum {start, mouse};
     static int state = start;
@@ -137,23 +138,23 @@ bool mouse(int action)
             break;
         case mouse:
             if (action == k07p) {
-                Mouse.move(-100, -100); consumed = true;
+                Mouse.move(-unit, -unit); consumed = true;
             } else if (action == k08p) {
-                Mouse.move(0, -100); consumed = true;
+                Mouse.move(0, -unit); consumed = true;
             } else if (action == k09p) {
-                Mouse.move(100, -100); consumed = true;
+                Mouse.move(unit, -unit); consumed = true;
             } else if (action == k19p) {
-                Mouse.move(-100, 0); consumed = true;
+                Mouse.move(-unit, 0); consumed = true;
             } else if (action == k20p) {
                 Mouse.click(1); consumed = true;
             } else if (action == k21p) {
-                Mouse.move(100, 0); consumed = true;
+                Mouse.move(unit, 0); consumed = true;
             } else if (action == k31p) {
-                Mouse.move(-100, 100); consumed = true;
+                Mouse.move(-unit, unit); consumed = true;
             } else if (action == k32p) {
-                Mouse.move(0, 100); consumed = true;
+                Mouse.move(0, unit); consumed = true;
             } else if (action == k33p) {
-                Mouse.move(100, -100); consumed = true;
+                Mouse.move(unit, unit); consumed = true;
             } else if (action == k40r) {
                 state = start;
             }

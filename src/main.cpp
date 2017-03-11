@@ -60,13 +60,20 @@ int dvorak[] {
         -1, KEY_QUOTE,     KEY_COMMA, KEY_PERIOD, KEY_P, KEY_Y, KEY_F, KEY_G, KEY_C, KEY_R, KEY_L, KEY_SLASH,
         -1, KEY_A,         KEY_O,     KEY_E,	  KEY_U, KEY_I, KEY_D, KEY_H, KEY_T, KEY_N, KEY_S, KEY_MINUS,
         -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        -1, -1, -1, -1, -1, -1, -1, -1, KEY_BACKSLASH, -1, -1, -1
 };
 int numbers[] {
-        KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
+        KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F11, KEY_F12, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10,
         -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
-        -1, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_RIGHT, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_HOME, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, -1,
+        -1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_HOME, KEY_END, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+};
+int utils[] {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, KEY_MEDIA_VOLUME_DEC, KEY_MEDIA_VOLUME_INC, KEY_MEDIA_MUTE, KEY_MEDIA_NEXT_TRACK, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+//       0   1   2   3   4   5 | 6   7   8   9  10  11
 };
 
 std::vector<int*> keymapLayers;
@@ -114,7 +121,7 @@ bool otherKeysPressed()
 bool layer(int action)
 {
     bool consumed = false;
-    enum {start, numberLayer};
+    enum {start, numberLayer, utilLayer};
     static int state = start;
     switch (state) {
         case start:
@@ -123,6 +130,10 @@ bool layer(int action)
                 keymapLayers.push_back(numbers);
                 // todo - release all keys of the layer getting replaced
                 state = numberLayer;
+                consumed = true;
+            } else if (action == k40p) {
+                keymapLayers.push_back(utils);
+                state = utilLayer;
                 consumed = true;
             }
             break;
@@ -136,6 +147,17 @@ bool layer(int action)
                 } else Serial.println("error: 1488939791"); // todo - a more robust layering scheme
                 consumed = true;
             }
+            break;
+        case utilLayer:
+            if (action == k40r) {
+                if (keymapLayers.back() == utils)
+                {
+                    keymapLayers.pop_back();
+                    state = start;
+                } else Serial.println("error: 1488939792");
+                consumed = true;
+            }
+            break;
     }
     return consumed;
 }

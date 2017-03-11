@@ -67,11 +67,11 @@ int numbers[] {
         -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, -1,
         -1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_HOME, KEY_END, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-};
+}
 int utils[] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, KEY_MEDIA_VOLUME_DEC, KEY_MEDIA_VOLUME_INC, KEY_MEDIA_MUTE, KEY_MEDIA_NEXT_TRACK, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, KEY_MEDIA_PREV_TRACK, KEY_MEDIA_NEXT_TRACK, KEY_MEDIA_VOLUME_DEC, KEY_MEDIA_VOLUME_INC, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 //       0   1   2   3   4   5 | 6   7   8   9  10  11
 };

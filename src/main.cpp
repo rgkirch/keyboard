@@ -145,7 +145,7 @@ bool mouse(int action)
             } else if (action == k19p) {
                 Mouse.move(-100, 0); consumed = true;
             } else if (action == k20p) {
-                Mouse.click(0); consumed = true;
+                Mouse.click(1); consumed = true;
             } else if (action == k21p) {
                 Mouse.move(100, 0); consumed = true;
             } else if (action == k31p) {

@@ -1,5 +1,7 @@
 #include "Arduino.h"
 #include <vector>
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
 bool shiftEquals(int action);
 bool thumbs(int action);
 bool layer(int action);
@@ -123,38 +125,61 @@ bool otherKeysPressed()
     }
     return false;
 }
-bool mouse(int action)
+void Mousemove(int x, int y)
 {
     int unit = 100;
+    int xs = 1;
+    int ys = 1;
+    if (x < 0) {xs = -1; x *= -1;}
+    if (y < 0) {ys = -1; y *= -1;}
+    while (x > 0 or y > 0)
+    {
+        int xmove = min(unit, x);
+        x = max(0, x - unit);
+        int ymove = min(unit, y);
+        y = max(0, y - unit);
+        Mouse.move(xmove * xs, ymove * ys);
+    }
+}
+bool mouse(int action)
+{
+    static int xunit = 0;
+    static int yunit = 0;
+    static bool divide = false;
     bool consumed = false;
     enum {start, mouse};
     static int state = start;
     switch (state) {
         case start:
             if (action == k40p) {
+                xunit = 1000;
+                yunit = 1000;
+                divide = false;
                 state = mouse;
                 consumed = true;
             }
             break;
         case mouse:
             if (action == k07p) {
-                Mouse.move(-unit, -unit); consumed = true;
+                divide = not divide; consumed = true;
             } else if (action == k08p) {
-                Mouse.move(0, -unit); consumed = true;
-            } else if (action == k09p) {
-                Mouse.move(unit, -unit); consumed = true;
+                Mousemove(0, -yunit); consumed = true;
+                if (divide) yunit /= 2;
             } else if (action == k19p) {
-                Mouse.move(-unit, 0); consumed = true;
+                Mousemove(-xunit, 0); consumed = true;
+                if (divide) xunit /= 2;
             } else if (action == k20p) {
-                Mouse.click(1); consumed = true;
+                Mousemove(0, yunit); consumed = true;
+                if (divide) yunit /= 2;
             } else if (action == k21p) {
-                Mouse.move(unit, 0); consumed = true;
+                Mousemove(xunit, 0); consumed = true;
+                if (divide) xunit /= 2;
             } else if (action == k31p) {
-                Mouse.move(-unit, unit); consumed = true;
+                Mouse.click(1); consumed = true;
             } else if (action == k32p) {
-                Mouse.move(0, unit); consumed = true;
+                Mouse.click(4); consumed = true;
             } else if (action == k33p) {
-                Mouse.move(unit, unit); consumed = true;
+                Mouse.click(2); consumed = true;
             } else if (action == k40r) {
                 state = start;
             }
@@ -472,5 +497,6 @@ void loop()
 // need better debuging
 // todo - i broke it so that on alt tab, the first tab doesn't go through
 // todo - idea - sticky keys - press alt, press other key, release alt, press space, sends alt space
+// todo - ctrl+alt+left breaks it
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

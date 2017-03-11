@@ -143,6 +143,55 @@ void Mousemove(int x, int y)
 }
 bool mouse(int action)
 {
+    Mouse.screenSize(3840, 2160);
+    int xRes = 3840;
+    int yRes = 2160;
+//    int xRes = 920;
+//    int yRes = 1080;
+//    int xRes = 100;
+//    int yRes = 100;
+    static int xunit = 0;
+    static int yunit = 0;
+    bool consumed = false;
+    enum {start, mouse};
+    static int state = start;
+    switch (state) {
+        case start:
+            if (action == k40p) {
+                xunit = xRes / 4;
+                yunit = yRes / 4;
+                Mouse.moveTo(xRes / 2, yRes / 2);
+                state = mouse;
+                consumed = true;
+            }
+            break;
+        case mouse:
+            if (action == k08p) {
+                Mousemove(0, -yunit); consumed = true;
+                yunit /= 2;
+            } else if (action == k19p) {
+                Mousemove(-xunit, 0); consumed = true;
+                xunit /= 2;
+            } else if (action == k20p) {
+                Mousemove(0, yunit); consumed = true;
+                yunit /= 2;
+            } else if (action == k21p) {
+                Mousemove(xunit, 0); consumed = true;
+                xunit /= 2;
+            } else if (action == k31p) {
+                Mouse.click(1); consumed = true;
+            } else if (action == k32p) {
+                Mouse.click(4); consumed = true;
+            } else if (action == k33p) {
+                Mouse.click(2); consumed = true;
+            } else if (action == k40r) {
+                state = start;
+            }
+            break;
+    }
+    return consumed;
+}bool relativeMouse(int action)
+{
     static int xunit = 0;
     static int yunit = 0;
     static bool divide = false;
@@ -448,6 +497,7 @@ void setup()
 {
     Serial.begin(9600);
     Keyboard.begin();
+    Mouse.begin();
     keymapLayers.push_back(modifiers);
     keymapLayers.push_back(dvorak);
     for(int i = 0; i < inputsLength; i++)

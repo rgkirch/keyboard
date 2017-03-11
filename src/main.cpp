@@ -3,6 +3,7 @@
 
 int numKeys = 48;
 std::vector<int*> keymapLayers;
+bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse};
 
 extern "C" {
     int _getpid(){ return -1;}
@@ -117,6 +118,27 @@ bool otherKeysPressed()
         if(i != 41 and i != 42 and states[i] == 1) return true;
     }
     return false;
+}
+bool mouse(int action)
+{
+    bool consumed = false;
+    enum {start, mouse};
+    static int state = start;
+    switch (state) {
+        case start:
+            if (action == k40p) {
+                state = mouse;
+                consumed = true;
+            }
+            break;
+        case mouse:
+            if (action == k07p)
+            {
+                Mouse.screenSize()
+            }
+            break;
+    }
+    return consumed;
 }
 bool layer(int action)
 {
@@ -347,14 +369,14 @@ bool thumbs(int action)
                 state = one_mod;
             }
             break;
-    }
+   }
     return consumed;
 }
 void reset()
 {
+    Keyboard.releaseAll();
     _reboot_Teensyduino_();
 }
-bool(*listeners[])(int action) = {shiftEquals, thumbs, layer};
 void push(int action)
 {
     if (action == k36p)
@@ -373,7 +395,7 @@ void push(int action)
     {
         send(action);
     }
-    Serial.println(actionStrings[action]);
+//    Serial.println(actionStrings[action]);
 }
 void setup()
 {
@@ -416,9 +438,6 @@ void loop()
                         push(key + 48);
                     }
                 }
-//                Serial.print(o);
-//                Serial.print(" ");
-//                Serial.println(i);
             }
         }
         digitalWrite(outputs[o], LOW);

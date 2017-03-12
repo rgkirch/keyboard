@@ -164,6 +164,7 @@ bool leader(int action)
 }
 bool mouse(int action)
 {
+    static bool centered = false;
     Mouse.screenSize(3840, 2160);
     int xRes = 3840;
     int yRes = 2160;
@@ -181,12 +182,15 @@ bool mouse(int action)
             if (action == k40p) {
                 xunit = xRes / 4;
                 yunit = yRes / 4;
-                Mouse.moveTo(xRes / 2, yRes / 2);
                 state = mouse;
                 consumed = true;
             }
             break;
         case mouse:
+            if (not centered) {
+                Mouse.moveTo(xRes / 2, yRes / 2);
+                centered = true;
+            }
             if (action == k08p) {
                 Mousemove(0, -yunit); consumed = true;
                 yunit /= 2;
@@ -207,6 +211,7 @@ bool mouse(int action)
                 Mouse.click(2); consumed = true;
             } else if (action == k40r) {
                 state = start;
+                centered = false;
             }
             break;
     }

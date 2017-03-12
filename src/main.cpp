@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include <vector>
+#include <functional>
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 bool shiftEquals(int action);
@@ -8,12 +9,27 @@ bool layer(int action);
 bool mouse(int action);
 bool leader(int action);
 
+//struct event {
+//    enum {mouseMoveBy, mouseMoveTo, keyPress, keyRelease};
+//    int type;
+//    union {
+//        struct {
+//            int mouseX;
+//            int mouseY;
+//        };
+//        struct {
+//            int key;
+//        };
+//    };
+//};
 int numKeys = 48;
+bool recordActions = false;
+std::vector<std::function<void(void)>> recordedActions;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
 
 extern "C" {
-    int _getpid(){ return -1;}
+int _getpid(){ return -1;}
     int _kill(int pid, int sig){ return -1; }
     int _write(){ return -1; }
 }
@@ -108,17 +124,6 @@ bool isRelease(int action)
 {
     return action > numKeys and action < 2 * numKeys;
 }
-void send(int action)
-{
-    int key;
-    if (isPress(action)) {
-        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
-        Keyboard.press(key);
-    } else if (isRelease(action)) {
-        key = get(action - numKeys);
-        Keyboard.release(key);
-    }
-}
 bool otherKeysPressed()
 {
     for (int i = 0; i < numKeys; ++i) {
@@ -126,7 +131,46 @@ bool otherKeysPressed()
     }
     return false;
 }
-void Mousemove(int x, int y)
+void KeyboardPress(int action)
+{
+    if (recordActions)
+    {
+//        recordedActions.push_back(event {.type = event::keyAction, .action = action, .keyPress = true});
+        recordedActions.push_back([=]()->void {Keyboard.press(action);});
+    }
+    Keyboard.press(action);
+}
+void KeyboardRelease(int action)
+{
+    if (recordActions)
+    {
+        recordedActions.push_back([=]()->void {Keyboard.release(action);});
+//        recordedActions.push_back(event {.type = event::keyAction, .action = action, .keyPress = false});
+    }
+    Keyboard.release(action);
+}
+void MouseMoveTo(int x, int y)
+{
+    if (recordActions)
+    {
+//        recordedActions.push_back(event {.type = event::mousePosition, .action = action, .keyPress = false});
+        recordedActions.push_back([=]()->void {Mouse.moveTo(x, y);});
+    }
+//    recordedActions.back()();
+    Mouse.moveTo(x, y);
+}
+void send(int action)
+{
+    int key;
+    if (isPress(action)) {
+        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
+        KeyboardPress(key);
+    } else if (isRelease(action)) {
+        key = get(action - numKeys);
+        KeyboardRelease(key);
+    }
+}
+void MouseMove(int x, int y)
 {
     int unit = 100;
     int xs = 1;
@@ -139,13 +183,14 @@ void Mousemove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
+        if (recordActions) recordedActions.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
     }
 }
 bool leader(int action)
 {
     static int state;
-    enum {start, leading, recordMacro};
+    enum {start, leading, recordingMacro};
     bool consumed;
     switch (state) {
         case start:
@@ -156,8 +201,14 @@ bool leader(int action)
             break;
         case leading:
             if (isPress(action) and get(action) == KEY_Q) {
-                state = recordMacro;
+                state = recordingMacro;
+                consumed = true;
+            } else if (isPress(action)) {
+                state = start;
             }
+            break;
+        case recordingMacro:
+            recordActions = true;
             break;
     }
     return consumed;
@@ -188,20 +239,20 @@ bool mouse(int action)
             break;
         case mouse:
             if (not centered) {
-                Mouse.moveTo(xRes / 2, yRes / 2);
+                MouseMoveTo(xRes / 2, yRes / 2);
                 centered = true;
             }
             if (action == k08p) {
-                Mousemove(0, -yunit); consumed = true;
+                MouseMove(0, -yunit); consumed = true;
                 yunit /= 2;
             } else if (action == k19p) {
-                Mousemove(-xunit, 0); consumed = true;
+                MouseMove(-xunit, 0); consumed = true;
                 xunit /= 2;
             } else if (action == k20p) {
-                Mousemove(0, yunit); consumed = true;
+                MouseMove(0, yunit); consumed = true;
                 yunit /= 2;
             } else if (action == k21p) {
-                Mousemove(xunit, 0); consumed = true;
+                MouseMove(xunit, 0); consumed = true;
                 xunit /= 2;
             } else if (action == k31p) {
                 Mouse.click(1); consumed = true;
@@ -238,16 +289,16 @@ bool mouse(int action)
             if (action == k07p) {
                 divide = not divide; consumed = true;
             } else if (action == k08p) {
-                Mousemove(0, -yunit); consumed = true;
+                MouseMove(0, -yunit); consumed = true;
                 if (divide) yunit /= 2;
             } else if (action == k19p) {
-                Mousemove(-xunit, 0); consumed = true;
+                MouseMove(-xunit, 0); consumed = true;
                 if (divide) xunit /= 2;
             } else if (action == k20p) {
-                Mousemove(0, yunit); consumed = true;
+                MouseMove(0, yunit); consumed = true;
                 if (divide) yunit /= 2;
             } else if (action == k21p) {
-                Mousemove(xunit, 0); consumed = true;
+                MouseMove(xunit, 0); consumed = true;
                 if (divide) xunit /= 2;
             } else if (action == k31p) {
                 Mouse.click(1); consumed = true;
@@ -322,19 +373,19 @@ bool shiftEquals(int action)
         case pressed:
             if (action == k35r)
             {
-                Keyboard.press(KEY_EQUAL);
-                Keyboard.release(KEY_EQUAL);
+                KeyboardPress(KEY_EQUAL);
+                KeyboardRelease(KEY_EQUAL);
                 consumed = true;
                 state = start;
             } else if (isPress(action)) {
-                Keyboard.press(KEY_RIGHT_SHIFT);
+                KeyboardPress(KEY_RIGHT_SHIFT);
                 state = shift;
             }
             break;
         case shift:
             if (action == k35r)
             {
-                Keyboard.release(KEY_RIGHT_SHIFT);
+                KeyboardRelease(KEY_RIGHT_SHIFT);
                 consumed = true;
                 state = start;
             }
@@ -368,14 +419,14 @@ bool thumbs(int action)
             if (action == k41r and k41pressed)
             {
                 k41pressed = false;
-                Keyboard.press(KEY_BACKSPACE);
-                Keyboard.release(KEY_BACKSPACE);
+                KeyboardPress(KEY_BACKSPACE);
+                KeyboardRelease(KEY_BACKSPACE);
                 consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
-                Keyboard.press(KEY_SPACE);
-                Keyboard.release(KEY_SPACE);
+                KeyboardPress(KEY_SPACE);
+                KeyboardRelease(KEY_SPACE);
                 consumed = true;
                 state = start;
             } else if (action == k41p and k42pressed) {
@@ -387,10 +438,10 @@ bool thumbs(int action)
                 consumed = true;
                 state = both_thumb;
             } else if (isPress(action) and k41pressed) {
-                Keyboard.press(MODIFIERKEY_CTRL);
+                KeyboardPress(MODIFIERKEY_CTRL);
                 state = one_mod;
             } else if(isPress(action) and k42pressed) {
-                Keyboard.press(MODIFIERKEY_ALT);
+                KeyboardPress(MODIFIERKEY_ALT);
                 state = one_mod;
             }
             break;
@@ -398,19 +449,19 @@ bool thumbs(int action)
             if (not k41pressed or not k42pressed) Serial.println("something wrong 1488853974");
             if (action == k41r) {
                 k41pressed = false;
-                Keyboard.press(KEY_DELETE);
-                Keyboard.release(KEY_DELETE);
+                KeyboardPress(KEY_DELETE);
+                KeyboardRelease(KEY_DELETE);
                 consumed = true;
                 state = one_thumb_prime;
             } else if (action == k42r) {
                 k42pressed = false;
-                Keyboard.press(KEY_ENTER);
-                Keyboard.release(KEY_ENTER);
+                KeyboardPress(KEY_ENTER);
+                KeyboardRelease(KEY_ENTER);
                 consumed = true;
                 state = one_thumb_prime;
             } else {
-                Keyboard.press(MODIFIERKEY_CTRL);
-                Keyboard.press(MODIFIERKEY_ALT);
+                KeyboardPress(MODIFIERKEY_CTRL);
+                KeyboardPress(MODIFIERKEY_ALT);
                 state = both_mod;
             }
             break;
@@ -419,23 +470,23 @@ bool thumbs(int action)
             if (not okp and action == k41r)
             {
                 k41pressed = false;
-                Keyboard.release(MODIFIERKEY_CTRL);
+                KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = one_thumb_prime;
             } else if (not okp and action == k42r) {
                 k42pressed = false;
-                Keyboard.release(MODIFIERKEY_ALT);
+                KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
                 state = one_thumb_prime;
             } else if (okp and action == k41r)
             {
                 k41pressed = false;
-                Keyboard.release(MODIFIERKEY_CTRL);
+                KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = one_mod;
             } else if (okp and action == k42r) {
                 k42pressed = false;
-                Keyboard.release(MODIFIERKEY_ALT);
+                KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
                 state = one_mod;
             }
@@ -444,22 +495,22 @@ bool thumbs(int action)
             if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488855253");
             if (action == k41p and !k41pressed) {
                 k41pressed = true;
-                Keyboard.press(MODIFIERKEY_CTRL);
+                KeyboardPress(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = both_mod;
             } else if (action == k42p and !k42pressed) {
                 k42pressed = true;
-                Keyboard.press(MODIFIERKEY_ALT);
+                KeyboardPress(MODIFIERKEY_ALT);
                 consumed = true;
                 state = both_mod;
             } else if (action == k41r and k41pressed) {
                 k41pressed = false;
-                Keyboard.release(MODIFIERKEY_CTRL);
+                KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
-                Keyboard.release(MODIFIERKEY_ALT);
+                KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
                 state = start;
             }
@@ -477,19 +528,19 @@ bool thumbs(int action)
                 state = both_thumb;
             } else if (action == k41r and k41pressed) {
                 k41pressed = false;
-                Keyboard.release(MODIFIERKEY_CTRL);
+                KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
-                Keyboard.release(MODIFIERKEY_ALT);
+                KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
                 state = start;
             } else if (k41pressed) {
-                Keyboard.press(MODIFIERKEY_CTRL);
+                KeyboardPress(MODIFIERKEY_CTRL);
                 state = one_mod;
             } else if (k42pressed) {
-                Keyboard.press(MODIFIERKEY_ALT);
+                KeyboardPress(MODIFIERKEY_ALT);
                 state = one_mod;
             }
             break;

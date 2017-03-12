@@ -112,7 +112,7 @@ void send(int action)
 {
     int key;
     if (isPress(action)) {
-        key = get(action);
+        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
         Keyboard.press(key);
     } else if (isRelease(action)) {
         key = get(action - numKeys);
@@ -141,6 +141,26 @@ void Mousemove(int x, int y)
         y = max(0, y - unit);
         Mouse.move(xmove * xs, ymove * ys);
     }
+}
+bool leader(int action)
+{
+    static int state;
+    enum {start, leading, recordMacro};
+    bool consumed;
+    switch (state) {
+        case start:
+            if (action == k38p) {
+                state = leading;
+                consumed = true;
+            }
+            break;
+        case leading:
+            if (isPress(action) and get(action) == KEY_Q) {
+                state = recordMacro;
+            }
+            break;
+    }
+    return consumed;
 }
 bool mouse(int action)
 {
@@ -452,10 +472,12 @@ bool thumbs(int action)
                 state = both_thumb;
             } else if (action == k41r and k41pressed) {
                 k41pressed = false;
+                Keyboard.release(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = start;
             } else if (action == k42r and k42pressed) {
                 k42pressed = false;
+                Keyboard.release(MODIFIERKEY_ALT);
                 consumed = true;
                 state = start;
             } else if (k41pressed) {
@@ -497,6 +519,7 @@ void push(int action)
 void setup()
 {
     Serial.begin(9600);
+    Serial.println("hello from keyboard");
     Keyboard.begin();
     Mouse.begin();
     keymapLayers.push_back(modifiers);
@@ -513,6 +536,7 @@ void setup()
 }
 void loop()
 {
+    Serial.println("alive");
     for(int o = 0; o < outputsLength; o++)
     {
         digitalWrite(outputs[o], HIGH);

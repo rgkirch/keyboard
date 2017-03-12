@@ -6,10 +6,11 @@ bool shiftEquals(int action);
 bool thumbs(int action);
 bool layer(int action);
 bool mouse(int action);
+bool leader(int action);
 
 int numKeys = 48;
 std::vector<int*> keymapLayers;
-bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse};
+bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
 
 extern "C" {
     int _getpid(){ return -1;}
@@ -105,16 +106,16 @@ bool isPress(int action)
 }
 bool isRelease(int action)
 {
-    return action > numKeys and action < 2 * 48;
+    return action > numKeys and action < 2 * numKeys;
 }
 void send(int action)
 {
     int key;
-    if (action >= 0 and action < numKeys) {
+    if (isPress(action)) {
         key = get(action);
         Keyboard.press(key);
-    } else if (action < 2 * 48) {
-        key = get(action - 48);
+    } else if (isRelease(action)) {
+        key = get(action - numKeys);
         Keyboard.release(key);
     }
 }
@@ -548,5 +549,6 @@ void loop()
 // todo - i broke it so that on alt tab, the first tab doesn't go through
 // todo - idea - sticky keys - press alt, press other key, release alt, press space, sends alt space
 // todo - ctrl+alt+left breaks it
+// todo - ctrl+alt+shift+t breaks it
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

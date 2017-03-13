@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include <vector>
 #include <functional>
+#include <map>
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 bool shiftEquals(int action);
@@ -24,7 +25,10 @@ bool leader(int action);
 //};
 int numKeys = 48;
 bool recordActions = false;
-std::vector<std::function<void(void)>> recordedActions;
+std::vector<std::function<void(void)>> *currentResolvedMacroVector;
+std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
+std::vector<int> *currentRawMacroVector;
+std::map<int, std::vector<int>> recordedRawKeys;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
 
@@ -72,7 +76,7 @@ int layerModifiers[] {
 int modifiers[] {
         KEY_TAB, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         KEY_ESC, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_RIGHT_SHIFT,
         -1, -1, -1, MODIFIERKEY_GUI, -1, -1, -1, -1, -1, -1, -1, -1,
 };
 int qwerty[] {
@@ -87,10 +91,10 @@ int dvorak[] {
         -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
-int numbers[] {
+int numbers[] { // todo - let it fall through to hit the equal key instead of catching that at a higher level
         KEY_F11, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F12,
-        -1, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_BACKSLASH,
-        -1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, KEY_HOME, -1,
+        KEY_TILDE, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_BACKSLASH,
+        -1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, KEY_HOME, KEY_EQUAL,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
 int utils[] {
@@ -124,6 +128,14 @@ bool isRelease(int action)
 {
     return action > numKeys and action < 2 * numKeys;
 }
+bool isLetter(int key)
+{
+    return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
+}
+bool isNumber(int key)
+{
+    return (key & ~0xF000) >= 30 and (key & ~0xF000) <= 39;
+}
 bool otherKeysPressed()
 {
     for (int i = 0; i < numKeys; ++i) {
@@ -135,8 +147,7 @@ void KeyboardPress(int action)
 {
     if (recordActions)
     {
-//        recordedActions.push_back(event {.type = event::keyAction, .action = action, .keyPress = true});
-        recordedActions.push_back([=]()->void {Keyboard.press(action);});
+        currentResolvedMacroVector->push_back([=]()->void {Keyboard.press(action);});
     }
     Keyboard.press(action);
 }
@@ -144,8 +155,7 @@ void KeyboardRelease(int action)
 {
     if (recordActions)
     {
-        recordedActions.push_back([=]()->void {Keyboard.release(action);});
-//        recordedActions.push_back(event {.type = event::keyAction, .action = action, .keyPress = false});
+        currentResolvedMacroVector->push_back([=]()->void {Keyboard.release(action);});
     }
     Keyboard.release(action);
 }
@@ -153,10 +163,8 @@ void MouseMoveTo(int x, int y)
 {
     if (recordActions)
     {
-//        recordedActions.push_back(event {.type = event::mousePosition, .action = action, .keyPress = false});
-        recordedActions.push_back([=]()->void {Mouse.moveTo(x, y);});
+        currentResolvedMacroVector->push_back([=]()->void {Mouse.moveTo(x, y);});
     }
-//    recordedActions.back()();
     Mouse.moveTo(x, y);
 }
 void send(int action)
@@ -183,15 +191,15 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
-        if (recordActions) recordedActions.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
+        if (recordActions) currentResolvedMacroVector->push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
     }
 }
 bool leader(int action)
 {
-    static int state;
-    enum {start, leading, recordingMacro};
-    bool consumed;
+    enum {start, leading, recordToWhere};
+    static int state = start;
+    bool consumed = false;
     switch (state) {
         case start:
             if (action == k38p) {
@@ -201,14 +209,36 @@ bool leader(int action)
             break;
         case leading:
             if (isPress(action) and get(action) == KEY_Q) {
-                state = recordingMacro;
-                consumed = true;
+                if (recordActions) {
+                    recordActions = false;
+                    state = start;
+                    consumed = true;
+                } else {
+                    state = recordToWhere;
+                    consumed = true;
+                }
             } else if (isPress(action)) {
                 state = start;
             }
             break;
-        case recordingMacro:
-            recordActions = true;
+        case recordToWhere:
+            int resolvedAction = get(action);
+            if (isPress(action) and isLetter(resolvedAction)) {
+                auto r = recordedResolvedActionsMap.emplace(resolvedAction, std::vector<std::function<void(void)>> {});
+                auto raw = recordedRawKeys.emplace(action, std::vector<int> {});
+                if (r.second == false) { // exists already
+                    recordedResolvedActionsMap[resolvedAction].clear();
+//                    recordedResolvedActionsMap[resolvedAction].push_back([=](void)->void {});
+                }
+                if (raw.second == false) {
+                    recordedRawKeys[action].clear();
+                }
+                currentResolvedMacroVector = &recordedResolvedActionsMap[resolvedAction];
+                currentRawMacroVector = &currentRawMacroVector[action];
+                recordActions = true;
+                consumed = true;
+            }
+            state = start;
             break;
     }
     return consumed;
@@ -554,6 +584,7 @@ void reset()
 }
 void push(int action)
 {
+    currentRawMacroVector->push_back(action);
     if (action == k36p)
     {
         reset();

@@ -8,16 +8,10 @@ bool shiftEquals(int action);
 bool thumbs(int action);
 bool layer(int action);
 bool mouse(int action);
-bool leader(int action);
 
-bool recordActions = false;
-std::vector<std::function<void(void)>> *currentResolvedMacroVector;
-std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
-std::vector<int> *currentRawMacroVector;
-std::map<int, std::vector<int>> recordedRawKeys;
 int numKeys = 48;
 std::vector<int*> keymapLayers;
-bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
+bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse};
 
 extern "C" {
     int _getpid(){ return -1;}
@@ -132,26 +126,14 @@ bool otherKeysPressed()
 }
 void KeyboardPress(int action)
 {
-    if (recordActions)
-    {
-        currentResolvedMacroVector->push_back([=]()->void {Keyboard.press(action);});
-    }
     Keyboard.press(action);
 }
 void KeyboardRelease(int action)
 {
-    if (recordActions)
-    {
-        currentResolvedMacroVector->push_back([=]()->void {Keyboard.release(action);});
-    }
     Keyboard.release(action);
 }
 void MouseMoveTo(int x, int y)
 {
-    if (recordActions)
-    {
-        currentResolvedMacroVector->push_back([=]()->void {Mouse.moveTo(x, y);});
-    }
     Mouse.moveTo(x, y);
 }
 void MouseMove(int x, int y)
@@ -167,7 +149,6 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
-        if (recordActions) currentResolvedMacroVector->push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
     }
 }
@@ -181,54 +162,6 @@ void send(int action)
         key = get(action - numKeys);
         KeyboardRelease(key);
     }
-}
-bool leader(int action)
-{
-    enum {start, leading, recordToWhere};
-    static int state = start;
-    bool consumed = false;
-    switch (state) {
-        case start:
-            if (action == k38p) {
-                state = leading;
-                consumed = true;
-            }
-            break;
-        case leading:
-            if (isPress(action) and get(action) == KEY_Q) {
-                if (recordActions) {
-                    recordActions = false;
-                    state = start;
-                    consumed = true;
-                } else {
-                    state = recordToWhere;
-                    consumed = true;
-                }
-            } else if (isPress(action)) {
-                state = start;
-            }
-            break;
-        case recordToWhere:
-            int resolvedAction = get(action);
-            if (isPress(action) and isLetter(resolvedAction)) {
-                auto r = recordedResolvedActionsMap.emplace(resolvedAction, std::vector<std::function<void(void)>> {});
-                auto raw = recordedRawKeys.emplace(action, std::vector<int> {});
-                if (r.second == false) { // exists already
-                    recordedResolvedActionsMap[resolvedAction].clear();
-//                    recordedResolvedActionsMap[resolvedAction].push_back([=](void)->void {});
-                }
-                if (raw.second == false) {
-                    recordedRawKeys[action].clear();
-                }
-                currentResolvedMacroVector = &recordedResolvedActionsMap[resolvedAction];
-                currentRawMacroVector = &currentRawMacroVector[action];
-                recordActions = true;
-                consumed = true;
-            }
-            state = start;
-            break;
-    }
-    return consumed;
 }
 bool mouse(int action)
 {
@@ -571,7 +504,6 @@ void reset()
 }
 void push(int action)
 {
-    currentRawMacroVector->push_back(action);
     if (action == k36p)
     {
         reset();

@@ -177,6 +177,7 @@ bool leader(int action)
     switch (state) {
         case start:
             if (action == k38p) {
+                Serial.println("leading");
                 state = leading;
                 consumed = true;
             }
@@ -596,7 +597,7 @@ void setup()
 }
 void loop()
 {
-    Serial.println("alive");
+    if (millis() % 1000 == 0) Serial.println("alive");
     for(int o = 0; o < outputsLength; o++)
     {
         digitalWrite(outputs[o], HIGH);

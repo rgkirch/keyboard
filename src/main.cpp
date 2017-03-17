@@ -113,15 +113,18 @@ bool isPress(int action)
 }
 bool isRelease(int action)
 {
-    return action > numKeys and action < 2 * numKeys;
+    return action > numKeys and action < 2 * 48;
 }
-bool isLetter(int key)
+void send(int action)
 {
-    return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
-}
-bool isNumber(int key)
-{
-    return (key & ~0xF000) >= 30 and (key & ~0xF000) <= 39;
+    int key;
+    if (action >= 0 and action < numKeys) {
+        key = get(action);
+        Keyboard.press(key);
+    } else if (action < 2 * 48) {
+        key = get(action - 48);
+        Keyboard.release(key);
+    }
 }
 bool otherKeysPressed()
 {
@@ -157,66 +160,6 @@ void MouseMove(int x, int y)
         y = max(0, y - unit);
         Mouse.move(xmove * xs, ymove * ys);
     }
-}
-void send(int action)
-{
-    int key;
-    if (isPress(action)) {
-        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
-        KeyboardPress(key);
-    } else if (isRelease(action)) {
-        key = get(action - numKeys);
-        KeyboardRelease(key);
-    }
-}
-bool leader(int action)
-{
-    enum {start, leading, recordToWhere};
-    static int state = start;
-    bool consumed = false;
-    switch (state) {
-        case start:
-            if (action == k38p) {
-                Serial.println("leading");
-                state = leading;
-                consumed = true;
-            }
-            break;
-        case leading:
-            if (isPress(action) and get(action) == KEY_Q) {
-                if (recordActions) {
-                    recordActions = false;
-                    state = start;
-                    consumed = true;
-                } else {
-                    state = recordToWhere;
-                    consumed = true;
-                }
-            } else if (isPress(action)) {
-                state = start;
-            }
-            break;
-        case recordToWhere:
-            int resolvedAction = get(action);
-            if (isPress(action) and isLetter(resolvedAction)) {
-                auto r = recordedResolvedActionsMap.emplace(resolvedAction, std::vector<std::function<void(void)>> {});
-                auto raw = recordedRawKeys.emplace(action, std::vector<int> {});
-                if (r.second == false) { // exists already
-                    recordedResolvedActionsMap[resolvedAction].clear();
-//                    recordedResolvedActionsMap[resolvedAction].push_back([=](void)->void {});
-                }
-                if (raw.second == false) {
-                    recordedRawKeys[action].clear();
-                }
-                currentResolvedMacroVector = &recordedResolvedActionsMap[resolvedAction];
-                currentRawMacroVector = &currentRawMacroVector[action];
-                recordActions = true;
-                consumed = true;
-            }
-            state = start;
-            break;
-    }
-    return consumed;
 }
 bool mouse(int action)
 {

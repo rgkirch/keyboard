@@ -8,7 +8,13 @@ bool shiftEquals(int action);
 bool thumbs(int action);
 bool layer(int action);
 bool mouse(int action);
+bool leader(int action);
 
+bool recordActions = false;
+std::vector<std::function<void(void)>> *currentResolvedMacroVector;
+std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
+std::vector<int> *currentRawMacroVector;
+std::map<int, std::vector<int>> recordedRawKeys;
 int numKeys = 48;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse};
@@ -162,6 +168,54 @@ void send(int action)
         key = get(action - numKeys);
         KeyboardRelease(key);
     }
+}
+bool leader(int action)
+{
+    enum {start, leading, recordToWhere};
+    static int state = start;
+    bool consumed = false;
+    switch (state) {
+        case start:
+            if (action == k38p) {
+                state = leading;
+                consumed = true;
+            }
+            break;
+        case leading:
+            if (isPress(action) and get(action) == KEY_Q) {
+                if (recordActions) {
+                    recordActions = false;
+                    state = start;
+                    consumed = true;
+                } else {
+                    state = recordToWhere;
+                    consumed = true;
+                }
+            } else if (isPress(action)) {
+                state = start;
+            }
+            break;
+        case recordToWhere:
+            int resolvedAction = get(action);
+            if (isPress(action) and isLetter(resolvedAction)) {
+                auto r = recordedResolvedActionsMap.emplace(resolvedAction, std::vector<std::function<void(void)>> {});
+                auto raw = recordedRawKeys.emplace(action, std::vector<int> {});
+                if (r.second == false) { // exists already
+                    recordedResolvedActionsMap[resolvedAction].clear();
+//                    recordedResolvedActionsMap[resolvedAction].push_back([=](void)->void {});
+                }
+                if (raw.second == false) {
+                    recordedRawKeys[action].clear();
+                }
+                currentResolvedMacroVector = &recordedResolvedActionsMap[resolvedAction];
+                currentRawMacroVector = &currentRawMacroVector[action];
+                recordActions = true;
+                consumed = true;
+            }
+            state = start;
+            break;
+    }
+    return consumed;
 }
 bool mouse(int action)
 {

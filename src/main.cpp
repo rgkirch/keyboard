@@ -10,30 +10,17 @@ bool layer(int action);
 bool mouse(int action);
 bool leader(int action);
 
-//struct event {
-//    enum {mouseMoveBy, mouseMoveTo, keyPress, keyRelease};
-//    int type;
-//    union {
-//        struct {
-//            int mouseX;
-//            int mouseY;
-//        };
-//        struct {
-//            int key;
-//        };
-//    };
-//};
-int numKeys = 48;
 bool recordActions = false;
 std::vector<std::function<void(void)>> *currentResolvedMacroVector;
 std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
 std::vector<int> *currentRawMacroVector;
 std::map<int, std::vector<int>> recordedRawKeys;
+int numKeys = 48;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
 
 extern "C" {
-int _getpid(){ return -1;}
+    int _getpid(){ return -1;}
     int _kill(int pid, int sig){ return -1; }
     int _write(){ return -1; }
 }
@@ -167,17 +154,6 @@ void MouseMoveTo(int x, int y)
     }
     Mouse.moveTo(x, y);
 }
-void send(int action)
-{
-    int key;
-    if (isPress(action)) {
-        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
-        KeyboardPress(key);
-    } else if (isRelease(action)) {
-        key = get(action - numKeys);
-        KeyboardRelease(key);
-    }
-}
 void MouseMove(int x, int y)
 {
     int unit = 100;
@@ -193,6 +169,17 @@ void MouseMove(int x, int y)
         y = max(0, y - unit);
         if (recordActions) currentResolvedMacroVector->push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
+    }
+}
+void send(int action)
+{
+    int key;
+    if (isPress(action)) {
+        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
+        KeyboardPress(key);
+    } else if (isRelease(action)) {
+        key = get(action - numKeys);
+        KeyboardRelease(key);
     }
 }
 bool leader(int action)

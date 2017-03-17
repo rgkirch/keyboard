@@ -186,7 +186,7 @@ bool mouse(int action)
             }
             break;
         case mouse:
-            if (not centered) {
+            if (not centered and (action == k08p or action == k19p or action == k20p or action == k21p)) {
                 MouseMoveTo(xRes / 2, yRes / 2);
                 centered = true;
             }

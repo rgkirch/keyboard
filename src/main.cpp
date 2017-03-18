@@ -130,21 +130,21 @@ bool otherKeysPressed()
     }
     return false;
 }
-void KeyboardPress(int action)
+void KeyboardPress(int key)
 {
     if (recordActions)
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(action);});
+        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(key);});
     }
-    Keyboard.press(action);
+    Keyboard.press(key);
 }
-void KeyboardRelease(int action)
+void KeyboardRelease(int key)
 {
     if (recordActions)
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(action);});
+        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(key);});
     }
-    Keyboard.release(action);
+    Keyboard.release(key);
 }
 void MouseMoveTo(int x, int y)
 {

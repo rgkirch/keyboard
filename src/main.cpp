@@ -93,7 +93,7 @@ int utils[] {
 };
 
 int get(int layer, int key)
-{
+{ // todo - move keymaplayers to a class with private mutators
     if(layer < 0) return -1;
 //    if(keymapLayers[layer] == nullptr) return get(layer - 1, key);
     if(keymapLayers[layer][key] != -1)
@@ -188,40 +188,51 @@ bool leader(int action)
             }
             break;
         case leading:
-            if (isPress(action) and get(action) == KEY_Q) {
-                if (recordActions) {
-                    recordActions = false;
-                    state = start;
-                    consumed = true;
+            if (isPress(action))
+            {
+                if (get(action) == KEY_Q)
+                {
+                    if (recordActions)
+                    {
+                        recordActions = false;
+                        state = start;
+                        consumed = true;
+                    } else {
+                        state = recordToWhere;
+                        consumed = true;
+                    }
                 } else {
-                    state = recordToWhere;
-                    consumed = true;
+                    state = start;
                 }
-            } else if (isPress(action)) {
-                state = start;
             }
             break;
         case recordToWhere:
             int resolvedAction = get(action);
-            if (isPress(action) and isLetter(resolvedAction)) {
-                const std::map<int, std::vector<std::function<void()>>>::iterator &recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
-                if (recordedIterator == recordedResolvedActionsMap.end()) {
-                    recordedResolvedActionsMap.emplace(std::make_pair(resolvedAction, std::initializer_list<std::function<void()>>()));
+            if (isPress(action))
+            {
+                if (isLetter(resolvedAction))
+                {
+                    const std::map<int, std::vector<std::function<void()>>>::iterator &recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
+                    if (recordedIterator == recordedResolvedActionsMap.end()) {
+                        recordedResolvedActionsMap.emplace(std::make_pair(resolvedAction, std::initializer_list<std::function<void()>>()));
+                    } else {
+                        recordedIterator->second.clear();
+                    }
+                    const std::map<int, std::vector<int>>::iterator &rawIterator = recordedRawKeys.find(resolvedAction);
+                    if (rawIterator == recordedRawKeys.end()) {
+                        recordedRawKeys.emplace(std::make_pair(resolvedAction, std::initializer_list<int>()));
+                    } else {
+                        rawIterator->second.clear();
+                    }
+                    currentResolvedMacroVector = recordedIterator;
+                    currentRawMacroVector = rawIterator;
+                    recordActions = true;
+                    state = start;
+                    consumed = true;
                 } else {
-                    recordedIterator->second.clear();
+                    state = start;
                 }
-                const std::map<int, std::vector<int>>::iterator &rawIterator = recordedRawKeys.find(resolvedAction);
-                if (rawIterator == recordedRawKeys.end()) {
-                    recordedRawKeys.emplace(std::make_pair(resolvedAction, std::initializer_list<int>()));
-                } else {
-                    rawIterator->second.clear();
-                }
-                currentResolvedMacroVector = recordedIterator;
-                currentRawMacroVector = rawIterator;
-                recordActions = true;
-                consumed = true;
             }
-            state = start;
             break;
     }
     return consumed;
@@ -649,7 +660,7 @@ void loop()
 // need better debuging
 // todo - i broke it so that on alt tab, the first tab doesn't go through
 // todo - idea - sticky keys - press alt, press other key, release alt, press space, sends alt space
-// todo - ctrl+alt+left breaks it
 // todo - alt+page down+release alt - doesn't stop painging down
+// todo - make macro recording time sensitive - example, if i hold a key, it records one event for it but windows might have repeated the key
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

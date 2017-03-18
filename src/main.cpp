@@ -10,7 +10,7 @@ bool layer(int action);
 bool mouse(int action);
 bool leader(int action);
 
-bool recordActions = false;
+bool recordActions = false; // should be private. when set to true, the iterators must be valid
 std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
 std::map<int, std::vector<std::function<void(void)>>>::iterator currentResolvedMacroVector;
 std::map<int, std::vector<int>> recordedRawKeys;

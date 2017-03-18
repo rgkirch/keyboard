@@ -437,7 +437,7 @@ bool thumbs(int action)
     static bool k42pressed = false;
     enum {start, one_thumb, one_thumb_prime, both_thumb, one_mod, both_mod};
     const char* enums[] {"start", "one_thumb", "one_thumb_prime", "both_thumb", "one_mod", "both_mod"};
-    static int state;
+    static int state = start;
     switch (state) {
         case start:
             if (action == k41p)
@@ -590,11 +590,11 @@ void reset()
 }
 void push(int action)
 {
-    if (recordActions) currentRawMacroVector->second.push_back(action);
     if (action == k36p)
     {
         reset();
     }
+    if (recordActions) currentRawMacroVector->second.push_back(action);
     bool consumed = false;
     for(auto f:listeners)
     {

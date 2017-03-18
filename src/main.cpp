@@ -115,17 +115,7 @@ bool isRelease(int action)
 {
     return action > numKeys and action < 2 * numKeys;
 }
-void send(int action)
-{
-    int key;
-    if (action >= 0 and action < numKeys) {
-        key = get(action);
-        Keyboard.press(key);
-    } else if (action < 2 * 48) {
-        key = get(action - 48);
-        Keyboard.release(key);
-    }
-}
+
 bool isLetter(int key)
 {
     return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
@@ -133,6 +123,22 @@ bool isLetter(int key)
 bool isNumber(int key)
 {
     return (key & ~0xF000) >= 30 and (key & ~0xF000) <= 39;
+}
+void send(int action)
+{
+    int key;
+    if (action >= 0 and action < numKeys) {
+        key = get(action);
+        if (isLetter(key)) {
+            Serial.println("is letter");
+        } else {
+            Serial.println("not letter");
+        }
+        Keyboard.press(key);
+    } else if (action < 2 * 48) {
+        key = get(action - 48);
+        Keyboard.release(key);
+    }
 }
 bool otherKeysPressed()
 {
@@ -597,9 +603,17 @@ void setup()
         digitalWrite(outputs[i], LOW);
     }
 }
+void alive()
+{
+    static uint32_t lastPrint = millis();
+    if (millis() - lastPrint > 1000) {
+        Serial.println("alive");
+        lastPrint = millis();
+    }
+}
 void loop()
 {
-    if (millis() % 1000 == 0) Serial.println("alive");
+    alive();
     for(int o = 0; o < outputsLength; o++)
     {
         digitalWrite(outputs[o], HIGH);

@@ -115,7 +115,6 @@ bool isRelease(int action)
 {
     return action > numKeys and action < 2 * numKeys;
 }
-
 bool isLetter(int key)
 {
     return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
@@ -123,22 +122,6 @@ bool isLetter(int key)
 bool isNumber(int key)
 {
     return (key & ~0xF000) >= 30 and (key & ~0xF000) <= 39;
-}
-void send(int action)
-{
-    int key;
-    if (action >= 0 and action < numKeys) {
-        key = get(action);
-        if (isLetter(key)) {
-            Serial.println("is letter");
-        } else {
-            Serial.println("not letter");
-        }
-        Keyboard.press(key);
-    } else if (action < 2 * 48) {
-        key = get(action - 48);
-        Keyboard.release(key);
-    }
 }
 bool otherKeysPressed()
 {
@@ -149,14 +132,26 @@ bool otherKeysPressed()
 }
 void KeyboardPress(int action)
 {
+    if (recordActions)
+    {
+        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(action);});
+    }
     Keyboard.press(action);
 }
 void KeyboardRelease(int action)
 {
+    if (recordActions)
+    {
+        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(action);});
+    }
     Keyboard.release(action);
 }
 void MouseMoveTo(int x, int y)
 {
+    if (recordActions)
+    {
+        currentResolvedMacroVector->second.push_back([=]()->void {Mouse.moveTo(x,y);});
+    }
     Mouse.moveTo(x, y);
 }
 void MouseMove(int x, int y)
@@ -172,7 +167,24 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
+        if (recordActions) currentResolvedMacroVector->second.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
+    }
+}
+void send(int action)
+{
+    int key;
+    if (isPress(action)) {
+        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
+        if (isLetter(key)) {
+            Serial.println("is letter");
+        } else {
+            Serial.println("not letter");
+        }
+        KeyboardPress(key);
+    } else if (isRelease(action)) {
+        key = get(action - numKeys);
+        KeyboardRelease(key);
     }
 }
 bool leader(int action)
@@ -578,6 +590,7 @@ void reset()
 }
 void push(int action)
 {
+    currentRawMacroVector->second.push_back(action);
     if (action == k36p)
     {
         reset();

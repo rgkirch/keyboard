@@ -113,7 +113,7 @@ bool isPress(int action)
 }
 bool isRelease(int action)
 {
-    return action > numKeys and action < 2 * 48;
+    return action > numKeys and action < 2 * numKeys;
 }
 void send(int action)
 {

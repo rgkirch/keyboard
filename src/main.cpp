@@ -11,13 +11,13 @@ bool mouse(int action);
 bool leader(int action);
 
 bool recordActions = false;
-std::vector<std::function<void(void)>> *currentResolvedMacroVector;
 std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
-std::vector<int> *currentRawMacroVector;
+std::map<int, std::vector<std::function<void(void)>>>::iterator currentResolvedMacroVector;
 std::map<int, std::vector<int>> recordedRawKeys;
+std::map<int, std::vector<int>>::iterator currentRawMacroVector;
 int numKeys = 48;
 std::vector<int*> keymapLayers;
-bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse};
+bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
 
 extern "C" {
     int _getpid(){ return -1;}
@@ -168,6 +168,57 @@ void MouseMove(int x, int y)
         y = max(0, y - unit);
         Mouse.move(xmove * xs, ymove * ys);
     }
+}
+bool leader(int action)
+{
+    enum {start, leading, recordToWhere};
+    static int state = start;
+    bool consumed = false;
+    switch (state) {
+        case start:
+            if (action == k38p) {
+                state = leading;
+                consumed = true;
+            }
+            break;
+        case leading:
+            if (isPress(action) and get(action) == KEY_Q) {
+                if (recordActions) {
+                    recordActions = false;
+                    state = start;
+                    consumed = true;
+                } else {
+                    state = recordToWhere;
+                    consumed = true;
+                }
+            } else if (isPress(action)) {
+                state = start;
+            }
+            break;
+        case recordToWhere:
+            int resolvedAction = get(action);
+            if (isPress(action) and isLetter(resolvedAction)) {
+                const std::map<int, std::vector<std::function<void()>>>::iterator &recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
+                if (recordedIterator == recordedResolvedActionsMap.end()) {
+                    recordedResolvedActionsMap.emplace(std::make_pair(resolvedAction, std::initializer_list<std::function<void()>>()));
+                } else {
+                    recordedIterator->second.clear();
+                }
+                const std::map<int, std::vector<int>>::iterator &rawIterator = recordedRawKeys.find(resolvedAction);
+                if (rawIterator == recordedRawKeys.end()) {
+                    recordedRawKeys.emplace(std::make_pair(resolvedAction, std::initializer_list<int>()));
+                } else {
+                    rawIterator->second.clear();
+                }
+                currentResolvedMacroVector = recordedIterator;
+                currentRawMacroVector = rawIterator;
+                recordActions = true;
+                consumed = true;
+            }
+            state = start;
+            break;
+    }
+    return consumed;
 }
 bool mouse(int action)
 {

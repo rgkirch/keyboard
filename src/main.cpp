@@ -224,13 +224,13 @@ bool leader(int action)
             {
                 if (isLetter(resolvedAction))
                 {
-                    const std::map<int, std::vector<std::function<void()>>>::iterator &recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
+                    auto recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
                     if (recordedIterator == recordedResolvedActionsMap.end()) {
                         recordedResolvedActionsMap.emplace(std::make_pair(resolvedAction, std::initializer_list<std::function<void()>>()));
                     } else {
                         recordedIterator->second.clear();
                     }
-                    const std::map<int, std::vector<int>>::iterator &rawIterator = recordedRawKeys.find(resolvedAction);
+                    auto rawIterator = recordedRawKeys.find(resolvedAction);
                     if (rawIterator == recordedRawKeys.end()) {
                         recordedRawKeys.emplace(std::make_pair(resolvedAction, std::initializer_list<int>()));
                     } else {

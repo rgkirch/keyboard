@@ -590,7 +590,7 @@ void reset()
 }
 void push(int action)
 {
-    currentRawMacroVector->second.push_back(action);
+    if (recordActions) currentRawMacroVector->second.push_back(action);
     if (action == k36p)
     {
         reset();

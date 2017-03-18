@@ -662,5 +662,6 @@ void loop()
 // todo - idea - sticky keys - press alt, press other key, release alt, press space, sends alt space
 // todo - alt+page down+release alt - doesn't stop painging down
 // todo - make macro recording time sensitive - example, if i hold a key, it records one event for it but windows might have repeated the key
+// todo - put limit on macro record size
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

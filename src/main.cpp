@@ -577,6 +577,6 @@ void loop()
 // todo - i broke it so that on alt tab, the first tab doesn't go through
 // todo - idea - sticky keys - press alt, press other key, release alt, press space, sends alt space
 // todo - ctrl+alt+left breaks it
-// todo - ctrl+alt+shift+t breaks it
+// todo - alt+page down+release alt - doesn't stop painging down
 
 //https://github.com/PaulStoffregen/cores/blob/master/teensy/keylayouts.h

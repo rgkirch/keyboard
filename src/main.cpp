@@ -126,6 +126,14 @@ void send(int action)
         Keyboard.release(key);
     }
 }
+bool isLetter(int key)
+{
+    return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
+}
+bool isNumber(int key)
+{
+    return (key & ~0xF000) >= 30 and (key & ~0xF000) <= 39;
+}
 bool otherKeysPressed()
 {
     for (int i = 0; i < numKeys; ++i) {

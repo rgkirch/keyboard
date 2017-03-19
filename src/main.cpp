@@ -115,8 +115,8 @@ int get(int layer, int key)
         return get(layer - 1, key);
     }
 }
-int get(int key) {
-    return get(keymapLayers.size() - 1, key);
+int get(int action) {
+    return get(keymapLayers.size() - 1, action);
 }
 
 bool isPress(int action)

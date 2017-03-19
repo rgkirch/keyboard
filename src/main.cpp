@@ -24,6 +24,20 @@ extern "C" {
     int _kill(int pid, int sig){ return -1; }
     int _write(){ return -1; }
 }
+struct ModifierKeysStates {
+public:
+    bool getLeftShiftPressed() { return leftShiftPressed; };
+    bool getRightShiftPressed() { return rightShiftPressed; };
+    friend void KeyboardPress(int key);
+    friend void KeyboardRelease(int key);
+private:
+    void setLeftShift(bool b) { leftShiftPressed = b; };
+    void setRightShift(bool b) { rightShiftPressed = b; };
+    bool leftShiftPressed = false;
+    bool rightShiftPressed = false;
+};
+struct ModifierKeysStates modifierKeysStates;
+
 
 enum actions {
     k00p, k01p, k02p, k03p, k04p, k05p, k06p, k07p, k08p, k09p, k10p, k11p,
@@ -136,6 +150,14 @@ void KeyboardPress(int key)
     {
         currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(key);});
     }
+    switch (key) {
+        case KEY_LEFT_SHIFT:
+            modifierKeysStates.setLeftShift(true);
+            break;
+        case KEY_RIGHT_SHIFT:
+            modifierKeysStates.setRightShift(true);
+            break;
+    }
     Keyboard.press(key);
 }
 void KeyboardRelease(int key)
@@ -143,6 +165,14 @@ void KeyboardRelease(int key)
     if (recordActions)
     {
         currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(key);});
+    }
+    switch (key) {
+        case KEY_LEFT_SHIFT:
+            modifierKeysStates.setLeftShift(false);
+            break;
+        case KEY_RIGHT_SHIFT:
+            modifierKeysStates.setRightShift(false);
+            break;
     }
     Keyboard.release(key);
 }

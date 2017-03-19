@@ -18,7 +18,6 @@ std::map<int, std::vector<int>>::iterator currentRawMacroVector;
 int numKeys = 48;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
-
 extern "C" {
     int _getpid(){ return -1;}
     int _kill(int pid, int sig){ return -1; }
@@ -28,6 +27,7 @@ struct ModifierKeysStates {
 public:
     bool getLeftShiftPressed() { return leftShiftPressed; };
     bool getRightShiftPressed() { return rightShiftPressed; };
+    bool getAnyShiftPressed() { return rightShiftPressed or leftShiftPressed; };
     friend void KeyboardPress(int key);
     friend void KeyboardRelease(int key);
 private:
@@ -37,8 +37,6 @@ private:
     bool rightShiftPressed = false;
 };
 struct ModifierKeysStates modifierKeysStates;
-
-
 enum actions {
     k00p, k01p, k02p, k03p, k04p, k05p, k06p, k07p, k08p, k09p, k10p, k11p,
     k12p, k13p, k14p, k15p, k16p, k17p, k18p, k19p, k20p, k21p, k22p, k23p,

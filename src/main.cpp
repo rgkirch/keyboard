@@ -217,7 +217,7 @@ void send(int action)
 }
 bool leader(int action)
 {
-    enum {start, leading, recordToWhere};
+    enum {start, leading, recordToWhere, replayWhat};
     static int state = start;
     bool consumed = false;
     switch (state) {
@@ -230,8 +230,12 @@ bool leader(int action)
         case leading:
             if (isPress(action))
             {
-                if (get(action) == KEY_Q)
+                int key = get(action);
+                if (key == KEY_2 and modifierKeysStates.getAnyShiftPressed())
                 {
+                    state = replayWhat;
+                    consumed = true;
+                } else if (key == KEY_Q) {
                     if (recordActions)
                     {
                         recordActions = false;
@@ -244,6 +248,22 @@ bool leader(int action)
                 } else {
                     state = start;
                 }
+            }
+            break;
+        case replayWhat:
+            if (isPress(action))
+            {
+                int key = get(action);
+                if (isLetter(key) /*and is lowercase*/)
+                {
+                    auto it = recordedResolvedActionsMap.find(key);
+                    if (it != recordedResolvedActionsMap.end())
+                    {
+                        for (auto &&f : it->second) { f(); }
+                        consumed = true;
+                    }
+                } // todo - else it's capital replay raw
+                state = start;
             }
             break;
         case recordToWhere:

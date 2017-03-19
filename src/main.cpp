@@ -644,7 +644,7 @@ void push(int action)
     }
     if (recordActions) currentRawMacroVector->second.push_back(action);
     bool consumed = false;
-    for(auto f:listeners)
+    for(auto &&f:listeners)
     {
         if (f(action))
         {

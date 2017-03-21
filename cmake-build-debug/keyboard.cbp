@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="keyboard"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_UPLOADFS">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_UPLOADFS"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_BUILD">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_BUILD"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_UPLOAD">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_UPLOAD"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="keyboard">
+				<Option output="G:/rgkirch/keyboard/cmake-build-debug/keyboard.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DF_CPU=72000000L"/>
+					<Add option="-DLAYOUT_US_ENGLISH"/>
+					<Add option="-DPLATFORMIO=30201"/>
+					<Add option="-D__MK20DX256__"/>
+					<Add option="-DTEENSY31"/>
+					<Add option="-DUSB_SERIAL_HID"/>
+					<Add option="-DARDUINO=10610"/>
+					<Add option="-DTEENSYDUINO=135"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/cores/teensy3"/>
+					<Add directory="G:/rgkirch/keyboard/src"/>
+					<Add directory="G:/rgkirch/keyboard/lib/bison"/>
+					<Add directory="G:/rgkirch/keyboard/lib/flex"/>
+					<Add directory="G:/rgkirch/keyboard/lib/regex"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ADC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_GFX"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9340"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9341"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_SSD1306"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ST7735"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_STMPE610"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_VS1053"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AltSoftSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Artnet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/CapacitiveSensor"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DS1307RTC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DmxSimple"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DogLcd"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EEPROM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransfer"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransferI2C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Entropy"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ethernet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastCRC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastLED"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexCAN"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexiTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqCount"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasure"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasureMulti"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FrequencyTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ILI9341_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/IRremote"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedControl/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedDisplay"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystal"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystalFast"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LowPower"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MFRC522"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MIDI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Metro"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MsTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NewPing"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OSC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OctoWS2811"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OneWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PWMServo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ping"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PulsePosition"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RadioHead"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ResponsiveAnalogRead/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPIFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7565"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Servo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftwareSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TFT_ILI9163C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Talkie"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Time"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimeAlarms"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerOne"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerThree"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TinyGPS"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Tlc5940"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TouchScreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/UTFT"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/VirtualWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XBee"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XPT2046_Touchscreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/i2c_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ks0108"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/openGLCD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ssd1351"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/x10"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/avr/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 keyboard"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="keyboard/fast">
+				<Option output="G:/rgkirch/keyboard/cmake-build-debug/keyboard.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DF_CPU=72000000L"/>
+					<Add option="-DLAYOUT_US_ENGLISH"/>
+					<Add option="-DPLATFORMIO=30201"/>
+					<Add option="-D__MK20DX256__"/>
+					<Add option="-DTEENSY31"/>
+					<Add option="-DUSB_SERIAL_HID"/>
+					<Add option="-DARDUINO=10610"/>
+					<Add option="-DTEENSYDUINO=135"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/cores/teensy3"/>
+					<Add directory="G:/rgkirch/keyboard/src"/>
+					<Add directory="G:/rgkirch/keyboard/lib/bison"/>
+					<Add directory="G:/rgkirch/keyboard/lib/flex"/>
+					<Add directory="G:/rgkirch/keyboard/lib/regex"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ADC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_GFX"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9340"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9341"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_SSD1306"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ST7735"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_STMPE610"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_VS1053"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AltSoftSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Artnet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/CapacitiveSensor"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DS1307RTC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DmxSimple"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DogLcd"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EEPROM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransfer"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransferI2C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Entropy"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ethernet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastCRC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastLED"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexCAN"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexiTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqCount"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasure"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasureMulti"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FrequencyTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ILI9341_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/IRremote"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedControl/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedDisplay"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystal"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystalFast"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LowPower"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MFRC522"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MIDI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Metro"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MsTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NewPing"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OSC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OctoWS2811"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OneWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PWMServo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ping"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PulsePosition"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RadioHead"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ResponsiveAnalogRead/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPIFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7565"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Servo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftwareSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TFT_ILI9163C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Talkie"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Time"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimeAlarms"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerOne"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerThree"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TinyGPS"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Tlc5940"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TouchScreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/UTFT"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/VirtualWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XBee"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XPT2046_Touchscreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/i2c_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ks0108"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/openGLCD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ssd1351"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/x10"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/avr/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 keyboard/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_CLEAN">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_CLEAN"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_REBUILD_PROJECT_INDEX">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_REBUILD_PROJECT_INDEX"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_TEST">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_TEST"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_PROGRAM">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_PROGRAM"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PLATFORMIO_UPDATE_ALL">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 PLATFORMIO_UPDATE_ALL"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="mytest">
+				<Option output="G:/rgkirch/keyboard/cmake-build-debug/mytest.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DF_CPU=72000000L"/>
+					<Add option="-DLAYOUT_US_ENGLISH"/>
+					<Add option="-DPLATFORMIO=30201"/>
+					<Add option="-D__MK20DX256__"/>
+					<Add option="-DTEENSY31"/>
+					<Add option="-DUSB_SERIAL_HID"/>
+					<Add option="-DARDUINO=10610"/>
+					<Add option="-DTEENSYDUINO=135"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/cores/teensy3"/>
+					<Add directory="G:/rgkirch/keyboard/src"/>
+					<Add directory="G:/rgkirch/keyboard/lib/bison"/>
+					<Add directory="G:/rgkirch/keyboard/lib/flex"/>
+					<Add directory="G:/rgkirch/keyboard/lib/regex"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ADC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_GFX"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9340"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9341"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_SSD1306"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ST7735"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_STMPE610"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_VS1053"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AltSoftSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Artnet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/CapacitiveSensor"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DS1307RTC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DmxSimple"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DogLcd"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EEPROM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransfer"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransferI2C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Entropy"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ethernet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastCRC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastLED"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexCAN"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexiTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqCount"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasure"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasureMulti"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FrequencyTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ILI9341_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/IRremote"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedControl/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedDisplay"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystal"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystalFast"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LowPower"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MFRC522"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MIDI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Metro"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MsTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NewPing"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OSC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OctoWS2811"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OneWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PWMServo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ping"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PulsePosition"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RadioHead"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ResponsiveAnalogRead/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPIFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7565"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Servo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftwareSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TFT_ILI9163C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Talkie"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Time"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimeAlarms"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerOne"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerThree"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TinyGPS"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Tlc5940"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TouchScreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/UTFT"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/VirtualWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XBee"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XPT2046_Touchscreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/i2c_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ks0108"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/openGLCD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ssd1351"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/x10"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/avr/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 mytest"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="mytest/fast">
+				<Option output="G:/rgkirch/keyboard/cmake-build-debug/mytest.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DF_CPU=72000000L"/>
+					<Add option="-DLAYOUT_US_ENGLISH"/>
+					<Add option="-DPLATFORMIO=30201"/>
+					<Add option="-D__MK20DX256__"/>
+					<Add option="-DTEENSY31"/>
+					<Add option="-DUSB_SERIAL_HID"/>
+					<Add option="-DARDUINO=10610"/>
+					<Add option="-DTEENSYDUINO=135"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/cores/teensy3"/>
+					<Add directory="G:/rgkirch/keyboard/src"/>
+					<Add directory="G:/rgkirch/keyboard/lib/bison"/>
+					<Add directory="G:/rgkirch/keyboard/lib/flex"/>
+					<Add directory="G:/rgkirch/keyboard/lib/regex"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ADC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_GFX"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9340"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9341"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_SSD1306"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ST7735"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_STMPE610"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_VS1053"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AltSoftSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Artnet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/CapacitiveSensor"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DS1307RTC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DmxSimple"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DogLcd"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EEPROM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransfer"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransferI2C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Entropy"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ethernet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastCRC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastLED"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexCAN"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexiTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqCount"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasure"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasureMulti"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FrequencyTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ILI9341_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/IRremote"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedControl/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedDisplay"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystal"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystalFast"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LowPower"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MFRC522"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MIDI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Metro"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MsTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NewPing"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OSC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OctoWS2811"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OneWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PWMServo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ping"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PulsePosition"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RadioHead"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ResponsiveAnalogRead/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPIFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7565"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Servo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftwareSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TFT_ILI9163C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Talkie"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Time"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimeAlarms"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerOne"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerThree"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TinyGPS"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Tlc5940"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TouchScreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/UTFT"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/VirtualWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XBee"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XPT2046_Touchscreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/i2c_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ks0108"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/openGLCD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ssd1351"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/x10"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/avr/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 mytest/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="myMacroTest">
+				<Option output="G:/rgkirch/keyboard/cmake-build-debug/myMacroTest.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DF_CPU=72000000L"/>
+					<Add option="-DLAYOUT_US_ENGLISH"/>
+					<Add option="-DPLATFORMIO=30201"/>
+					<Add option="-D__MK20DX256__"/>
+					<Add option="-DTEENSY31"/>
+					<Add option="-DUSB_SERIAL_HID"/>
+					<Add option="-DARDUINO=10610"/>
+					<Add option="-DTEENSYDUINO=135"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/cores/teensy3"/>
+					<Add directory="G:/rgkirch/keyboard/src"/>
+					<Add directory="G:/rgkirch/keyboard/lib/bison"/>
+					<Add directory="G:/rgkirch/keyboard/lib/flex"/>
+					<Add directory="G:/rgkirch/keyboard/lib/regex"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ADC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_GFX"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9340"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9341"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_SSD1306"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ST7735"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_STMPE610"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_VS1053"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AltSoftSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Artnet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/CapacitiveSensor"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DS1307RTC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DmxSimple"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DogLcd"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EEPROM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransfer"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransferI2C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Entropy"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ethernet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastCRC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastLED"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexCAN"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexiTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqCount"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasure"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasureMulti"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FrequencyTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ILI9341_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/IRremote"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedControl/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedDisplay"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystal"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystalFast"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LowPower"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MFRC522"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MIDI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Metro"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MsTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NewPing"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OSC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OctoWS2811"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OneWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PWMServo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ping"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PulsePosition"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RadioHead"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ResponsiveAnalogRead/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPIFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7565"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Servo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftwareSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TFT_ILI9163C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Talkie"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Time"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimeAlarms"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerOne"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerThree"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TinyGPS"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Tlc5940"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TouchScreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/UTFT"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/VirtualWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XBee"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XPT2046_Touchscreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/i2c_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ks0108"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/openGLCD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ssd1351"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/x10"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/avr/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 myMacroTest"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="myMacroTest/fast">
+				<Option output="G:/rgkirch/keyboard/cmake-build-debug/myMacroTest.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DF_CPU=72000000L"/>
+					<Add option="-DLAYOUT_US_ENGLISH"/>
+					<Add option="-DPLATFORMIO=30201"/>
+					<Add option="-D__MK20DX256__"/>
+					<Add option="-DTEENSY31"/>
+					<Add option="-DUSB_SERIAL_HID"/>
+					<Add option="-DARDUINO=10610"/>
+					<Add option="-DTEENSYDUINO=135"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/cores/teensy3"/>
+					<Add directory="G:/rgkirch/keyboard/src"/>
+					<Add directory="G:/rgkirch/keyboard/lib/bison"/>
+					<Add directory="G:/rgkirch/keyboard/lib/flex"/>
+					<Add directory="G:/rgkirch/keyboard/lib/regex"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ADC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AccelStepper"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_CC3000/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_GFX"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9340"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ILI9341"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_NeoPixel"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_SSD1306"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_ST7735"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_STMPE610"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_VS1053"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Adafruit_nRF8001/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/AltSoftSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Artnet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Audio/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Bounce2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/CapacitiveSensor"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DS1307RTC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DmxSimple"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/DogLcd"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EEPROM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransfer"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/EasyTransferI2C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Encoder/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Entropy"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ethernet"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastCRC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FastLED"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexCAN"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FlexiTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqCount"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasure"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FreqMeasureMulti"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/FrequencyTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ILI9341_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/IRremote"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Keypad/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedControl/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LedDisplay"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystal"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LiquidCrystalFast"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/LowPower"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MFRC522"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MIDI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Metro"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/MsTimer2"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NXPMotionSense/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/NewPing"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OSC"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OctoWS2811"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/OneWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PS2Keyboard/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PWMServo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Ping"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/PulsePosition"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RA8875"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/RadioHead"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ResponsiveAnalogRead/src"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SD/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPI"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SPIFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7565"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ST7735_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SerialFlash"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Servo"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ShiftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Snooze/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftPWM"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/SoftwareSerial"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TFT_ILI9163C"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Talkie"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Time"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimeAlarms"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerOne"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TimerThree"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TinyGPS"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Tlc5940"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/TouchScreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/UTFT"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/VirtualWire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/Wire/utility"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XBee"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/XPT2046_Touchscreen"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/i2c_t3"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ks0108"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/openGLCD"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/ssd1351"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/framework-arduinoteensy/libraries/x10"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/avr/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-atmelavr/lib/gcc/avr/4.9.2/include-fixed"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include"/>
+					<Add directory="C:/Users/Richie/.platformio/packages/toolchain-gccarmnoneeabi/lib/gcc/arm-none-eabi/4.8.4/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include-fixed"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/../../../../mingw32/include"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/mingw32"/>
+					<Add directory="c:\mingw\bin\../lib/gcc/mingw32/4.8.1/include/c++/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 myMacroTest/fast"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="G:/rgkirch/keyboard/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/bin/mingw32-make.exe -f &quot;G:/rgkirch/keyboard/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="G:/rgkirch/keyboard/lib/keyboard/keyboard.cpp">
+			<Option target="keyboard"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/lib/keyboard/keyboard.hpp">
+			<Option target="keyboard"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/src/main.cpp">
+			<Option target="keyboard"/>
+			<Option target="mytest"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/src/main.hpp">
+			<Option target="keyboard"/>
+			<Option target="mytest"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/src/nospace.l">
+			<Option target="keyboard"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/src/numberconvert.l">
+			<Option target="keyboard"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/src/regex.txt">
+			<Option target="keyboard"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/test/test.cpp">
+			<Option target="mytest"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="G:/rgkirch/keyboard/CMakeListsPrivate.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -628,7 +628,7 @@ bool thumbs(int action)
                 state = one_mod;
             }
             break;
-   }
+    }
     return consumed;
 }
 void reset()

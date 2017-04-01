@@ -10,11 +10,29 @@ bool layer(int action);
 bool mouse(int action);
 bool leader(int action);
 
-bool recordActions = false; // should be private. when set to true, the iterators must be valid
 std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
 std::map<int, std::vector<std::function<void(void)>>>::iterator currentResolvedMacroVector;
 std::map<int, std::vector<int>> recordedRawKeys;
 std::map<int, std::vector<int>>::iterator currentRawMacroVector;
+struct RecordActions {
+public:
+    bool isRecordingActions() { return recordingActions; }
+    friend bool leader(int action);
+private:
+    void setRecordingActions(bool b) { recordingActions = b; }
+    bool recordingActions = false;
+};
+struct RecordActions recordActions; // when set to true, the iterators must be valid
+//struct Macro {
+//public:
+//    std::vector<std::function<void()>> *getCurrentResolvedMacroVector() const { return currentResolvedMacroVector; }
+//    std::vector<int> *getCurrentRawMacroVector() const { return currentRawMacroVector; }
+//private:
+//    std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
+//    std::map<int, std::vector<int>> recordedRawKeys;
+//    std::vector<std::function<void(void)>> *currentResolvedMacroVector;
+//    std::vector<int> *currentRawMacroVector;
+//};
 int numKeys = 48;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
@@ -144,7 +162,7 @@ bool otherKeysPressed()
 }
 void KeyboardPress(int key)
 {
-    if (recordActions)
+    if (recordActions.isRecordingActions())
     {
         currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(key);});
     }
@@ -160,7 +178,7 @@ void KeyboardPress(int key)
 }
 void KeyboardRelease(int key)
 {
-    if (recordActions)
+    if (recordActions.isRecordingActions())
     {
         currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(key);});
     }
@@ -176,7 +194,7 @@ void KeyboardRelease(int key)
 }
 void MouseMoveTo(int x, int y)
 {
-    if (recordActions)
+    if (recordActions.isRecordingActions())
     {
         currentResolvedMacroVector->second.push_back([=]()->void {Mouse.moveTo(x,y);});
     }
@@ -195,7 +213,7 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
-        if (recordActions) currentResolvedMacroVector->second.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
+        if (recordActions.isRecordingActions()) currentResolvedMacroVector->second.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
     }
 }
@@ -236,9 +254,9 @@ bool leader(int action)
                     state = replayWhat;
                     consumed = true;
                 } else if (key == KEY_Q) {
-                    if (recordActions)
+                    if (recordActions.isRecordingActions())
                     {
-                        recordActions = false;
+                        recordActions.setRecordingActions(false);
                         state = start;
                         consumed = true;
                     } else {
@@ -286,7 +304,7 @@ bool leader(int action)
                     }
                     currentResolvedMacroVector = recordedIterator;
                     currentRawMacroVector = rawIterator;
-                    recordActions = true;
+                    recordActions.setRecordingActions(true);
                     state = start;
                     consumed = true;
                 } else {
@@ -642,7 +660,7 @@ void push(int action)
     {
         reset();
     }
-    if (recordActions) currentRawMacroVector->second.push_back(action);
+    if (recordActions.isRecordingActions()) currentRawMacroVector->second.push_back(action);
     bool consumed = false;
     for(auto &&f:listeners)
     {

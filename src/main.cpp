@@ -10,29 +10,53 @@ bool layer(int action);
 bool mouse(int action);
 bool leader(int action);
 
-std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
-std::map<int, std::vector<std::function<void(void)>>>::iterator currentResolvedMacroVector;
-std::map<int, std::vector<int>> recordedRawKeys;
-std::map<int, std::vector<int>>::iterator currentRawMacroVector;
 struct RecordActions {
 public:
-    bool isRecordingActions() { return recordingActions; }
-    friend bool leader(int action);
+    void startRecording(int key) {
+        // todo - isAlpha(key);
+        actions[key].clear();
+        rawKeys[key].clear();
+        setCurrentMacroKey(key);
+        setRecordingActions(true);
+    }
+    void stopRecording()
+    {
+        setRecordingActions(false);
+    }
+    void recordAction(std::function<void()> f)
+    {
+        if (isRecording())
+        {
+            actions[currentMacroKey].push_back(f);
+        }
+    }
+    void recordRawKey(int key)
+    {
+        if (isRecording())
+        {
+            rawKeys[currentMacroKey].push_back(key);
+        }
+    }
+    void replayActions(int key) {
+        for (auto &&f : actions[key]) {
+            f();
+        }
+    }
+    void replayRawKeys(int key) {
+        // disallow playback of the currently recording macro to avoid infinite playback loop
+        // todo - implement this
+    }
+    bool isRecording() { return recording; }
+//    friend bool leader(int action);
 private:
-    void setRecordingActions(bool b) { recordingActions = b; }
-    bool recordingActions = false;
+    std::map<int, std::vector<std::function<void(void)>>> actions;
+    std::map<int, std::vector<int>> rawKeys;
+    void setCurrentMacroKey(int key) { currentMacroKey = key; }
+    void setRecordingActions(bool b) { recording = b; } // when set to true, the iterators must be valid
+    int currentMacroKey;
+    bool recording = false;
 };
-struct RecordActions recordActions; // when set to true, the iterators must be valid
-//struct Macro {
-//public:
-//    std::vector<std::function<void()>> *getCurrentResolvedMacroVector() const { return currentResolvedMacroVector; }
-//    std::vector<int> *getCurrentRawMacroVector() const { return currentRawMacroVector; }
-//private:
-//    std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
-//    std::map<int, std::vector<int>> recordedRawKeys;
-//    std::vector<std::function<void(void)>> *currentResolvedMacroVector;
-//    std::vector<int> *currentRawMacroVector;
-//};
+struct RecordActions recordActions;
 int numKeys = 48;
 std::vector<int*> keymapLayers;
 bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
@@ -162,9 +186,9 @@ bool otherKeysPressed()
 }
 void KeyboardPress(int key)
 {
-    if (recordActions.isRecordingActions())
+    if (recordActions.isRecording())
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(key);});
+        recordActions.recordAction([=]()->void { Keyboard.press(key); });
     }
     switch (key) {
         case KEY_LEFT_SHIFT:
@@ -178,9 +202,9 @@ void KeyboardPress(int key)
 }
 void KeyboardRelease(int key)
 {
-    if (recordActions.isRecordingActions())
+    if (recordActions.isRecording())
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(key);});
+        recordActions.recordAction([=]()->void { Keyboard.release(key); });
     }
     switch (key) {
         case KEY_LEFT_SHIFT:
@@ -194,9 +218,9 @@ void KeyboardRelease(int key)
 }
 void MouseMoveTo(int x, int y)
 {
-    if (recordActions.isRecordingActions())
+    if (recordActions.isRecording())
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Mouse.moveTo(x,y);});
+        recordActions.recordAction([=]()->void {Mouse.moveTo(x,y);});
     }
     Mouse.moveTo(x, y);
 }
@@ -213,7 +237,7 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
-        if (recordActions.isRecordingActions()) currentResolvedMacroVector->second.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
+        if (recordActions.isRecording()) recordActions.recordAction([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
     }
 }
@@ -254,9 +278,9 @@ bool leader(int action)
                     state = replayWhat;
                     consumed = true;
                 } else if (key == KEY_Q) {
-                    if (recordActions.isRecordingActions())
+                    if (recordActions.isRecording())
                     {
-                        recordActions.setRecordingActions(false);
+                        recordActions.stopRecording();
                         state = start;
                         consumed = true;
                     } else {
@@ -274,12 +298,8 @@ bool leader(int action)
                 int key = get(action);
                 if (isLetter(key) /*and is lowercase*/)
                 {
-                    auto it = recordedResolvedActionsMap.find(key);
-                    if (it != recordedResolvedActionsMap.end())
-                    {
-                        for (auto &&f : it->second) { f(); }
-                        consumed = true;
-                    }
+                    recordActions.replayActions(key);
+                    consumed = true;
                 } // todo - else it's capital replay raw
                 state = start;
             }
@@ -290,21 +310,7 @@ bool leader(int action)
             {
                 if (isLetter(resolvedAction))
                 {
-                    auto recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
-                    if (recordedIterator == recordedResolvedActionsMap.end()) {
-                        recordedResolvedActionsMap.emplace(std::make_pair(resolvedAction, std::initializer_list<std::function<void()>>()));
-                    } else {
-                        recordedIterator->second.clear();
-                    }
-                    auto rawIterator = recordedRawKeys.find(resolvedAction);
-                    if (rawIterator == recordedRawKeys.end()) {
-                        recordedRawKeys.emplace(std::make_pair(resolvedAction, std::initializer_list<int>()));
-                    } else {
-                        rawIterator->second.clear();
-                    }
-                    currentResolvedMacroVector = recordedIterator;
-                    currentRawMacroVector = rawIterator;
-                    recordActions.setRecordingActions(true);
+                    recordActions.startRecording(resolvedAction);
                     state = start;
                     consumed = true;
                 } else {
@@ -660,7 +666,7 @@ void push(int action)
     {
         reset();
     }
-    if (recordActions.isRecordingActions()) currentRawMacroVector->second.push_back(action);
+    if (recordActions.isRecording()) recordActions.recordRawKey(action);
     bool consumed = false;
     for(auto &&f:listeners)
     {

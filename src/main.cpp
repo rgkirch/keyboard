@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include <map>
+#include <cstdarg>
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
 bool shiftEquals(int action);
@@ -10,15 +11,117 @@ bool layer(int action);
 bool mouse(int action);
 bool leader(int action);
 
-bool recordActions = false; // should be private. when set to true, the iterators must be valid
-std::map<int, std::vector<std::function<void(void)>>> recordedResolvedActionsMap;
-std::map<int, std::vector<std::function<void(void)>>>::iterator currentResolvedMacroVector;
-std::map<int, std::vector<int>> recordedRawKeys;
-std::map<int, std::vector<int>>::iterator currentRawMacroVector;
+class Configuration {
+public:
+    class Builder;
+    const std::vector<int> outputs;
+    const std::vector<int> inputs;
+private:
+    Configuration(std::vector<int> outputs, std::vector<int> inputs, std::function<int(int,int)> fun) : outputs(outputs), inputs(inputs), f(f) {};
+    std::function<int(int,int)> f;
+};
+class Configuration::Builder {
+public:
+    Configuration *build() { return new Configuration(outputs, inputs, function); };
+    Builder &o(int n) { outputs.push_back(n); return *this; };
+    Builder &i(int n) { inputs.push_back(n); return *this; };
+    Builder &f(std::function<int(int,int)> fun) { function = fun; return *this; };
+private:
+    std::function<int(int,int)> function;
+    std::vector<int> outputs;
+    std::vector<int> inputs;
+};
+Configuration *configuration;
+
+enum class Key {
+    k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11,
+    k12, k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23,
+    k24, k25, k26, k27, k28, k29, k30, k31, k32, k33, k34, k35,
+    k36, k37, k38, k39, k40, k41, k42, k43, k44, k45, k46, k47
+};
+Key layout[] = {
+        Key::k00, Key::k01, Key::k02, Key::k03, Key::k04, Key::k05, Key::k06, Key::k07, Key::k08, Key::k09, Key::k10, Key::k11,
+        Key::k12, Key::k13, Key::k14, Key::k15, Key::k16, Key::k17, Key::k18, Key::k19, Key::k20, Key::k21, Key::k22, Key::k23,
+        Key::k24, Key::k25, Key::k26, Key::k27, Key::k28, Key::k29, Key::k30, Key::k31, Key::k32, Key::k33, Key::k34, Key::k35,
+        Key::k36, Key::k37, Key::k38, Key::k39, Key::k40, Key::k41, Key::k42, Key::k43, Key::k44, Key::k45, Key::k46, Key::k47
+};
+
+enum class Action {RELEASE, PRESS};
+class KeyEvent {
+public:
+    KeyEvent(Key k, Action a) : key(k), action(a) {};
+    bool isPress() { return action == Action::PRESS; }
+    bool isRelease() { return action == Action::RELEASE; }
+    bool isKey(Key k) { return k == key; }
+    bool isKeyPressed(Key k) { return isKey(k) and isPress(); }
+    bool isKeyReleased(Key k) { return isKey(k) and isRelease(); }
+    bool isOneOf(Key... k) {
+        bool oneOf = isKey(k);
+        bool temp;
+        va_list args;
+        va_start(args, k);
+        while (temp = va_arg(k, Key)) {
+            oneOf = oneOf or temp;
+        }
+        return oneOf;
+    }
+    Key getKey() { return key; }
+    Action getAction() { return action; }
+private:
+    Key key;
+    Action action;
+};
+
+struct RecordActions {
+public:
+    void startRecording(int key) {
+        // todo - isAlpha(key);
+        actions[key].clear();
+        rawKeys[key].clear();
+        setCurrentMacroKey(key);
+        setRecordingActions(true);
+    }
+    void stopRecording()
+    {
+        setRecordingActions(false);
+    }
+    void recordAction(std::function<void()> f)
+    {
+        if (isRecording())
+        {
+            actions[currentMacroKey].push_back(f);
+        }
+    }
+    void recordRawKey(KeyEvent key)
+    {
+        if (isRecording())
+        {
+            rawKeys[currentMacroKey].push_back(key);
+        }
+    }
+    void replayActions(int key) {
+        for (auto &&f : actions[key]) {
+            f();
+        }
+    }
+    void replayRawKeys(int key) {
+        // disallow playback of the currently recording macro to avoid infinite playback loop
+        // todo - implement this
+    }
+    bool isRecording() { return recording; }
+//    friend bool leader(int action);
+private:
+    std::map<int, std::vector<std::function<void(void)>>> actions;
+    std::map<int, std::vector<KeyEvent>> rawKeys;
+    void setCurrentMacroKey(int key) { currentMacroKey = key; }
+    void setRecordingActions(bool b) { recording = b; } // when set to true, the iterators must be valid
+    int currentMacroKey;
+    bool recording = false;
+};
+struct RecordActions recordActions;
 int numKeys = 48;
 std::vector<int*> keymapLayers;
-bool(*listeners[])(int action) = {shiftEquals, thumbs, layer, mouse, leader};
-
+bool(*listeners[])(KeyEvent action) = {shiftEquals, thumbs, layer, mouse, leader};
 extern "C" {
     int _getpid(){ return -1;}
     int _kill(int pid, int sig){ return -1; }
@@ -28,6 +131,7 @@ struct ModifierKeysStates {
 public:
     bool getLeftShiftPressed() { return leftShiftPressed; };
     bool getRightShiftPressed() { return rightShiftPressed; };
+    bool getAnyShiftPressed() { return rightShiftPressed or leftShiftPressed; };
     friend void KeyboardPress(int key);
     friend void KeyboardRelease(int key);
 private:
@@ -37,18 +141,6 @@ private:
     bool rightShiftPressed = false;
 };
 struct ModifierKeysStates modifierKeysStates;
-
-
-enum actions {
-    k00p, k01p, k02p, k03p, k04p, k05p, k06p, k07p, k08p, k09p, k10p, k11p,
-    k12p, k13p, k14p, k15p, k16p, k17p, k18p, k19p, k20p, k21p, k22p, k23p,
-    k24p, k25p, k26p, k27p, k28p, k29p, k30p, k31p, k32p, k33p, k34p, k35p,
-    k36p, k37p, k38p, k39p, k40p, k41p, k42p, k43p, k44p, k45p, k46p, k47p,
-    k00r, k01r, k02r, k03r, k04r, k05r, k06r, k07r, k08r, k09r, k10r, k11r,
-    k12r, k13r, k14r, k15r, k16r, k17r, k18r, k19r, k20r, k21r, k22r, k23r,
-    k24r, k25r, k26r, k27r, k28r, k29r, k30r, k31r, k32r, k33r, k34r, k35r,
-    k36r, k37r, k38r, k39r, k40r, k41r, k42r, k43r, k44r, k45r, k46r, k47r
-};
 const char* actionStrings[] {
     "k00p", "k01p", "k02p", "k03p", "k04p", "k05p", "k06p", "k07p", "k08p", "k09p", "k10p", "k11p",
     "k12p", "k13p", "k14p", "k15p", "k16p", "k17p", "k18p", "k19p", "k20p", "k21p", "k22p", "k23p",
@@ -60,12 +152,8 @@ const char* actionStrings[] {
     "k36r", "k37r", "k38r", "k39r", "k40r", "k41r", "k42r", "k43r", "k44r", "k45r", "k46r", "k47r"
 };
 
-int inputs[] {6,  7,  8,  9};
-int outputs[] {10, 11, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23};
 int states[48] = {0};
 int times[48] = {0};
-const int inputsLength = sizeof(inputs) / sizeof(int);
-const int outputsLength = sizeof(outputs) / sizeof(int);
 
 int layerModifiers[] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -106,29 +194,21 @@ int utils[] {
 //       0   1   2   3   4   5 | 6   7   8   9  10  11
 };
 
-int get(int layer, int key)
+int get(int layer, KeyEvent event)
 { // todo - move keymaplayers to a class with private mutators
     if(layer < 0) return -1;
-//    if(keymapLayers[layer] == nullptr) return get(layer - 1, key);
-    if(keymapLayers[layer][key] != -1)
+//    if(keymapLayers[layer] == nullptr) return get(layer - 1, event.getKey());
+    if(keymapLayers[layer][event.getKey()] != -1)
     {
-        return keymapLayers[layer][key];
+        return keymapLayers[layer][event.getKey()];
     } else {
-        return get(layer - 1, key);
+        return get(layer - 1, event);
     }
 }
-int get(int key) {
-    return get(keymapLayers.size() - 1, key);
+int get(KeyEvent event) {
+    return get(keymapLayers.size() - 1, event);
 }
 
-bool isPress(int action)
-{
-    return action >= 0 and action < numKeys;
-}
-bool isRelease(int action)
-{
-    return action >= numKeys and action < 2 * numKeys;
-}
 bool isLetter(int key)
 {
     return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
@@ -146,9 +226,9 @@ bool otherKeysPressed()
 }
 void KeyboardPress(int key)
 {
-    if (recordActions)
+    if (recordActions.isRecording())
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.press(key);});
+        recordActions.recordAction([=]()->void { Keyboard.press(key); });
     }
     switch (key) {
         case KEY_LEFT_SHIFT:
@@ -162,9 +242,9 @@ void KeyboardPress(int key)
 }
 void KeyboardRelease(int key)
 {
-    if (recordActions)
+    if (recordActions.isRecording())
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Keyboard.release(key);});
+        recordActions.recordAction([=]()->void { Keyboard.release(key); });
     }
     switch (key) {
         case KEY_LEFT_SHIFT:
@@ -178,9 +258,9 @@ void KeyboardRelease(int key)
 }
 void MouseMoveTo(int x, int y)
 {
-    if (recordActions)
+    if (recordActions.isRecording())
     {
-        currentResolvedMacroVector->second.push_back([=]()->void {Mouse.moveTo(x,y);});
+        recordActions.recordAction([=]()->void {Mouse.moveTo(x,y);});
     }
     Mouse.moveTo(x, y);
 }
@@ -197,46 +277,50 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
-        if (recordActions) currentResolvedMacroVector->second.push_back([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
+        if (recordActions.isRecording()) recordActions.recordAction([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
         Mouse.move(xmove * xs, ymove * ys);
     }
 }
-void send(int action)
+void send(KeyEvent event)
 {
     int key;
-    if (isPress(action)) {
-        key = get(action); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
+    if (event.isPress()) {
+        key = get(event); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
         if (isLetter(key)) {
             Serial.println("is letter");
         } else {
             Serial.println("not letter");
         }
         KeyboardPress(key);
-    } else if (isRelease(action)) {
-        key = get(action - numKeys);
+    } else if (event.isRelease()) {
+        key = get(event - numKeys);
         KeyboardRelease(key);
     }
 }
-bool leader(int action)
+bool leader(KeyEvent action)
 {
-    enum {start, leading, recordToWhere};
+    enum {start, leading, recordToWhere, replayWhat};
     static int state = start;
     bool consumed = false;
     switch (state) {
         case start:
-            if (action == k38p) {
+            if (action.isKeyPressed(Key::k38)) {
                 state = leading;
                 consumed = true;
             }
             break;
         case leading:
-            if (isPress(action))
+            if (action.isPress())
             {
-                if (get(action) == KEY_Q)
+                int key = get(action);
+                if (key == KEY_2 and modifierKeysStates.getAnyShiftPressed())
                 {
-                    if (recordActions)
+                    state = replayWhat;
+                    consumed = true;
+                } else if (key == KEY_Q) {
+                    if (recordActions.isRecording())
                     {
-                        recordActions = false;
+                        recordActions.stopRecording();
                         state = start;
                         consumed = true;
                     } else {
@@ -248,27 +332,25 @@ bool leader(int action)
                 }
             }
             break;
+        case replayWhat:
+            if (action.isPress())
+            {
+                int key = get(action);
+                if (isLetter(key) /*and is lowercase*/)
+                {
+                    recordActions.replayActions(key);
+                    consumed = true;
+                } // todo - else it's capital replay raw
+                state = start;
+            }
+            break;
         case recordToWhere:
             int resolvedAction = get(action);
-            if (isPress(action))
+            if (action.isPress())
             {
                 if (isLetter(resolvedAction))
                 {
-                    auto recordedIterator = recordedResolvedActionsMap.find(resolvedAction);
-                    if (recordedIterator == recordedResolvedActionsMap.end()) {
-                        recordedResolvedActionsMap.emplace(std::make_pair(resolvedAction, std::initializer_list<std::function<void()>>()));
-                    } else {
-                        recordedIterator->second.clear();
-                    }
-                    auto rawIterator = recordedRawKeys.find(resolvedAction);
-                    if (rawIterator == recordedRawKeys.end()) {
-                        recordedRawKeys.emplace(std::make_pair(resolvedAction, std::initializer_list<int>()));
-                    } else {
-                        rawIterator->second.clear();
-                    }
-                    currentResolvedMacroVector = recordedIterator;
-                    currentRawMacroVector = rawIterator;
-                    recordActions = true;
+                    recordActions.startRecording(resolvedAction);
                     state = start;
                     consumed = true;
                 } else {
@@ -279,7 +361,7 @@ bool leader(int action)
     }
     return consumed;
 }
-bool mouse(int action)
+bool mouse(KeyEvent action)
 {
     static bool centered = false;
     Mouse.screenSize(3840, 2160);
@@ -296,7 +378,7 @@ bool mouse(int action)
     static int state = start;
     switch (state) {
         case start:
-            if (action == k40p) {
+            if (action.isKeyPressed(Key::k40)) {
                 xunit = xRes / 4;
                 yunit = yRes / 4;
                 state = mouse;
@@ -304,36 +386,36 @@ bool mouse(int action)
             }
             break;
         case mouse:
-            if (not centered and (action == k08p or action == k19p or action == k20p or action == k21p)) {
+            if (not centered and action.isPress() and action.isOneOf(Key::k08, Key::k19, Key::k20, Key::k21)) {
                 MouseMoveTo(xRes / 2, yRes / 2);
                 centered = true;
             }
-            if (action == k08p) {
+            if (action.isKeyPressed(Key::k08)) {
                 MouseMove(0, -yunit); consumed = true;
                 yunit /= 2;
-            } else if (action == k19p) {
+            } else if (action.isKeyPressed(Key::k19)) {
                 MouseMove(-xunit, 0); consumed = true;
                 xunit /= 2;
-            } else if (action == k20p) {
+            } else if (action.isKeyPressed(Key::k20)) {
                 MouseMove(0, yunit); consumed = true;
                 yunit /= 2;
-            } else if (action == k21p) {
+            } else if (action.isKeyPressed(Key::k21)) {
                 MouseMove(xunit, 0); consumed = true;
                 xunit /= 2;
-            } else if (action == k31p) {
+            } else if (action.isKeyPressed(Key::k31)) {
                 Mouse.click(1); consumed = true;
-            } else if (action == k32p) {
+            } else if (action.isKeyPressed(Key::k32)) {
                 Mouse.click(4); consumed = true;
-            } else if (action == k33p) {
+            } else if (action.isKeyPressed(Key::k33)) {
                 Mouse.click(2); consumed = true;
-            } else if (action == k40r) {
+            } else if (action.isKeyReleased(Key::k40)) {
                 state = start;
                 centered = false;
             }
             break;
     }
     return consumed;
-}bool relativeMouse(int action)
+}bool relativeMouse(KeyEvent action)
 {
     static int xunit = 0;
     static int yunit = 0;
@@ -343,7 +425,7 @@ bool mouse(int action)
     static int state = start;
     switch (state) {
         case start:
-            if (action == k40p) {
+            if (action.isKeyPressed(Key::k40)) {
                 xunit = 1000;
                 yunit = 1000;
                 divide = false;
@@ -352,54 +434,54 @@ bool mouse(int action)
             }
             break;
         case mouse:
-            if (action == k07p) {
+            if (action.isKeyPressed(Key::k07)) {
                 divide = not divide; consumed = true;
-            } else if (action == k08p) {
+            } else if (action.isKeyPressed(Key::k08)) {
                 MouseMove(0, -yunit); consumed = true;
                 if (divide) yunit /= 2;
-            } else if (action == k19p) {
+            } else if (action.isKeyPressed(Key::k19)) {
                 MouseMove(-xunit, 0); consumed = true;
                 if (divide) xunit /= 2;
-            } else if (action == k20p) {
+            } else if (action.isKeyPressed(Key::k20)) {
                 MouseMove(0, yunit); consumed = true;
                 if (divide) yunit /= 2;
-            } else if (action == k21p) {
+            } else if (action.isKeyPressed(Key::k21)) {
                 MouseMove(xunit, 0); consumed = true;
                 if (divide) xunit /= 2;
-            } else if (action == k31p) {
+            } else if (action.isKeyPressed(Key::k31)) {
                 Mouse.click(1); consumed = true;
-            } else if (action == k32p) {
+            } else if (action.isKeyPressed(Key::k32)) {
                 Mouse.click(4); consumed = true;
-            } else if (action == k33p) {
+            } else if (action.isKeyPressed(Key::k33)) {
                 Mouse.click(2); consumed = true;
-            } else if (action == k40r) {
+            } else if (action.isKeyReleased(Key::k40)) {
                 state = start;
             }
             break;
     }
     return consumed;
 }
-bool layer(int action)
+bool layer(KeyEvent action)
 {
     bool consumed = false;
     enum {start, numberLayer, utilLayer};
     static int state = start;
     switch (state) {
         case start:
-            if (action == k43p)
+            if (action.isKeyPressed(Key::k43))
             {
                 keymapLayers.push_back(numbers);
                 // todo - release all keys of the layer getting replaced
                 state = numberLayer;
                 consumed = true;
-            } else if (action == k40p) {
+            } else if (action.isKeyPressed(Key::k40)) {
                 keymapLayers.push_back(utils);
                 state = utilLayer;
                 consumed = true;
             }
             break;
         case numberLayer:
-            if (action == k43r)
+            if (action.isKeyReleased(Key::k43))
             {
                 if (keymapLayers.back() == numbers)
                 {
@@ -410,7 +492,7 @@ bool layer(int action)
             }
             break;
         case utilLayer:
-            if (action == k40r) {
+            if (action.isKeyReleased(Key::k40)) {
                 if (keymapLayers.back() == utils)
                 {
                     keymapLayers.pop_back();
@@ -422,7 +504,7 @@ bool layer(int action)
     }
     return consumed;
 }
-bool shiftEquals(int action)
+bool shiftEquals(KeyEvent action)
 {
     bool consumed = false;
     enum {start, pressed, shift};
@@ -430,26 +512,26 @@ bool shiftEquals(int action)
     switch (state)
     {
         case start:
-            if (action == k35p)
+            if (action.isKeyPressed(Key::k35))
             {
                 consumed = true;
                 state = pressed;
             }
             break;
         case pressed:
-            if (action == k35r)
+            if (action.isKeyReleased(Key::k35))
             {
                 KeyboardPress(KEY_EQUAL);
                 KeyboardRelease(KEY_EQUAL);
                 consumed = true;
                 state = start;
-            } else if (isPress(action)) {
+            } else if (action.isPress()) {
                 KeyboardPress(KEY_RIGHT_SHIFT);
                 state = shift;
             }
             break;
         case shift:
-            if (action == k35r)
+            if (action.isKeyReleased(Key::k35))
             {
                 KeyboardRelease(KEY_RIGHT_SHIFT);
                 consumed = true;
@@ -459,7 +541,7 @@ bool shiftEquals(int action)
     }
     return consumed;
 }
-bool thumbs(int action)
+bool thumbs(KeyEvent action)
 {
     bool consumed = false;
     bool okp;
@@ -470,56 +552,56 @@ bool thumbs(int action)
     static int state = start;
     switch (state) {
         case start:
-            if (action == k41p)
+            if (action.isKeyPressed(Key::k41))
             {
                 k41pressed = true;
                 consumed = true;
                 state = one_thumb;
-            } else if (action == k42p) {
+            } else if (action.isKeyPressed(Key::k42)) {
                 k42pressed = true;
                 consumed = true;
                 state = one_thumb;
             }
             break;
         case one_thumb:
-            if (action == k41r and k41pressed)
+            if (action.isKeyReleased(Key::k41) and k41pressed)
             {
                 k41pressed = false;
                 KeyboardPress(KEY_BACKSPACE);
                 KeyboardRelease(KEY_BACKSPACE);
                 consumed = true;
                 state = start;
-            } else if (action == k42r and k42pressed) {
+            } else if (action.isKeyReleased(Key::k42) and k42pressed) {
                 k42pressed = false;
                 KeyboardPress(KEY_SPACE);
                 KeyboardRelease(KEY_SPACE);
                 consumed = true;
                 state = start;
-            } else if (action == k41p and k42pressed) {
+            } else if (action.isKeyPressed(Key::k41) and k42pressed) {
                 k41pressed = true;
                 consumed = true;
                 state = both_thumb;
-            } else if (action == k42p and k41pressed) {
+            } else if (action.isKeyPressed(Key::k42) and k41pressed) {
                 k42pressed = true;
                 consumed = true;
                 state = both_thumb;
-            } else if (isPress(action) and k41pressed) {
+            } else if (action.isPress() and k41pressed) {
                 KeyboardPress(MODIFIERKEY_CTRL);
                 state = one_mod;
-            } else if(isPress(action) and k42pressed) {
+            } else if(action.isPress() and k42pressed) {
                 KeyboardPress(MODIFIERKEY_ALT);
                 state = one_mod;
             }
             break;
         case both_thumb:
             if (not k41pressed or not k42pressed) Serial.println("something wrong 1488853974");
-            if (action == k41r) {
+            if (action.isKeyReleased(Key::k41)) {
                 k41pressed = false;
                 KeyboardPress(KEY_DELETE);
                 KeyboardRelease(KEY_DELETE);
                 consumed = true;
                 state = one_thumb_prime;
-            } else if (action == k42r) {
+            } else if (action.isKeyReleased(Key::k42)) {
                 k42pressed = false;
                 KeyboardPress(KEY_ENTER);
                 KeyboardRelease(KEY_ENTER);
@@ -533,24 +615,24 @@ bool thumbs(int action)
             break;
         case both_mod:
             okp = otherKeysPressed();
-            if (not okp and action == k41r)
+            if (not okp and action.isKeyReleased(Key::k41))
             {
                 k41pressed = false;
                 KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = one_thumb_prime;
-            } else if (not okp and action == k42r) {
+            } else if (not okp and action.isKeyReleased(Key::k42)) {
                 k42pressed = false;
                 KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
                 state = one_thumb_prime;
-            } else if (okp and action == k41r)
+            } else if (okp and action.isKeyReleased(Key::k41))
             {
                 k41pressed = false;
                 KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = one_mod;
-            } else if (okp and action == k42r) {
+            } else if (okp and action.isKeyReleased(Key::k42)) {
                 k42pressed = false;
                 KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
@@ -559,22 +641,22 @@ bool thumbs(int action)
             break;
         case one_mod:
             if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488855253");
-            if (action == k41p and !k41pressed) {
+            if (action.isKeyPressed(Key::k41) and !k41pressed) {
                 k41pressed = true;
                 KeyboardPress(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = both_mod;
-            } else if (action == k42p and !k42pressed) {
+            } else if (action.isKeyPressed(Key::k42) and !k42pressed) {
                 k42pressed = true;
                 KeyboardPress(MODIFIERKEY_ALT);
                 consumed = true;
                 state = both_mod;
-            } else if (action == k41r and k41pressed) {
+            } else if (action.isKeyReleased(Key::k41) and k41pressed) {
                 k41pressed = false;
                 KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = start;
-            } else if (action == k42r and k42pressed) {
+            } else if (action.isKeyReleased(Key::k42) and k42pressed) {
                 k42pressed = false;
                 KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
@@ -583,21 +665,21 @@ bool thumbs(int action)
             break;
         case one_thumb_prime:
             if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488856884");
-            if (action == k41p and not k41pressed)
+            if (action.isKeyPressed(Key::k41) and not k41pressed)
             {
                 k41pressed = true;
                 consumed = true;
                 state = both_thumb;
-            } else if (action == k42p and not k42pressed) {
+            } else if (action.isKeyPressed(Key::k42) and not k42pressed) {
                 k42pressed = true;
                 consumed = true;
                 state = both_thumb;
-            } else if (action == k41r and k41pressed) {
+            } else if (action.isKeyReleased(Key::k41) and k41pressed) {
                 k41pressed = false;
                 KeyboardRelease(MODIFIERKEY_CTRL);
                 consumed = true;
                 state = start;
-            } else if (action == k42r and k42pressed) {
+            } else if (action.isKeyReleased(Key::k42) and k42pressed) {
                 k42pressed = false;
                 KeyboardRelease(MODIFIERKEY_ALT);
                 consumed = true;
@@ -610,7 +692,7 @@ bool thumbs(int action)
                 state = one_mod;
             }
             break;
-   }
+    }
     return consumed;
 }
 void reset()
@@ -618,43 +700,50 @@ void reset()
     Keyboard.releaseAll();
     _reboot_Teensyduino_();
 }
-void push(int action)
+void push(KeyEvent event)
 {
-    if (action == k36p)
+    if (event.isKeyPressed(Key::k36))
     {
         reset();
     }
-    if (recordActions) currentRawMacroVector->second.push_back(action);
+    if (recordActions.isRecording()) recordActions.recordRawKey(event);
     bool consumed = false;
-    for(auto f:listeners)
+    for(auto &&f:listeners)
     {
-        if (f(action))
+        if (f(event))
         {
             consumed = true;
         }
     }
     if (not consumed)
     {
-        send(action);
+        send(event);
     }
 //    Serial.println(actionStrings[action]);
 }
 void setup()
 {
+    configuration = Configuration::Builder()
+            .i(6).i(7).i(8).i(9)
+            .o(10).o(11).o(12).o(15).o(16).o(17).o(18).o(19).o(20).o(21).o(22).o(23)
+            .f([](int i, int o)->int {
+                return outputs.length() * i + o;
+            })
+            .build();
     Serial.begin(9600);
     Serial.println("hello from keyboard");
     Keyboard.begin();
     Mouse.begin();
     keymapLayers.push_back(modifiers);
     keymapLayers.push_back(dvorak);
-    for(int i = 0; i < inputsLength; i++)
+    for(int i = 0; i < configuration->inputs.size(); i++)
     {
-        pinMode(inputs[i], INPUT_PULLDOWN);
+        pinMode(configuration->inputs[i], INPUT_PULLDOWN);
     }
-    for(int i = 0; i < outputsLength; i++)
+    for(int i = 0; i < configuration->outputs.size(); i++)
     {
-        pinMode(outputs[i], OUTPUT);
-        digitalWrite(outputs[i], LOW);
+        pinMode(configuration->outputs[i], OUTPUT);
+        digitalWrite(configuration->outputs[i], LOW);
     }
 }
 void alive()
@@ -668,13 +757,13 @@ void alive()
 void loop()
 {
     alive();
-    for(int o = 0; o < outputsLength; o++)
+    for(int o = 0; o < configuration->outputs.size(); o++)
     {
-        digitalWrite(outputs[o], HIGH);
-        for(int i = 0; i < inputsLength; i++)
+        digitalWrite(configuration->outputs[o], HIGH);
+        for(int i = 0; i < configuration->inputs.size(); i++)
         {
-            int state = digitalRead(inputs[i]);
-            int key = outputsLength * i + o;
+            int state = digitalRead(configuration->inputs[i]);
+            int key = configuration->outputs.size() * i + o;
             if(state != states[key]) // if there is a change
             {
                 if(state)
@@ -682,18 +771,18 @@ void loop()
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 1;
-                        push(key);
+                        push(KeyEvent(layout[key], Action::PRESS));
                     }
                 } else {
                     if(millis() - times[key] > 20) {
                         times[key] = millis();
                         states[key] = 0;
-                        push(key + 48);
+                        push(KeyEvent(layout[key], Action::RELEASE));
                     }
                 }
             }
         }
-        digitalWrite(outputs[o], LOW);
+        digitalWrite(configuration->outputs[o], LOW);
     }
 //    delay(1000);
 }

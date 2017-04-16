@@ -20,8 +20,8 @@ private:
 class Configuration::Builder {
 public:
     Configuration *build() { return new Configuration(outputs, inputs, function); };
-    Builder &o(int n) { outputs.push_back(n); return *this; };
-    Builder &i(int n) { inputs.push_back(n); return *this; };
+    Builder &o(uint8_t n) { outputs.push_back(n); return *this; };
+    Builder &i(uint8_t n) { inputs.push_back(n); return *this; };
     Builder &f(std::function<int(int,int,int,int)> fun) { function = fun; return *this; };
 private:
     std::function<int(int,int,int,int)> function;
@@ -81,7 +81,7 @@ public:
     {
         setRecordingActions(false);
     }
-    void recordAction(std::function<void()> f)
+    void recordAction(void(*f)())
     {
         if (isRecording())
         {
@@ -224,7 +224,7 @@ void KeyboardPress(int key)
 {
     if (recordActions.isRecording())
     {
-        recordActions.recordAction([=]()->void { Keyboard.press(key); });
+        recordActions.recordAction([=]()->void { Keyboard.press((uint16_t)key); });
     }
     switch (key) {
         case KEY_LEFT_SHIFT:
@@ -234,13 +234,13 @@ void KeyboardPress(int key)
             modifierKeysStates.setRightShift(true);
             break;
     }
-    Keyboard.press(key);
+    Keyboard.press((uint16_t)key);
 }
 void KeyboardRelease(int key)
 {
     if (recordActions.isRecording())
     {
-        recordActions.recordAction([=]()->void { Keyboard.release(key); });
+        recordActions.recordAction([=]()->void { Keyboard.release((uint16_t)key); });
     }
     switch (key) {
         case KEY_LEFT_SHIFT:
@@ -250,15 +250,15 @@ void KeyboardRelease(int key)
             modifierKeysStates.setRightShift(false);
             break;
     }
-    Keyboard.release(key);
+    Keyboard.release((uint16_t)key);
 }
 void MouseMoveTo(int x, int y)
 {
     if (recordActions.isRecording())
     {
-        recordActions.recordAction([=]()->void {Mouse.moveTo(x,y);});
+        recordActions.recordAction([=]()->void {Mouse.moveTo((uint16_t)x, (uint16_t)y);});
     }
-    Mouse.moveTo(x, y);
+    Mouse.moveTo((uint16_t)x, (uint16_t)y);
 }
 void MouseMove(int x, int y)
 {
@@ -273,8 +273,8 @@ void MouseMove(int x, int y)
         x = max(0, x - unit);
         int ymove = min(unit, y);
         y = max(0, y - unit);
-        if (recordActions.isRecording()) recordActions.recordAction([=]()->void {Mouse.move(xmove * xs, ymove * ys);});
-        Mouse.move(xmove * xs, ymove * ys);
+        if (recordActions.isRecording()) recordActions.recordAction([=]()->void {Mouse.move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));});
+        Mouse.move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
     }
 }
 void send(KeyEvent event)

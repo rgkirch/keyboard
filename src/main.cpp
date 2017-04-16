@@ -3,33 +3,30 @@
 #include <functional>
 #include <map>
 #include <cstdarg>
+#include <algorithm>
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
-bool shiftEquals(int action);
-bool thumbs(int action);
-bool layer(int action);
-bool mouse(int action);
-bool leader(int action);
 
 class Configuration {
 public:
     class Builder;
-    const std::vector<int> outputs;
-    const std::vector<int> inputs;
+    const std::vector<uint8_t> outputs;
+    const std::vector<uint8_t> inputs;
+    int fun(int i, int o) { return f(i, o, inputs.size(), outputs.size()); };
 private:
-    Configuration(std::vector<int> outputs, std::vector<int> inputs, std::function<int(int,int)> fun) : outputs(outputs), inputs(inputs), f(f) {};
-    std::function<int(int,int)> f;
+    Configuration(std::vector<uint8_t> outputs, std::vector<uint8_t> inputs, std::function<int(int,int,int,int)> fun) : outputs(outputs), inputs(inputs), f(fun) {};
+    std::function<int(int,int,int,int)> f; // todo - make const
 };
 class Configuration::Builder {
 public:
     Configuration *build() { return new Configuration(outputs, inputs, function); };
     Builder &o(int n) { outputs.push_back(n); return *this; };
     Builder &i(int n) { inputs.push_back(n); return *this; };
-    Builder &f(std::function<int(int,int)> fun) { function = fun; return *this; };
+    Builder &f(std::function<int(int,int,int,int)> fun) { function = fun; return *this; };
 private:
-    std::function<int(int,int)> function;
-    std::vector<int> outputs;
-    std::vector<int> inputs;
+    std::function<int(int,int,int,int)> function;
+    std::vector<uint8_t> outputs;
+    std::vector<uint8_t> inputs;
 };
 Configuration *configuration;
 
@@ -55,15 +52,8 @@ public:
     bool isKey(Key k) { return k == key; }
     bool isKeyPressed(Key k) { return isKey(k) and isPress(); }
     bool isKeyReleased(Key k) { return isKey(k) and isRelease(); }
-    bool isOneOf(Key... k) {
-        bool oneOf = isKey(k);
-        bool temp;
-        va_list args;
-        va_start(args, k);
-        while (temp = va_arg(k, Key)) {
-            oneOf = oneOf or temp;
-        }
-        return oneOf;
+    bool isOneOf(std::vector<Key> keys) {
+        return std::find(keys.begin(), keys.end(), key) == keys.end();
     }
     Key getKey() { return key; }
     Action getAction() { return action; }
@@ -71,6 +61,12 @@ private:
     Key key;
     Action action;
 };
+
+bool shiftEquals(KeyEvent action);
+bool thumbs(KeyEvent action);
+bool layer(KeyEvent action);
+bool mouse(KeyEvent action);
+bool leader(KeyEvent action);
 
 struct RecordActions {
 public:
@@ -153,7 +149,7 @@ const char* actionStrings[] {
 };
 
 int states[48] = {0};
-int times[48] = {0};
+long times[48] = {0};
 
 int layerModifiers[] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -198,9 +194,9 @@ int get(int layer, KeyEvent event)
 { // todo - move keymaplayers to a class with private mutators
     if(layer < 0) return -1;
 //    if(keymapLayers[layer] == nullptr) return get(layer - 1, event.getKey());
-    if(keymapLayers[layer][event.getKey()] != -1)
+    if(keymapLayers[layer][static_cast<int>(event.getKey())] != -1)
     {
-        return keymapLayers[layer][event.getKey()];
+        return keymapLayers[layer][static_cast<int>(event.getKey())];
     } else {
         return get(layer - 1, event);
     }
@@ -283,17 +279,10 @@ void MouseMove(int x, int y)
 }
 void send(KeyEvent event)
 {
-    int key;
+    int key = get(event); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
     if (event.isPress()) {
-        key = get(event); // add the pressed key somewhere so that we aren't relying on finding the same on the next time that we look it up in the array
-        if (isLetter(key)) {
-            Serial.println("is letter");
-        } else {
-            Serial.println("not letter");
-        }
         KeyboardPress(key);
     } else if (event.isRelease()) {
-        key = get(event - numKeys);
         KeyboardRelease(key);
     }
 }
@@ -386,7 +375,7 @@ bool mouse(KeyEvent action)
             }
             break;
         case mouse:
-            if (not centered and action.isPress() and action.isOneOf(Key::k08, Key::k19, Key::k20, Key::k21)) {
+            if (not centered and action.isPress() and action.isOneOf({Key::k08, Key::k19, Key::k20, Key::k21})) {
                 MouseMoveTo(xRes / 2, yRes / 2);
                 centered = true;
             }
@@ -640,7 +629,7 @@ bool thumbs(KeyEvent action)
             }
             break;
         case one_mod:
-            if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488855253");
+            if (not ((not k41pressed and k42pressed) or (k41pressed and not k42pressed))) Serial.println("problem 1488855253");
             if (action.isKeyPressed(Key::k41) and !k41pressed) {
                 k41pressed = true;
                 KeyboardPress(MODIFIERKEY_CTRL);
@@ -664,7 +653,7 @@ bool thumbs(KeyEvent action)
             }
             break;
         case one_thumb_prime:
-            if (not (not k41pressed and k42pressed or k41pressed and not k42pressed)) Serial.println("problem 1488856884");
+            if (not ((not k41pressed and k42pressed) or (k41pressed and not k42pressed))) Serial.println("problem 1488856884");
             if (action.isKeyPressed(Key::k41) and not k41pressed)
             {
                 k41pressed = true;
@@ -726,8 +715,8 @@ void setup()
     configuration = Configuration::Builder()
             .i(6).i(7).i(8).i(9)
             .o(10).o(11).o(12).o(15).o(16).o(17).o(18).o(19).o(20).o(21).o(22).o(23)
-            .f([](int i, int o)->int {
-                return outputs.length() * i + o;
+            .f([](int i, int o, int inputsLength, int outputsLength)->int {
+                return outputsLength * i + o;
             })
             .build();
     Serial.begin(9600);
@@ -736,11 +725,11 @@ void setup()
     Mouse.begin();
     keymapLayers.push_back(modifiers);
     keymapLayers.push_back(dvorak);
-    for(int i = 0; i < configuration->inputs.size(); i++)
+    for(unsigned int i = 0; i < configuration->inputs.size(); i++)
     {
         pinMode(configuration->inputs[i], INPUT_PULLDOWN);
     }
-    for(int i = 0; i < configuration->outputs.size(); i++)
+    for(unsigned int i = 0; i < configuration->outputs.size(); i++)
     {
         pinMode(configuration->outputs[i], OUTPUT);
         digitalWrite(configuration->outputs[i], LOW);
@@ -757,10 +746,10 @@ void alive()
 void loop()
 {
     alive();
-    for(int o = 0; o < configuration->outputs.size(); o++)
+    for(unsigned int o = 0; o < configuration->outputs.size(); o++)
     {
         digitalWrite(configuration->outputs[o], HIGH);
-        for(int i = 0; i < configuration->inputs.size(); i++)
+        for(unsigned int i = 0; i < configuration->inputs.size(); i++)
         {
             int state = digitalRead(configuration->inputs[i]);
             int key = configuration->outputs.size() * i + o;

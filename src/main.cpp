@@ -17,17 +17,17 @@ public:
     const std::vector<int> outputs;
     const std::vector<int> inputs;
 private:
-    Configuration(std::vector<int> outputs, std::vector<int> inputs, std::function<int(int,int)> fun) : outputs(outputs), inputs(inputs), f(f) {};
-    std::function<int(int,int)> f;
+    Configuration(std::vector<int> outputs, std::vector<int> inputs, std::function<int(int,int,int,int)> fun) : outputs(outputs), inputs(inputs), f(fun) {};
+    std::function<int(int,int,int,int)> f;
 };
 class Configuration::Builder {
 public:
     Configuration *build() { return new Configuration(outputs, inputs, function); };
     Builder &o(int n) { outputs.push_back(n); return *this; };
     Builder &i(int n) { inputs.push_back(n); return *this; };
-    Builder &f(std::function<int(int,int)> fun) { function = fun; return *this; };
+    Builder &f(std::function<int(int,int,int,int)> fun) { function = fun; return *this; };
 private:
-    std::function<int(int,int)> function;
+    std::function<int(int,int,int,int)> function;
     std::vector<int> outputs;
     std::vector<int> inputs;
 };
@@ -55,13 +55,13 @@ public:
     bool isKey(Key k) { return k == key; }
     bool isKeyPressed(Key k) { return isKey(k) and isPress(); }
     bool isKeyReleased(Key k) { return isKey(k) and isRelease(); }
-    bool isOneOf(Key... k) {
+    bool isOneOf(Key k...) {
         bool oneOf = isKey(k);
-        bool temp;
+        Key temp;
         va_list args;
         va_start(args, k);
         while (temp = va_arg(k, Key)) {
-            oneOf = oneOf or temp;
+            oneOf = oneOf or isKey(temp);
         }
         return oneOf;
     }
@@ -726,8 +726,8 @@ void setup()
     configuration = Configuration::Builder()
             .i(6).i(7).i(8).i(9)
             .o(10).o(11).o(12).o(15).o(16).o(17).o(18).o(19).o(20).o(21).o(22).o(23)
-            .f([](int i, int o)->int {
-                return outputs.length() * i + o;
+            .f([](int i, int o, int inputsLength, int outputsLength)->int {
+                return outputsLength * i + o;
             })
             .build();
     Serial.begin(9600);

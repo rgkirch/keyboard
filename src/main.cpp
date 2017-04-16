@@ -14,8 +14,8 @@ bool leader(int action);
 class Configuration {
 public:
     class Builder;
-    const std::vector<int> outputs;
-    const std::vector<int> inputs;
+    const std::vector<uint8_t> outputs;
+    const std::vector<uint8_t> inputs;
 private:
     Configuration(std::vector<int> outputs, std::vector<int> inputs, std::function<int(int,int,int,int)> fun) : outputs(outputs), inputs(inputs), f(fun) {};
     std::function<int(int,int,int,int)> f;
@@ -153,7 +153,7 @@ const char* actionStrings[] {
 };
 
 int states[48] = {0};
-int times[48] = {0};
+long times[48] = {0};
 
 int layerModifiers[] {
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,

@@ -10,6 +10,7 @@
 class Configuration {
 public:
     class Builder;
+    int layout[48] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47};
     const std::vector<uint8_t> outputs;
     const std::vector<uint8_t> inputs;
     int fun(int i, int o) { return f(i, o, inputs.size(), outputs.size()); };
@@ -81,7 +82,7 @@ public:
     {
         setRecordingActions(false);
     }
-    void recordAction(void(*f)())
+    void recordAction(std::function<void(void)> f)
     {
         if (isRecording())
         {
@@ -691,10 +692,6 @@ void reset()
 }
 void push(KeyEvent event)
 {
-    if (event.isKeyPressed(Key::k36))
-    {
-        reset();
-    }
     if (recordActions.isRecording()) recordActions.recordRawKey(event);
     bool consumed = false;
     for(auto &&f:listeners)

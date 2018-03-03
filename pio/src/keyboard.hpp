@@ -277,7 +277,7 @@ void MouseMoveTo(int x, int y) {
   }
   Mouse.moveTo((uint16_t)x, (uint16_t)y);
 }
-void MouseMove(int x, int y) {
+void mouseMove(int x, int y) {
   int unit = 100;
   int xs = 1;
   int ys = 1;
@@ -397,19 +397,19 @@ bool mouse(KeyEvent action) {
       centered = true;
     }
     if (action.isKeyPressed(Key::k08)) {
-      MouseMove(0, -yunit);
+      mouseMove(0, -yunit);
       consumed = true;
       yunit /= 2;
     } else if (action.isKeyPressed(Key::k19)) {
-      MouseMove(-xunit, 0);
+      mouseMove(-xunit, 0);
       consumed = true;
       xunit /= 2;
     } else if (action.isKeyPressed(Key::k20)) {
-      MouseMove(0, yunit);
+      mouseMove(0, yunit);
       consumed = true;
       yunit /= 2;
     } else if (action.isKeyPressed(Key::k21)) {
-      MouseMove(xunit, 0);
+      mouseMove(xunit, 0);
       consumed = true;
       xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
@@ -451,22 +451,22 @@ bool relativeMouse(KeyEvent action) {
       divide = not divide;
       consumed = true;
     } else if (action.isKeyPressed(Key::k08)) {
-      MouseMove(0, -yunit);
+      mouseMove(0, -yunit);
       consumed = true;
       if (divide)
         yunit /= 2;
     } else if (action.isKeyPressed(Key::k19)) {
-      MouseMove(-xunit, 0);
+      mouseMove(-xunit, 0);
       consumed = true;
       if (divide)
         xunit /= 2;
     } else if (action.isKeyPressed(Key::k20)) {
-      MouseMove(0, yunit);
+      mouseMove(0, yunit);
       consumed = true;
       if (divide)
         yunit /= 2;
     } else if (action.isKeyPressed(Key::k21)) {
-      MouseMove(xunit, 0);
+      mouseMove(xunit, 0);
       consumed = true;
       if (divide)
         xunit /= 2;

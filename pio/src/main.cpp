@@ -63,20 +63,17 @@ void loop() {
     for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
       int state = digitalRead(configuration->inputs[i]);
       int key = configuration->outputs.size() * i + o;
-      if (state != states[key]) // if there is a change
+      if (state != states[key] &&
+          millis() - times[key] > 20) // if there is a change and debounce
       {
         if (state) {
-          if (millis() - times[key] > 20) {
-            times[key] = millis();
-            states[key] = 1;
-            push(KeyEvent(layout[key], Action::PRESS));
-          }
+          times[key] = millis();
+          states[key] = 1;
+          push(KeyEvent(layout[key], Action::PRESS));
         } else {
-          if (millis() - times[key] > 20) {
-            times[key] = millis();
-            states[key] = 0;
-            push(KeyEvent(layout[key], Action::RELEASE));
-          }
+          times[key] = millis();
+          states[key] = 0;
+          push(KeyEvent(layout[key], Action::RELEASE));
         }
       }
     }

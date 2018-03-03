@@ -169,7 +169,7 @@ const char *actionStrings[]{
     "k33r", "k34r", "k35r", "k36r", "k37r", "k38r", "k39r", "k40r", "k41r",
     "k42r", "k43r", "k44r", "k45r", "k46r", "k47r"};
 
-int states[48] = {0};
+char states[48] = {0};
 long times[48] = {0};
 
 // clang-format off

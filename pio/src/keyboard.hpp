@@ -146,8 +146,8 @@ public:
   bool getLeftShiftPressed() { return leftShiftPressed; };
   bool getRightShiftPressed() { return rightShiftPressed; };
   bool getAnyShiftPressed() { return rightShiftPressed or leftShiftPressed; };
-  friend void KeyboardPress(int key);
-  friend void KeyboardRelease(int key);
+  friend void keyboardPress(int key);
+  friend void keyboardRelease(int key);
 
 private:
   void setLeftShift(bool b) { leftShiftPressed = b; };
@@ -240,7 +240,7 @@ bool otherKeysPressed() {
   }
   return false;
 }
-void KeyboardPress(int key) {
+void keyboardPress(int key) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
         [=]() -> void { Keyboard.press((uint16_t)key); });
@@ -255,7 +255,7 @@ void KeyboardPress(int key) {
   }
   Keyboard.press((uint16_t)key);
 }
-void KeyboardRelease(int key) {
+void keyboardRelease(int key) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
         [=]() -> void { Keyboard.release((uint16_t)key); });
@@ -306,9 +306,9 @@ void send(KeyEvent event) {
                         // relying on finding the same on the next time that we
                         // look it up in the array
   if (event.isPress()) {
-    KeyboardPress(key);
+    keyboardPress(key);
   } else if (event.isRelease()) {
-    KeyboardRelease(key);
+    keyboardRelease(key);
   }
 }
 bool leader(KeyEvent action) {
@@ -540,18 +540,18 @@ bool shiftEquals(KeyEvent action) {
     break;
   case pressed:
     if (action.isKeyReleased(Key::k35)) {
-      KeyboardPress(KEY_EQUAL);
-      KeyboardRelease(KEY_EQUAL);
+      keyboardPress(KEY_EQUAL);
+      keyboardRelease(KEY_EQUAL);
       consumed = true;
       state = start;
     } else if (action.isPress()) {
-      KeyboardPress(KEY_RIGHT_SHIFT);
+      keyboardPress(KEY_RIGHT_SHIFT);
       state = shift;
     }
     break;
   case shift:
     if (action.isKeyReleased(Key::k35)) {
-      KeyboardRelease(KEY_RIGHT_SHIFT);
+      keyboardRelease(KEY_RIGHT_SHIFT);
       consumed = true;
       state = start;
     }
@@ -583,14 +583,14 @@ bool thumbs(KeyEvent action) {
   case one_thumb:
     if (action.isKeyReleased(Key::k41) and k41pressed) {
       k41pressed = false;
-      KeyboardPress(KEY_BACKSPACE);
-      KeyboardRelease(KEY_BACKSPACE);
+      keyboardPress(KEY_BACKSPACE);
+      keyboardRelease(KEY_BACKSPACE);
       consumed = true;
       state = start;
     } else if (action.isKeyReleased(Key::k42) and k42pressed) {
       k42pressed = false;
-      KeyboardPress(KEY_SPACE);
-      KeyboardRelease(KEY_SPACE);
+      keyboardPress(KEY_SPACE);
+      keyboardRelease(KEY_SPACE);
       consumed = true;
       state = start;
     } else if (action.isKeyPressed(Key::k41) and k42pressed) {
@@ -602,10 +602,10 @@ bool thumbs(KeyEvent action) {
       consumed = true;
       state = both_thumb;
     } else if (action.isPress() and k41pressed) {
-      KeyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(MODIFIERKEY_CTRL);
       state = one_mod;
     } else if (action.isPress() and k42pressed) {
-      KeyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(MODIFIERKEY_ALT);
       state = one_mod;
     }
     break;
@@ -614,19 +614,19 @@ bool thumbs(KeyEvent action) {
       Serial.println("something wrong 1488853974");
     if (action.isKeyReleased(Key::k41)) {
       k41pressed = false;
-      KeyboardPress(KEY_DELETE);
-      KeyboardRelease(KEY_DELETE);
+      keyboardPress(KEY_DELETE);
+      keyboardRelease(KEY_DELETE);
       consumed = true;
       state = one_thumb_prime;
     } else if (action.isKeyReleased(Key::k42)) {
       k42pressed = false;
-      KeyboardPress(KEY_ENTER);
-      KeyboardRelease(KEY_ENTER);
+      keyboardPress(KEY_ENTER);
+      keyboardRelease(KEY_ENTER);
       consumed = true;
       state = one_thumb_prime;
     } else {
-      KeyboardPress(MODIFIERKEY_CTRL);
-      KeyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(MODIFIERKEY_ALT);
       state = both_mod;
     }
     break;
@@ -634,22 +634,22 @@ bool thumbs(KeyEvent action) {
     okp = otherKeysPressed();
     if (not okp and action.isKeyReleased(Key::k41)) {
       k41pressed = false;
-      KeyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(MODIFIERKEY_CTRL);
       consumed = true;
       state = one_thumb_prime;
     } else if (not okp and action.isKeyReleased(Key::k42)) {
       k42pressed = false;
-      KeyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(MODIFIERKEY_ALT);
       consumed = true;
       state = one_thumb_prime;
     } else if (okp and action.isKeyReleased(Key::k41)) {
       k41pressed = false;
-      KeyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(MODIFIERKEY_CTRL);
       consumed = true;
       state = one_mod;
     } else if (okp and action.isKeyReleased(Key::k42)) {
       k42pressed = false;
-      KeyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(MODIFIERKEY_ALT);
       consumed = true;
       state = one_mod;
     }
@@ -659,22 +659,22 @@ bool thumbs(KeyEvent action) {
       Serial.println("problem 1488855253");
     if (action.isKeyPressed(Key::k41) and !k41pressed) {
       k41pressed = true;
-      KeyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(MODIFIERKEY_CTRL);
       consumed = true;
       state = both_mod;
     } else if (action.isKeyPressed(Key::k42) and !k42pressed) {
       k42pressed = true;
-      KeyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(MODIFIERKEY_ALT);
       consumed = true;
       state = both_mod;
     } else if (action.isKeyReleased(Key::k41) and k41pressed) {
       k41pressed = false;
-      KeyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(MODIFIERKEY_CTRL);
       consumed = true;
       state = start;
     } else if (action.isKeyReleased(Key::k42) and k42pressed) {
       k42pressed = false;
-      KeyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(MODIFIERKEY_ALT);
       consumed = true;
       state = start;
     }
@@ -692,19 +692,19 @@ bool thumbs(KeyEvent action) {
       state = both_thumb;
     } else if (action.isKeyReleased(Key::k41) and k41pressed) {
       k41pressed = false;
-      KeyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(MODIFIERKEY_CTRL);
       consumed = true;
       state = start;
     } else if (action.isKeyReleased(Key::k42) and k42pressed) {
       k42pressed = false;
-      KeyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(MODIFIERKEY_ALT);
       consumed = true;
       state = start;
     } else if (k41pressed) {
-      KeyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(MODIFIERKEY_CTRL);
       state = one_mod;
     } else if (k42pressed) {
-      KeyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(MODIFIERKEY_ALT);
       state = one_mod;
     }
     break;

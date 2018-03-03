@@ -711,3 +711,17 @@ bool thumbs(KeyEvent action) {
   }
   return consumed;
 }
+void push(KeyEvent event) {
+  if (recordActions.isRecording())
+    recordActions.recordRawKey(event);
+  bool consumed = false;
+  for (auto &&f : listeners) {
+    if (f(event)) {
+      consumed = true;
+    }
+  }
+  if (not consumed) {
+    send(event);
+  }
+  //    Serial.println(actionStrings[action]);
+}

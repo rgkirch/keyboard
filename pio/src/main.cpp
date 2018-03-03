@@ -10,21 +10,7 @@
 
 void reset() {
   Keyboard.releaseAll();
-  _reboot_Teensyduino_();
-}
-void push(KeyEvent event) {
-  if (recordActions.isRecording())
-    recordActions.recordRawKey(event);
-  bool consumed = false;
-  for (auto &&f : listeners) {
-    if (f(event)) {
-      consumed = true;
-    }
-  }
-  if (not consumed) {
-    send(event);
-  }
-  //    Serial.println(actionStrings[action]);
+  // _reboot_Teensyduino_();
 }
 void setup() {
   configuration =

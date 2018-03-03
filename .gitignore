@@ -11,3 +11,4 @@ CMakeListsPrivate.txt
 .vscode/.BROWSE.C_CPP.DB
 .vscode/.BROWSE.C_CPP.DB-shm
 .vscode/.BROWSE.C_CPP.DB-wal
+test/build_debug

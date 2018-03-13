@@ -25,3 +25,10 @@ bool mouseDotIsPressed(uint8_t b = MOUSE_ALL) { return Mouse.isPressed(b); }
 void keyboardDotPress(uint16_t n) { Keyboard.press(n); }
 
 void keyboardDotRelease(uint16_t n) { Keyboard.release(n); }
+
+void keyboardDotReleaseAll(void) { Keyboard.releaseAll(); }
+void keyboardDotBegin(void) { Keyboard.begin(); }
+void keyboardDotEnd(void) { Keyboard.end(); }
+void ummPinMode(uint8_t pin, uint8_t mode) { pinMode(pin, mode); }
+
+void ummDigitalWrite(uint8_t pin, uint8_t val) { digitalWrite(pin, val); }

@@ -725,3 +725,40 @@ void push(KeyEvent event) {
   }
   //    Serial.println(actionStrings[action]);
 }
+void setup() {
+  configuration =
+      Configuration::Builder()
+          .i(6)
+          .i(7)
+          .i(8)
+          .i(9)
+          .o(10)
+          .o(11)
+          .o(12)
+          .o(15)
+          .o(16)
+          .o(17)
+          .o(18)
+          .o(19)
+          .o(20)
+          .o(21)
+          .o(22)
+          .o(23)
+          .f([](int i, int o, int inputsLength, int outputsLength) -> int {
+            return outputsLength * i + o;
+          })
+          .build();
+  Serial.begin(9600);
+  Serial.println("hello from keyboard");
+  keyboardDotBegin();
+  mouseDotBegin();
+  keymapLayers.push_back(modifiers);
+  keymapLayers.push_back(dvorak);
+  for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
+    ummPinMode(configuration->inputs[i], INPUT_PULLDOWN);
+  }
+  for (unsigned int i = 0; i < configuration->outputs.size(); i++) {
+    ummPinMode(configuration->outputs[i], OUTPUT);
+    ummDigitalWrite(configuration->outputs[i], LOW);
+  }
+}

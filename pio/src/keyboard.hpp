@@ -736,28 +736,14 @@ void push(KeyEvent event) {
   //    serialDotPrintln(actionStrings[action]);
 }
 void setup() {
+  // clang-format off
   configuration =
-      Configuration::Builder()
-          .i(6)
-          .i(7)
-          .i(8)
-          .i(9)
-          .o(10)
-          .o(11)
-          .o(12)
-          .o(15)
-          .o(16)
-          .o(17)
-          .o(18)
-          .o(19)
-          .o(20)
-          .o(21)
-          .o(22)
-          .o(23)
-          .f([](int i, int o, int inputsLength, int outputsLength) -> int {
+      Configuration::Builder().i(6).i(7).i(8).i(9)
+      .o(10).o(11).o(12).o(15).o(16).o(17).o(18).o(19).o(20).o(21).o(22).o(23)
+      .f([](int i, int o, int inputsLength, int outputsLength) -> int {
             return outputsLength * i + o;
-          })
-          .build();
+          }).build();
+  // clang-format on
   serialDotBegin(9600);
   serialDotPrintln("hello from keyboard");
   keyboardDotBegin();

@@ -1,6 +1,17 @@
 #pragma once
 #include "Arduino.h"
 
+struct testable_keyboard_class {
+  void press(uint16_t n) { Keyboard.press(n); }
+  void release(uint16_t n) { Keyboard.release(n); }
+  void releaseAll(void) { Keyboard.releaseAll(); }
+  void begin(void) { Keyboard.begin(); }
+  void end(void) { Keyboard.end(); }
+  virtual ~testable_keyboard_class() = default;
+};
+testable_keyboard_class my_testable_keyboard;
+testable_keyboard_class *myTestableKeyboard = &my_testable_keyboard;
+
 void mouseDotBegin(void) { Mouse.begin(); }
 void mouseDotEnd(void) { Mouse.end(); }
 void mouseDotMove(int8_t x, int8_t y, int8_t wheel = 0, int8_t horiz = 0) {
@@ -22,14 +33,6 @@ void mouseDotSet_buttons(uint8_t left, uint8_t middle = 0, uint8_t right = 0,
 void mouseDotPress(uint8_t b = MOUSE_LEFT) { Mouse.press(); }
 void mouseDotRelease(uint8_t b = MOUSE_LEFT) { Mouse.release(); }
 bool mouseDotIsPressed(uint8_t b = MOUSE_ALL) { return Mouse.isPressed(b); }
-
-void keyboardDotPress(uint16_t n) { Keyboard.press(n); }
-
-void keyboardDotRelease(uint16_t n) { Keyboard.release(n); }
-
-void keyboardDotReleaseAll(void) { Keyboard.releaseAll(); }
-void keyboardDotBegin(void) { Keyboard.begin(); }
-void keyboardDotEnd(void) { Keyboard.end(); }
 void ummPinMode(uint8_t pin, uint8_t mode) { pinMode(pin, mode); }
 
 void ummDigitalWrite(uint8_t pin, uint8_t val) { digitalWrite(pin, val); }

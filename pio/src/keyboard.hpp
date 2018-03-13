@@ -10,6 +10,8 @@
 // #define min(a, b) ((a) < (b) ? (a) : (b))
 // #define max(a, b) ((a) > (b) ? (a) : (b))
 
+#define Keyboard myTestableKeyboard
+
 template <typename T> auto max(T a, T b) -> T {
   return ((a) > (b) ? (a) : (b));
 }
@@ -253,7 +255,7 @@ bool otherKeysPressed() {
 void keyboardPress(int key) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
-        [=]() -> void { keyboardDotPress((uint16_t)key); });
+        [=]() -> void { Keyboard->press((uint16_t)key); });
   }
   switch (key) {
   case KEY_LEFT_SHIFT:
@@ -263,12 +265,12 @@ void keyboardPress(int key) {
     modifierKeysStates.setRightShift(true);
     break;
   }
-  keyboardDotPress((uint16_t)key);
+  Keyboard->press((uint16_t)key);
 }
 void keyboardRelease(int key) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
-        [=]() -> void { keyboardDotRelease((uint16_t)key); });
+        [=]() -> void { Keyboard->release((uint16_t)key); });
   }
   switch (key) {
   case KEY_LEFT_SHIFT:
@@ -278,7 +280,7 @@ void keyboardRelease(int key) {
     modifierKeysStates.setRightShift(false);
     break;
   }
-  keyboardDotRelease((uint16_t)key);
+  Keyboard->release((uint16_t)key);
 }
 void mouseMoveTo(int x, int y) {
   if (recordActions.isRecording()) {
@@ -746,7 +748,7 @@ void setup() {
   // clang-format on
   serialDotBegin(9600);
   serialDotPrintln("hello from keyboard");
-  keyboardDotBegin();
+  Keyboard->begin();
   mouseDotBegin();
   keymapLayers.push_back(modifiers);
   keymapLayers.push_back(dvorak);
@@ -758,3 +760,4 @@ void setup() {
     ummDigitalWrite(configuration->outputs[i], LOW);
   }
 }
+#undef Keyboard

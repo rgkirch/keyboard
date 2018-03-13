@@ -9,7 +9,7 @@
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 void reset() {
-  keyboardDotReleaseAll();
+  Keyboard.releaseAll();
   // _reboot_Teensyduino_();
 }
 

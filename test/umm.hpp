@@ -58,19 +58,41 @@ mock_testable_keyboard_class myTestableKeyboardMock;
 testable_keyboard_class *myTestableKeyboard =
     static_cast<testable_keyboard_class *>(&myTestableKeyboardMock);
 
-void mouseDotBegin(void) {}
-void mouseDotEnd(void) {}
-void mouseDotMove(int8_t x, int8_t y, int8_t wheel = 0, int8_t horiz = 0) {}
-void mouseDotMoveTo(uint16_t x, uint16_t y) {}
-void mouseDotScreenSize(uint16_t width, uint16_t height,
-                        bool isMacintosh = false) {}
-void mouseDotClick(uint8_t b = MOUSE_LEFT) {}
-void mouseDotScroll(int8_t wheel, int8_t horiz = 0) {}
-void mouseDotSet_buttons(uint8_t left, uint8_t middle = 0, uint8_t right = 0,
-                         uint8_t back = 0, uint8_t forward = 0) {}
-void mouseDotPress(uint8_t b = MOUSE_LEFT) {}
-void mouseDotRelease(uint8_t b = MOUSE_LEFT) {}
-bool mouseDotIsPressed(uint8_t b = MOUSE_ALL) { return true; }
+struct testable_mouse_class {
+  virtual void begin(void) {}
+  virtual void end(void) {}
+  virtual void move(int8_t x, int8_t y, int8_t wheel = 0, int8_t horiz = 0) {}
+  virtual void moveTo(uint16_t x, uint16_t y) {}
+  virtual void screenSize(uint16_t width, uint16_t height,
+                          bool isMacintosh = false) {}
+  virtual void click(uint8_t b = MOUSE_LEFT) {}
+  virtual void scroll(int8_t wheel, int8_t horiz = 0) {}
+  virtual void set_buttons(uint8_t left, uint8_t middle = 0, uint8_t right = 0,
+                           uint8_t back = 0, uint8_t forward = 0) {}
+  virtual void press(uint8_t b = MOUSE_LEFT) {}
+  virtual void release(uint8_t b = MOUSE_LEFT) {}
+  virtual bool isPressed(uint8_t b = MOUSE_ALL) { return true; }
+};
+struct mock_testable_mouse_class : public testable_mouse_class {
+  MOCK_METHOD0(begin, void(void));
+  MOCK_METHOD0(end, void(void));
+  MOCK_METHOD4(move, void(int8_t x, int8_t y, int8_t wheel, int8_t horiz));
+  MOCK_METHOD2(moveTo, void(uint16_t x, uint16_t y));
+  MOCK_METHOD3(screenSize,
+               void(uint16_t width, uint16_t height, bool isMacintosh));
+  MOCK_METHOD1(click, void(uint8_t b));
+  MOCK_METHOD2(scroll, void(int8_t wheel, int8_t horiz));
+  MOCK_METHOD5(set_buttons, void(uint8_t left, uint8_t middle, uint8_t right,
+                                 uint8_t back, uint8_t forward));
+  MOCK_METHOD1(press, void(uint8_t b));
+  MOCK_METHOD1(release, void(uint8_t b));
+  MOCK_METHOD1(isPressed, bool(uint8_t));
+};
+
+mock_testable_mouse_class myTestableMouseMock;
+testable_mouse_class *myTestableMouse =
+    static_cast<testable_mouse_class *>(&myTestableMouseMock);
+
 void ummPinMode(uint8_t pin, uint8_t mode) {}
 
 void ummDigitalWrite(uint8_t pin, uint8_t val) {}

@@ -11,6 +11,7 @@
 // #define max(a, b) ((a) > (b) ? (a) : (b))
 
 #define Keyboard myTestableKeyboard
+#define Mouse myTestableMouse
 
 template <typename T> auto max(T a, T b) -> T {
   return ((a) > (b) ? (a) : (b));
@@ -285,9 +286,9 @@ void keyboardRelease(int key) {
 void mouseMoveTo(int x, int y) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
-        [=]() -> void { mouseDotMoveTo((uint16_t)x, (uint16_t)y); });
+        [=]() -> void { Mouse->moveTo((uint16_t)x, (uint16_t)y); });
   }
-  mouseDotMoveTo((uint16_t)x, (uint16_t)y);
+  Mouse->moveTo((uint16_t)x, (uint16_t)y);
 }
 void mouseMove(int x, int y) {
   int unit = 100;
@@ -308,9 +309,9 @@ void mouseMove(int x, int y) {
     y = max(0, y - unit);
     if (recordActions.isRecording())
       recordActions.recordAction([=]() -> void {
-        mouseDotMove((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
+        Mouse->move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
       });
-    mouseDotMove((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
+    Mouse->move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
   }
 }
 void send(KeyEvent event) {
@@ -381,7 +382,7 @@ bool leader(KeyEvent action) {
 }
 bool mouse(KeyEvent action) {
   static bool centered = false;
-  mouseDotScreenSize(3840, 2160);
+  Mouse->screenSize(3840, 2160);
   int xRes = 3840;
   int yRes = 2160;
   //    int xRes = 920;
@@ -425,13 +426,13 @@ bool mouse(KeyEvent action) {
       consumed = true;
       xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
-      mouseDotClick(1);
+      Mouse->click(1);
       consumed = true;
     } else if (action.isKeyPressed(Key::k32)) {
-      mouseDotClick(4);
+      Mouse->click(4);
       consumed = true;
     } else if (action.isKeyPressed(Key::k33)) {
-      mouseDotClick(2);
+      Mouse->click(2);
       consumed = true;
     } else if (action.isKeyReleased(Key::k40)) {
       state = start;
@@ -483,13 +484,13 @@ bool relativeMouse(KeyEvent action) {
       if (divide)
         xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
-      mouseDotClick(1);
+      Mouse->click(1);
       consumed = true;
     } else if (action.isKeyPressed(Key::k32)) {
-      mouseDotClick(4);
+      Mouse->click(4);
       consumed = true;
     } else if (action.isKeyPressed(Key::k33)) {
-      mouseDotClick(2);
+      Mouse->click(2);
       consumed = true;
     } else if (action.isKeyReleased(Key::k40)) {
       state = start;
@@ -749,7 +750,7 @@ void setup() {
   serialDotBegin(9600);
   serialDotPrintln("hello from keyboard");
   Keyboard->begin();
-  mouseDotBegin();
+  Mouse->begin();
   keymapLayers.push_back(modifiers);
   keymapLayers.push_back(dvorak);
   for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
@@ -761,3 +762,4 @@ void setup() {
   }
 }
 #undef Keyboard
+#undef Mouse

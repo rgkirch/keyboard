@@ -1,11 +1,21 @@
+#pragma once
 #include "umm.hpp"
 #include <algorithm>
 #include <cstdarg>
 #include <functional>
 #include <map>
 #include <vector>
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#define max(a, b) ((a) > (b) ? (a) : (b))
+#undef min
+#undef max
+// #define min(a, b) ((a) < (b) ? (a) : (b))
+// #define max(a, b) ((a) > (b) ? (a) : (b))
+
+template <typename T> auto max(T a, T b) -> T {
+  return ((a) > (b) ? (a) : (b));
+}
+template <typename T> auto min(T a, T b) -> T {
+  return ((a) < (b) ? (a) : (b));
+}
 
 class Configuration {
 public:
@@ -509,7 +519,7 @@ bool layer(KeyEvent action) {
         keymapLayers.pop_back();
         state = start;
       } else
-        Serial.println(
+        serialDotPrintln(
             "error: 1488939791"); // todo - a more robust layering scheme
       consumed = true;
     }
@@ -520,7 +530,7 @@ bool layer(KeyEvent action) {
         keymapLayers.pop_back();
         state = start;
       } else
-        Serial.println("error: 1488939792");
+        serialDotPrintln("error: 1488939792");
       consumed = true;
     }
     break;
@@ -611,7 +621,7 @@ bool thumbs(KeyEvent action) {
     break;
   case both_thumb:
     if (not k41pressed or not k42pressed)
-      Serial.println("something wrong 1488853974");
+      serialDotPrintln("something wrong 1488853974");
     if (action.isKeyReleased(Key::k41)) {
       k41pressed = false;
       keyboardPress(KEY_DELETE);
@@ -656,7 +666,7 @@ bool thumbs(KeyEvent action) {
     break;
   case one_mod:
     if (not((not k41pressed and k42pressed) or (k41pressed and not k42pressed)))
-      Serial.println("problem 1488855253");
+      serialDotPrintln("problem 1488855253");
     if (action.isKeyPressed(Key::k41) and !k41pressed) {
       k41pressed = true;
       keyboardPress(MODIFIERKEY_CTRL);
@@ -681,7 +691,7 @@ bool thumbs(KeyEvent action) {
     break;
   case one_thumb_prime:
     if (not((not k41pressed and k42pressed) or (k41pressed and not k42pressed)))
-      Serial.println("problem 1488856884");
+      serialDotPrintln("problem 1488856884");
     if (action.isKeyPressed(Key::k41) and not k41pressed) {
       k41pressed = true;
       consumed = true;
@@ -723,7 +733,7 @@ void push(KeyEvent event) {
   if (not consumed) {
     send(event);
   }
-  //    Serial.println(actionStrings[action]);
+  //    serialDotPrintln(actionStrings[action]);
 }
 void setup() {
   configuration =
@@ -748,8 +758,8 @@ void setup() {
             return outputsLength * i + o;
           })
           .build();
-  Serial.begin(9600);
-  Serial.println("hello from keyboard");
+  serialDotBegin(9600);
+  serialDotPrintln("hello from keyboard");
   keyboardDotBegin();
   mouseDotBegin();
   keymapLayers.push_back(modifiers);

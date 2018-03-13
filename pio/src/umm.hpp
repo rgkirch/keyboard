@@ -1,3 +1,4 @@
+#pragma once
 #include "Arduino.h"
 
 void mouseDotBegin(void) { Mouse.begin(); }
@@ -32,3 +33,13 @@ void keyboardDotEnd(void) { Keyboard.end(); }
 void ummPinMode(uint8_t pin, uint8_t mode) { pinMode(pin, mode); }
 
 void ummDigitalWrite(uint8_t pin, uint8_t val) { digitalWrite(pin, val); }
+size_t serialDotPrintln() { Serial.println(); }
+template <typename A> size_t serialDotPrint(A a) { Serial.print(a); }
+template <typename A, typename B> size_t serialDotPrint(A a, B b) {
+  Serial.print(a, b);
+}
+template <typename A> size_t serialDotPrintln(A a) { Serial.println(a); }
+template <typename A, typename B> size_t serialDotPrintln(A a, B b) {
+  Serial.println(a, b);
+}
+void serialDotBegin(long a) { Serial.begin(a); }

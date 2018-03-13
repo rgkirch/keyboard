@@ -1,4 +1,4 @@
-#include "Arduino.h"
+#include "umm.hpp"
 #include <algorithm>
 #include <cstdarg>
 #include <functional>
@@ -243,7 +243,7 @@ bool otherKeysPressed() {
 void keyboardPress(int key) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
-        [=]() -> void { Keyboard.press((uint16_t)key); });
+        [=]() -> void { keyboardDotPress((uint16_t)key); });
   }
   switch (key) {
   case KEY_LEFT_SHIFT:
@@ -253,12 +253,12 @@ void keyboardPress(int key) {
     modifierKeysStates.setRightShift(true);
     break;
   }
-  Keyboard.press((uint16_t)key);
+  keyboardDotPress((uint16_t)key);
 }
 void keyboardRelease(int key) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
-        [=]() -> void { Keyboard.release((uint16_t)key); });
+        [=]() -> void { keyboardDotRelease((uint16_t)key); });
   }
   switch (key) {
   case KEY_LEFT_SHIFT:
@@ -268,14 +268,14 @@ void keyboardRelease(int key) {
     modifierKeysStates.setRightShift(false);
     break;
   }
-  Keyboard.release((uint16_t)key);
+  keyboardDotRelease((uint16_t)key);
 }
-void MouseMoveTo(int x, int y) {
+void mouseMoveTo(int x, int y) {
   if (recordActions.isRecording()) {
     recordActions.recordAction(
-        [=]() -> void { Mouse.moveTo((uint16_t)x, (uint16_t)y); });
+        [=]() -> void { mouseDotMoveTo((uint16_t)x, (uint16_t)y); });
   }
-  Mouse.moveTo((uint16_t)x, (uint16_t)y);
+  mouseDotMoveTo((uint16_t)x, (uint16_t)y);
 }
 void mouseMove(int x, int y) {
   int unit = 100;
@@ -296,9 +296,9 @@ void mouseMove(int x, int y) {
     y = max(0, y - unit);
     if (recordActions.isRecording())
       recordActions.recordAction([=]() -> void {
-        Mouse.move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
+        mouseDotMove((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
       });
-    Mouse.move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
+    mouseDotMove((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
   }
 }
 void send(KeyEvent event) {
@@ -369,7 +369,7 @@ bool leader(KeyEvent action) {
 }
 bool mouse(KeyEvent action) {
   static bool centered = false;
-  Mouse.screenSize(3840, 2160);
+  mouseDotScreenSize(3840, 2160);
   int xRes = 3840;
   int yRes = 2160;
   //    int xRes = 920;
@@ -393,7 +393,7 @@ bool mouse(KeyEvent action) {
   case mouse:
     if (not centered and action.isPress() and
         action.isOneOf({Key::k08, Key::k19, Key::k20, Key::k21})) {
-      MouseMoveTo(xRes / 2, yRes / 2);
+      mouseMoveTo(xRes / 2, yRes / 2);
       centered = true;
     }
     if (action.isKeyPressed(Key::k08)) {
@@ -413,13 +413,13 @@ bool mouse(KeyEvent action) {
       consumed = true;
       xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
-      Mouse.click(1);
+      mouseDotClick(1);
       consumed = true;
     } else if (action.isKeyPressed(Key::k32)) {
-      Mouse.click(4);
+      mouseDotClick(4);
       consumed = true;
     } else if (action.isKeyPressed(Key::k33)) {
-      Mouse.click(2);
+      mouseDotClick(2);
       consumed = true;
     } else if (action.isKeyReleased(Key::k40)) {
       state = start;
@@ -471,13 +471,13 @@ bool relativeMouse(KeyEvent action) {
       if (divide)
         xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
-      Mouse.click(1);
+      mouseDotClick(1);
       consumed = true;
     } else if (action.isKeyPressed(Key::k32)) {
-      Mouse.click(4);
+      mouseDotClick(4);
       consumed = true;
     } else if (action.isKeyPressed(Key::k33)) {
-      Mouse.click(2);
+      mouseDotClick(2);
       consumed = true;
     } else if (action.isKeyReleased(Key::k40)) {
       state = start;

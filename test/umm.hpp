@@ -93,9 +93,19 @@ mock_testable_mouse_class myTestableMouseMock;
 testable_mouse_class *myTestableMouse =
     static_cast<testable_mouse_class *>(&myTestableMouseMock);
 
-void ummPinMode(uint8_t pin, uint8_t mode) {}
+struct testable_core_class {
+  virtual void pinMode(uint8_t pin, uint8_t mode) {}
+  virtual void digitalWrite(uint8_t pin, uint8_t val) {}
+  virtual ~testable_core_class();
+};
+struct mock_testable_core_class {
+  MOCK_METHOD2(pinMode, void(uint8_t pin, uint8_t mode));
+  MOCK_METHOD2(digitalWrite, void(uint8_t pin, uint8_t val));
+};
+mock_testable_core_class myTestableCoreMock;
+testable_core_class *myTestableCore =
+    (testable_core_class *)&myTestableCoreMock;
 
-void ummDigitalWrite(uint8_t pin, uint8_t val) {}
 size_t serialDotPrintln() { return 0; }
 template <typename A> size_t serialDotPrint(A a) { return 0; }
 template <typename A, typename B> size_t serialDotPrint(A a, B b) { return 0; }

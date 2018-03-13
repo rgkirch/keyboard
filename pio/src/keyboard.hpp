@@ -12,6 +12,7 @@
 
 #define Keyboard myTestableKeyboard
 #define Mouse myTestableMouse
+#define Core myTestableCore
 
 template <typename T> auto max(T a, T b) -> T {
   return ((a) > (b) ? (a) : (b));
@@ -754,12 +755,13 @@ void setup() {
   keymapLayers.push_back(modifiers);
   keymapLayers.push_back(dvorak);
   for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
-    ummPinMode(configuration->inputs[i], INPUT_PULLDOWN);
+    Core->pinMode(configuration->inputs[i], INPUT_PULLDOWN);
   }
   for (unsigned int i = 0; i < configuration->outputs.size(); i++) {
-    ummPinMode(configuration->outputs[i], OUTPUT);
-    ummDigitalWrite(configuration->outputs[i], LOW);
+    Core->pinMode(configuration->outputs[i], OUTPUT);
+    Core->digitalWrite(configuration->outputs[i], LOW);
   }
 }
 #undef Keyboard
 #undef Mouse
+#undef Core

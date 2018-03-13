@@ -35,9 +35,15 @@ struct testable_mouse_class {
 };
 testable_mouse_class my_testable_mouse;
 testable_mouse_class *myTestableMouse = &my_testable_mouse;
-void ummPinMode(uint8_t pin, uint8_t mode) { pinMode(pin, mode); }
 
-void ummDigitalWrite(uint8_t pin, uint8_t val) { digitalWrite(pin, val); }
+struct testable_core_class {
+  void pinMode(uint8_t pin, uint8_t mode) { ::pinMode(pin, mode); }
+  void digitalWrite(uint8_t pin, uint8_t val) { ::digitalWrite(pin, val); }
+  virtual ~testable_core_class() = default;
+};
+testable_core_class my_testable_core;
+testable_core_class *myTestableCore = &my_testable_core;
+
 size_t serialDotPrintln() { Serial.println(); }
 template <typename A> size_t serialDotPrint(A a) { Serial.print(a); }
 template <typename A, typename B> size_t serialDotPrint(A a, B b) {

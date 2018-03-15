@@ -23,13 +23,15 @@ using namespace std;
 TEST(hello, one) { cout << "hello there how are you" << endl; }
 
 TEST(setup, one) {
+  // clang-format off
   StrictMock<mock_testable_keyboard_class> myTestableKeyboardMock;
-  myTestableKeyboard =
-      static_cast<testable_keyboard_class *>(&myTestableKeyboardMock);
+  myTestableKeyboard = static_cast<testable_keyboard_class *>(&myTestableKeyboardMock);
   StrictMock<mock_testable_mouse_class> myTestableMouseMock;
   myTestableMouse = static_cast<testable_mouse_class *>(&myTestableMouseMock);
   StrictMock<mock_testable_core_class> myTestableCoreMock;
   myTestableCore = static_cast<testable_core_class *>(&myTestableCoreMock);
+  // clang-format on
+
   EXPECT_CALL(myTestableKeyboardMock, begin()).Times(1);
   EXPECT_CALL(myTestableMouseMock, begin()).Times(1);
   for (uint8_t x : {6, 7, 8, 9}) {
@@ -44,14 +46,3 @@ TEST(setup, one) {
   ASSERT_EQ(2, keyboardController->keymapLayers.size());
 }
 
-TEST(setup, two) {
-  mock_testable_keyboard_class myTestableKeyboardMock;
-  myTestableKeyboard =
-      static_cast<testable_keyboard_class *>(&myTestableKeyboardMock);
-  mock_testable_mouse_class myTestableMouseMock;
-  myTestableMouse = static_cast<testable_mouse_class *>(&myTestableMouseMock);
-  mock_testable_core_class myTestableCoreMock;
-  myTestableCore = static_cast<testable_core_class *>(&myTestableCoreMock);
-  setup();
-  ASSERT_EQ(2, keyboardController->keymapLayers.size());
-}

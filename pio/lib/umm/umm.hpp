@@ -37,6 +37,7 @@ testable_mouse_class my_testable_mouse;
 testable_mouse_class *myTestableMouse = &my_testable_mouse;
 
 struct testable_core_class {
+  uint8_t digitalRead(uint8_t pin) { ::digitalRead(pin); }
   void pinMode(uint8_t pin, uint8_t mode) { ::pinMode(pin, mode); }
   void digitalWrite(uint8_t pin, uint8_t val) { ::digitalWrite(pin, val); }
   virtual ~testable_core_class() = default;

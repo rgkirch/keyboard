@@ -72,6 +72,7 @@ struct testable_mouse_class {
   virtual void press(uint8_t b = MOUSE_LEFT) {}
   virtual void release(uint8_t b = MOUSE_LEFT) {}
   virtual bool isPressed(uint8_t b = MOUSE_ALL) { return true; }
+  virtual ~testable_mouse_class() = default;
 };
 struct mock_testable_mouse_class : public testable_mouse_class {
   MOCK_METHOD0(begin, void(void));
@@ -94,17 +95,19 @@ testable_mouse_class *myTestableMouse =
     static_cast<testable_mouse_class *>(&myTestableMouseMock);
 
 struct testable_core_class {
+  virtual uint8_t digitalRead(uint8_t pin) { return pin; }
   virtual void pinMode(uint8_t pin, uint8_t mode) {}
   virtual void digitalWrite(uint8_t pin, uint8_t val) {}
-  virtual ~testable_core_class();
+  virtual ~testable_core_class() = default;
 };
-struct mock_testable_core_class {
+struct mock_testable_core_class : public testable_core_class {
+  MOCK_METHOD1(digitalRead, uint8_t(uint8_t pin));
   MOCK_METHOD2(pinMode, void(uint8_t pin, uint8_t mode));
   MOCK_METHOD2(digitalWrite, void(uint8_t pin, uint8_t val));
 };
 mock_testable_core_class myTestableCoreMock;
 testable_core_class *myTestableCore =
-    (testable_core_class *)&myTestableCoreMock;
+    static_cast<testable_core_class *>(&myTestableCoreMock);
 
 size_t serialDotPrintln() { return 0; }
 template <typename A> size_t serialDotPrint(A a) { return 0; }

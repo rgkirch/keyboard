@@ -749,7 +749,6 @@ void setup() {
           }).build();
   // clang-format on
   serialDotBegin(9600);
-  serialDotPrintln("hello from keyboard");
   Keyboard->begin();
   Mouse->begin();
   keymapLayers.push_back(modifiers);

@@ -54,9 +54,7 @@ struct mock_testable_keyboard_class : public testable_keyboard_class {
   MOCK_METHOD0(end, void(void));
 };
 
-mock_testable_keyboard_class myTestableKeyboardMock;
-testable_keyboard_class *myTestableKeyboard =
-    static_cast<testable_keyboard_class *>(&myTestableKeyboardMock);
+testable_keyboard_class *myTestableKeyboard;
 
 struct testable_mouse_class {
   virtual void begin(void) {}
@@ -90,9 +88,7 @@ struct mock_testable_mouse_class : public testable_mouse_class {
   MOCK_METHOD1(isPressed, bool(uint8_t));
 };
 
-mock_testable_mouse_class myTestableMouseMock;
-testable_mouse_class *myTestableMouse =
-    static_cast<testable_mouse_class *>(&myTestableMouseMock);
+testable_mouse_class *myTestableMouse;
 
 struct testable_core_class {
   virtual uint8_t digitalRead(uint8_t pin) { return pin; }
@@ -106,8 +102,7 @@ struct mock_testable_core_class : public testable_core_class {
   MOCK_METHOD2(digitalWrite, void(uint8_t pin, uint8_t val));
 };
 mock_testable_core_class myTestableCoreMock;
-testable_core_class *myTestableCore =
-    static_cast<testable_core_class *>(&myTestableCoreMock);
+testable_core_class *myTestableCore;
 
 size_t serialDotPrintln() { return 0; }
 template <typename A> size_t serialDotPrint(A a) { return 0; }

@@ -22,26 +22,28 @@ void alive() {
 }
 void loop() {
   alive();
-  for (unsigned int o = 0; o < configuration->outputs.size(); o++) {
-    digitalWrite(configuration->outputs[o], HIGH);
-    for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
-      int state = digitalRead(configuration->inputs[i]);
-      int key = configuration->outputs.size() * i + o;
+  auto outputs = keyboardController->configuration->outputs;
+  auto inputs = keyboardController->configuration->inputs;
+  for (unsigned int o = 0; o < outputs.size(); o++) {
+    digitalWrite(outputs[o], HIGH);
+    for (unsigned int i = 0; i < inputs.size(); i++) {
+      int state = digitalRead(inputs[i]);
+      int key = outputs.size() * i + o;
       if (state != states[key] &&
           millis() - times[key] > 20) // if there is a change and debounce
       {
         if (state) {
           times[key] = millis();
           states[key] = 1;
-          push(KeyEvent(layout[key], Action::PRESS));
+          push(keyboardController, KeyEvent(layout[key], Action::PRESS));
         } else {
           times[key] = millis();
           states[key] = 0;
-          push(KeyEvent(layout[key], Action::RELEASE));
+          push(keyboardController, KeyEvent(layout[key], Action::RELEASE));
         }
       }
     }
-    digitalWrite(configuration->outputs[o], LOW);
+    digitalWrite(outputs[o], LOW);
   }
   //    delay(1000);
 }

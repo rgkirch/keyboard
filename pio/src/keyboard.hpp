@@ -9,11 +9,6 @@
 #undef max
 // #define min(a, b) ((a) < (b) ? (a) : (b))
 // #define max(a, b) ((a) > (b) ? (a) : (b))
-
-#define Keyboard myTestableKeyboard
-#define Mouse myTestableMouse
-#define Core myTestableCore
-
 template <typename T> auto max(T a, T b) -> T {
   return ((a) > (b) ? (a) : (b));
 }
@@ -64,6 +59,46 @@ private:
 Configuration *configuration;
 
 // clang-format off
+int layerModifiers[] {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -7, -6, -1, -2, -3, -4, -5
+//       0   1   2   3   4   5 | 6   7   8   9  10  11
+};
+int modifiers[] {
+        KEY_TAB, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        KEY_ESC, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_RIGHT_SHIFT,
+        -1, -1, -1, MODIFIERKEY_GUI, -1, -1, -1, -1, -1, -1, -1, -1,
+};
+int qwerty[] {
+        -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
+        -1, KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K,     KEY_L,      KEY_SEMICOLON, KEY_QUOTE,
+        -1, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,     -1,
+        -1, -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,        -1,         -1,             -1
+};
+int dvorak[] {
+        -1, KEY_QUOTE,     KEY_COMMA, KEY_PERIOD, KEY_P, KEY_Y, KEY_F, KEY_G, KEY_C, KEY_R, KEY_L, KEY_SLASH,
+        -1, KEY_A,         KEY_O,     KEY_E,	  KEY_U, KEY_I, KEY_D, KEY_H, KEY_T, KEY_N, KEY_S, KEY_MINUS,
+        -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+};
+int numbers[] { // todo - let it fall through to hit the equal key instead of catching that at a higher level
+        KEY_F11, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F12,
+        KEY_TILDE, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_BACKSLASH,
+        -1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, KEY_HOME, KEY_EQUAL,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+};
+int utils[] {
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, KEY_MEDIA_PREV_TRACK, KEY_MEDIA_NEXT_TRACK, KEY_MEDIA_VOLUME_DEC, KEY_MEDIA_VOLUME_INC, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+//       0   1   2   3   4   5 | 6   7   8   9  10  11
+};
+// clang-format on
+// clang-format off
 enum class Key {
     k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k10, k11,
     k12, k13, k14, k15, k16, k17, k18, k19, k20, k21, k22, k23,
@@ -97,12 +132,6 @@ private:
   Key key;
   Action action;
 };
-
-bool shiftEquals(KeyEvent action);
-bool thumbs(KeyEvent action);
-bool layer(KeyEvent action);
-bool mouse(KeyEvent action);
-bool leader(KeyEvent action);
 
 struct RecordActions {
 public:
@@ -145,31 +174,62 @@ private:
   int currentMacroKey;
   bool recording = false;
 };
-struct RecordActions recordActions;
-int numKeys = 48;
-std::vector<int *> keymapLayers;
-bool (*listeners[])(KeyEvent action) = {shiftEquals, thumbs, layer, mouse,
-                                        leader};
-extern "C" {
-int _getpid() { return -1; }
-int _kill(int pid, int sig) { return -1; }
-int _write() { return -1; }
-}
+
+// struct ModifierKeysStates {
+//   bool getLeftShiftPressed();
+//   bool getRightShiftPressed();
+//   bool getAnyShiftPressed();
+//   friend void KeyboardController::keyboardPress(int key);
+//   friend void KeyboardController::keyboardRelease(int key);
+
+// private:
+//   void setLeftShift(bool b);
+//   void setRightShift(bool b);
+//   bool leftShiftPressed;
+//   bool rightShiftPressed;
+// };
+
+// struct KeyboardController {
+//   KeyboardController(testable_keyboard_class *myTestableKeyboard,
+//                      testable_mouse_class *myTestableMouse,
+//                      testable_core_class *myTestableCore,
+//                      Configuration *configuration);
+//   testable_keyboard_class *Keyboard;
+//   testable_mouse_class *Mouse;
+//   testable_core_class *Core;
+//   Configuration *configuration;
+//   RecordActions recordActions;
+//   ModifierKeysStates modifierKeysStates;
+// int numKeys;
+// std::vector<int *> keymapLayers;
+// bool (*listeners[])(KeyEvent action);
+//   void keyboardPress(int key);
+//   void keyboardRelease(int key);
+//   void mouseMoveTo(int x, int y);
+//   void mouseMove(int x, int y);
+//   void send(KeyEvent event);
+//   void push(KeyEvent event);
+//   bool leader(KeyEvent action);
+//   bool mouse(KeyEvent action);
+//   bool relativeMouse(KeyEvent action);
+//   bool layer(KeyEvent action);
+//   bool shiftEquals(KeyEvent action);
+//   bool thumbs(KeyEvent action);
+// };
+
 struct ModifierKeysStates {
-public:
   bool getLeftShiftPressed() { return leftShiftPressed; };
   bool getRightShiftPressed() { return rightShiftPressed; };
   bool getAnyShiftPressed() { return rightShiftPressed or leftShiftPressed; };
-  friend void keyboardPress(int key);
-  friend void keyboardRelease(int key);
+  // friend void KeyboardController::keyboardPress(int key);
+  // friend void KeyboardController::keyboardRelease(int key);
 
-private:
+  // private:
   void setLeftShift(bool b) { leftShiftPressed = b; };
   void setRightShift(bool b) { rightShiftPressed = b; };
   bool leftShiftPressed = false;
   bool rightShiftPressed = false;
 };
-struct ModifierKeysStates modifierKeysStates;
 const char *actionStrings[]{
     "k00p", "k01p", "k02p", "k03p", "k04p", "k05p", "k06p", "k07p", "k08p",
     "k09p", "k10p", "k11p", "k12p", "k13p", "k14p", "k15p", "k16p", "k17p",
@@ -186,60 +246,57 @@ const char *actionStrings[]{
 char states[48] = {0};
 long times[48] = {0};
 
-// clang-format off
-int layerModifiers[] {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -7, -6, -1, -2, -3, -4, -5
-//       0   1   2   3   4   5 | 6   7   8   9  10  11
+struct KeyboardController {
+  KeyboardController(testable_keyboard_class *myTestableKeyboard,
+                     testable_mouse_class *myTestableMouse,
+                     testable_core_class *myTestableCore,
+                     Configuration *configuration)
+      : Keyboard(myTestableKeyboard), Mouse(myTestableMouse),
+        Core(myTestableCore), configuration(configuration) {
+    Keyboard->begin();
+    Mouse->begin();
+    keymapLayers.push_back(modifiers);
+    keymapLayers.push_back(dvorak);
+    for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
+      Core->pinMode(configuration->inputs[i], INPUT_PULLDOWN);
+    }
+    for (unsigned int i = 0; i < configuration->outputs.size(); i++) {
+      Core->pinMode(configuration->outputs[i], OUTPUT);
+      Core->digitalWrite(configuration->outputs[i], LOW);
+    }
+  }
+  testable_keyboard_class *Keyboard;
+  testable_mouse_class *Mouse;
+  testable_core_class *Core;
+  Configuration *configuration;
+  RecordActions recordActions;
+  ModifierKeysStates modifierKeysStates;
+  int numKeys = 48;
+  std::vector<int *> keymapLayers;
 };
-int modifiers[] {
-        KEY_TAB, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        KEY_ESC, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        KEY_LEFT_SHIFT, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, KEY_RIGHT_SHIFT,
-        -1, -1, -1, MODIFIERKEY_GUI, -1, -1, -1, -1, -1, -1, -1, -1,
-};
-int qwerty[] {
-        -1, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I,     KEY_O,      KEY_P,         KEY_LEFT_BRACE
-        -1, KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K,     KEY_L,      KEY_SEMICOLON, KEY_QUOTE,
-        -1, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,     -1,
-        -1, -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,        -1,         -1,             -1
-};
-int dvorak[] {
-        -1, KEY_QUOTE,     KEY_COMMA, KEY_PERIOD, KEY_P, KEY_Y, KEY_F, KEY_G, KEY_C, KEY_R, KEY_L, KEY_SLASH,
-        -1, KEY_A,         KEY_O,     KEY_E,	  KEY_U, KEY_I, KEY_D, KEY_H, KEY_T, KEY_N, KEY_S, KEY_MINUS,
-        -1, KEY_SEMICOLON, KEY_Q,	  KEY_J,      KEY_K, KEY_X, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-};
-int numbers[] { // todo - let it fall through to hit the equal key instead of catching that at a higher level
-        KEY_F11, KEY_F1, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F12,
-        KEY_TILDE, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_BACKSLASH,
-        -1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_PAGE_DOWN, KEY_PAGE_UP, KEY_END, KEY_HOME, KEY_EQUAL,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-};
-int utils[] {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, KEY_MEDIA_PREV_TRACK, KEY_MEDIA_NEXT_TRACK, KEY_MEDIA_VOLUME_DEC, KEY_MEDIA_VOLUME_INC, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-//       0   1   2   3   4   5 | 6   7   8   9  10  11
-};
-// clang-format on
 
-int get(int layer, KeyEvent event) { // todo - move keymaplayers to a class with
-                                     // private mutators
+bool shiftEquals(KeyboardController *kb, KeyEvent action);
+bool thumbs(KeyboardController *kb, KeyEvent action);
+bool layer(KeyboardController *kb, KeyEvent action);
+bool mouse(KeyboardController *kb, KeyEvent action);
+bool leader(KeyboardController *kb, KeyEvent action);
+
+int get(KeyboardController *kb, int layer,
+        KeyEvent event) { // todo - move keymaplayers to a class with
+                          // private mutators
   if (layer < 0)
     return -1;
   //    if(keymapLayers[layer] == nullptr) return get(layer - 1,
   //    event.getKey());
-  if (keymapLayers[layer][static_cast<int>(event.getKey())] != -1) {
-    return keymapLayers[layer][static_cast<int>(event.getKey())];
+  if (kb->keymapLayers[layer][static_cast<int>(event.getKey())] != -1) {
+    return kb->keymapLayers[layer][static_cast<int>(event.getKey())];
   } else {
-    return get(layer - 1, event);
+    return get(kb, layer - 1, event);
   }
 }
-int get(KeyEvent event) { return get(keymapLayers.size() - 1, event); }
+int get(KeyboardController *kb, KeyEvent event) {
+  return get(kb, kb->keymapLayers.size() - 1, event);
+}
 
 bool isLetter(int key) {
   return (key & ~0xF000) >= 4 and (key & ~0xF000) <= 29;
@@ -247,51 +304,54 @@ bool isLetter(int key) {
 bool isNumber(int key) {
   return (key & ~0xF000) >= 30 and (key & ~0xF000) <= 39;
 }
-bool otherKeysPressed() {
-  for (int i = 0; i < numKeys; ++i) {
+bool otherKeysPressed(KeyboardController *kb) {
+  for (int i = 0; i < kb->numKeys; ++i) {
     if (i != 41 and i != 42 and states[i] == 1)
       return true;
   }
   return false;
 }
-void keyboardPress(int key) {
-  if (recordActions.isRecording()) {
-    recordActions.recordAction(
-        [=]() -> void { Keyboard->press((uint16_t)key); });
+
+bool (*listeners[])(KeyboardController *kb, KeyEvent action) = {
+    shiftEquals, thumbs, layer, mouse, leader};
+void keyboardPress(KeyboardController *kb, int key) {
+  if (kb->recordActions.isRecording()) {
+    kb->recordActions.recordAction(
+        [=]() -> void { kb->Keyboard->press((uint16_t)key); });
   }
   switch (key) {
   case KEY_LEFT_SHIFT:
-    modifierKeysStates.setLeftShift(true);
+    kb->modifierKeysStates.setLeftShift(true);
     break;
   case KEY_RIGHT_SHIFT:
-    modifierKeysStates.setRightShift(true);
+    kb->modifierKeysStates.setRightShift(true);
     break;
   }
-  Keyboard->press((uint16_t)key);
+  kb->Keyboard->press((uint16_t)key);
 }
-void keyboardRelease(int key) {
-  if (recordActions.isRecording()) {
-    recordActions.recordAction(
-        [=]() -> void { Keyboard->release((uint16_t)key); });
+void keyboardRelease(KeyboardController *kb, int key) {
+  if (kb->recordActions.isRecording()) {
+    kb->recordActions.recordAction(
+        [=]() -> void { kb->Keyboard->release((uint16_t)key); });
   }
   switch (key) {
   case KEY_LEFT_SHIFT:
-    modifierKeysStates.setLeftShift(false);
+    kb->modifierKeysStates.setLeftShift(false);
     break;
   case KEY_RIGHT_SHIFT:
-    modifierKeysStates.setRightShift(false);
+    kb->modifierKeysStates.setRightShift(false);
     break;
   }
-  Keyboard->release((uint16_t)key);
+  kb->Keyboard->release((uint16_t)key);
 }
-void mouseMoveTo(int x, int y) {
-  if (recordActions.isRecording()) {
-    recordActions.recordAction(
-        [=]() -> void { Mouse->moveTo((uint16_t)x, (uint16_t)y); });
+void mouseMoveTo(KeyboardController *kb, int x, int y) {
+  if (kb->recordActions.isRecording()) {
+    kb->recordActions.recordAction(
+        [=]() -> void { kb->Mouse->moveTo((uint16_t)x, (uint16_t)y); });
   }
-  Mouse->moveTo((uint16_t)x, (uint16_t)y);
+  kb->Mouse->moveTo((uint16_t)x, (uint16_t)y);
 }
-void mouseMove(int x, int y) {
+void mouseMove(KeyboardController *kb, int x, int y) {
   int unit = 100;
   int xs = 1;
   int ys = 1;
@@ -308,24 +368,25 @@ void mouseMove(int x, int y) {
     x = max(0, x - unit);
     int ymove = min(unit, y);
     y = max(0, y - unit);
-    if (recordActions.isRecording())
-      recordActions.recordAction([=]() -> void {
-        Mouse->move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
+    if (kb->recordActions.isRecording())
+      kb->recordActions.recordAction([=]() -> void {
+        kb->Mouse->move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
       });
-    Mouse->move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
+    kb->Mouse->move((uint8_t)(xmove * xs), (uint8_t)(ymove * ys));
   }
 }
-void send(KeyEvent event) {
-  int key = get(event); // add the pressed key somewhere so that we aren't
-                        // relying on finding the same on the next time that we
-                        // look it up in the array
+void send(KeyboardController *kb, KeyEvent event) {
+  int key =
+      get(kb, event); // add the pressed key somewhere so that we aren't
+                      // relying on finding the same on the next time that we
+                      // look it up in the array
   if (event.isPress()) {
-    keyboardPress(key);
+    keyboardPress(kb, key);
   } else if (event.isRelease()) {
-    keyboardRelease(key);
+    kb->Keyboard->release(key);
   }
 }
-bool leader(KeyEvent action) {
+bool leader(KeyboardController *kb, KeyEvent action) {
   enum { start, leading, recordToWhere, replayWhat };
   static int state = start;
   bool consumed = false;
@@ -338,13 +399,13 @@ bool leader(KeyEvent action) {
     break;
   case leading:
     if (action.isPress()) {
-      int key = get(action);
-      if (key == KEY_2 and modifierKeysStates.getAnyShiftPressed()) {
+      int key = get(kb, action);
+      if (key == KEY_2 and kb->modifierKeysStates.getAnyShiftPressed()) {
         state = replayWhat;
         consumed = true;
       } else if (key == KEY_Q) {
-        if (recordActions.isRecording()) {
-          recordActions.stopRecording();
+        if (kb->recordActions.isRecording()) {
+          kb->recordActions.stopRecording();
           state = start;
           consumed = true;
         } else {
@@ -358,19 +419,19 @@ bool leader(KeyEvent action) {
     break;
   case replayWhat:
     if (action.isPress()) {
-      int key = get(action);
+      int key = get(kb, action);
       if (isLetter(key) /*and is lowercase*/) {
-        recordActions.replayActions(key);
+        kb->recordActions.replayActions(key);
         consumed = true;
       } // todo - else it's capital replay raw
       state = start;
     }
     break;
   case recordToWhere:
-    int resolvedAction = get(action);
+    int resolvedAction = get(kb, action);
     if (action.isPress()) {
       if (isLetter(resolvedAction)) {
-        recordActions.startRecording(resolvedAction);
+        kb->recordActions.startRecording(resolvedAction);
         state = start;
         consumed = true;
       } else {
@@ -381,9 +442,9 @@ bool leader(KeyEvent action) {
   }
   return consumed;
 }
-bool mouse(KeyEvent action) {
+bool mouse(KeyboardController *kb, KeyEvent action) {
   static bool centered = false;
-  Mouse->screenSize(3840, 2160);
+  kb->Mouse->screenSize(3840, 2160);
   int xRes = 3840;
   int yRes = 2160;
   //    int xRes = 920;
@@ -407,33 +468,33 @@ bool mouse(KeyEvent action) {
   case mouse:
     if (not centered and action.isPress() and
         action.isOneOf({Key::k08, Key::k19, Key::k20, Key::k21})) {
-      mouseMoveTo(xRes / 2, yRes / 2);
+      mouseMoveTo(kb, xRes / 2, yRes / 2);
       centered = true;
     }
     if (action.isKeyPressed(Key::k08)) {
-      mouseMove(0, -yunit);
+      mouseMove(kb, 0, -yunit);
       consumed = true;
       yunit /= 2;
     } else if (action.isKeyPressed(Key::k19)) {
-      mouseMove(-xunit, 0);
+      mouseMove(kb, -xunit, 0);
       consumed = true;
       xunit /= 2;
     } else if (action.isKeyPressed(Key::k20)) {
-      mouseMove(0, yunit);
+      mouseMove(kb, 0, yunit);
       consumed = true;
       yunit /= 2;
     } else if (action.isKeyPressed(Key::k21)) {
-      mouseMove(xunit, 0);
+      mouseMove(kb, xunit, 0);
       consumed = true;
       xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
-      Mouse->click(1);
+      kb->Mouse->click(1);
       consumed = true;
     } else if (action.isKeyPressed(Key::k32)) {
-      Mouse->click(4);
+      kb->Mouse->click(4);
       consumed = true;
     } else if (action.isKeyPressed(Key::k33)) {
-      Mouse->click(2);
+      kb->Mouse->click(2);
       consumed = true;
     } else if (action.isKeyReleased(Key::k40)) {
       state = start;
@@ -443,7 +504,7 @@ bool mouse(KeyEvent action) {
   }
   return consumed;
 }
-bool relativeMouse(KeyEvent action) {
+bool relativeMouse(KeyboardController *kb, KeyEvent action) {
   static int xunit = 0;
   static int yunit = 0;
   static bool divide = false;
@@ -465,33 +526,33 @@ bool relativeMouse(KeyEvent action) {
       divide = not divide;
       consumed = true;
     } else if (action.isKeyPressed(Key::k08)) {
-      mouseMove(0, -yunit);
+      mouseMove(kb, 0, -yunit);
       consumed = true;
       if (divide)
         yunit /= 2;
     } else if (action.isKeyPressed(Key::k19)) {
-      mouseMove(-xunit, 0);
+      mouseMove(kb, -xunit, 0);
       consumed = true;
       if (divide)
         xunit /= 2;
     } else if (action.isKeyPressed(Key::k20)) {
-      mouseMove(0, yunit);
+      mouseMove(kb, 0, yunit);
       consumed = true;
       if (divide)
         yunit /= 2;
     } else if (action.isKeyPressed(Key::k21)) {
-      mouseMove(xunit, 0);
+      mouseMove(kb, xunit, 0);
       consumed = true;
       if (divide)
         xunit /= 2;
     } else if (action.isKeyPressed(Key::k31)) {
-      Mouse->click(1);
+      kb->Mouse->click(1);
       consumed = true;
     } else if (action.isKeyPressed(Key::k32)) {
-      Mouse->click(4);
+      kb->Mouse->click(4);
       consumed = true;
     } else if (action.isKeyPressed(Key::k33)) {
-      Mouse->click(2);
+      kb->Mouse->click(2);
       consumed = true;
     } else if (action.isKeyReleased(Key::k40)) {
       state = start;
@@ -500,27 +561,27 @@ bool relativeMouse(KeyEvent action) {
   }
   return consumed;
 }
-bool layer(KeyEvent action) {
+bool layer(KeyboardController *kb, KeyEvent action) {
   bool consumed = false;
   enum { start, numberLayer, utilLayer };
   static int state = start;
   switch (state) {
   case start:
     if (action.isKeyPressed(Key::k43)) {
-      keymapLayers.push_back(numbers);
+      kb->keymapLayers.push_back(numbers);
       // todo - release all keys of the layer getting replaced
       state = numberLayer;
       consumed = true;
     } else if (action.isKeyPressed(Key::k40)) {
-      keymapLayers.push_back(utils);
+      kb->keymapLayers.push_back(utils);
       state = utilLayer;
       consumed = true;
     }
     break;
   case numberLayer:
     if (action.isKeyReleased(Key::k43)) {
-      if (keymapLayers.back() == numbers) {
-        keymapLayers.pop_back();
+      if (kb->keymapLayers.back() == numbers) {
+        kb->keymapLayers.pop_back();
         state = start;
       } else
         serialDotPrintln(
@@ -530,8 +591,8 @@ bool layer(KeyEvent action) {
     break;
   case utilLayer:
     if (action.isKeyReleased(Key::k40)) {
-      if (keymapLayers.back() == utils) {
-        keymapLayers.pop_back();
+      if (kb->keymapLayers.back() == utils) {
+        kb->keymapLayers.pop_back();
         state = start;
       } else
         serialDotPrintln("error: 1488939792");
@@ -541,7 +602,7 @@ bool layer(KeyEvent action) {
   }
   return consumed;
 }
-bool shiftEquals(KeyEvent action) {
+bool shiftEquals(KeyboardController *kb, KeyEvent action) {
   bool consumed = false;
   enum { start, pressed, shift };
   static int state = start;
@@ -554,18 +615,18 @@ bool shiftEquals(KeyEvent action) {
     break;
   case pressed:
     if (action.isKeyReleased(Key::k35)) {
-      keyboardPress(KEY_EQUAL);
-      keyboardRelease(KEY_EQUAL);
+      keyboardPress(kb, KEY_EQUAL);
+      keyboardRelease(kb, KEY_EQUAL);
       consumed = true;
       state = start;
     } else if (action.isPress()) {
-      keyboardPress(KEY_RIGHT_SHIFT);
+      keyboardPress(kb, KEY_RIGHT_SHIFT);
       state = shift;
     }
     break;
   case shift:
     if (action.isKeyReleased(Key::k35)) {
-      keyboardRelease(KEY_RIGHT_SHIFT);
+      keyboardRelease(kb, KEY_RIGHT_SHIFT);
       consumed = true;
       state = start;
     }
@@ -573,7 +634,7 @@ bool shiftEquals(KeyEvent action) {
   }
   return consumed;
 }
-bool thumbs(KeyEvent action) {
+bool thumbs(KeyboardController *kb, KeyEvent action) {
   bool consumed = false;
   bool okp;
   static bool k41pressed = false;
@@ -597,14 +658,14 @@ bool thumbs(KeyEvent action) {
   case one_thumb:
     if (action.isKeyReleased(Key::k41) and k41pressed) {
       k41pressed = false;
-      keyboardPress(KEY_BACKSPACE);
-      keyboardRelease(KEY_BACKSPACE);
+      keyboardPress(kb, KEY_BACKSPACE);
+      keyboardRelease(kb, KEY_BACKSPACE);
       consumed = true;
       state = start;
     } else if (action.isKeyReleased(Key::k42) and k42pressed) {
       k42pressed = false;
-      keyboardPress(KEY_SPACE);
-      keyboardRelease(KEY_SPACE);
+      keyboardPress(kb, KEY_SPACE);
+      keyboardRelease(kb, KEY_SPACE);
       consumed = true;
       state = start;
     } else if (action.isKeyPressed(Key::k41) and k42pressed) {
@@ -616,10 +677,10 @@ bool thumbs(KeyEvent action) {
       consumed = true;
       state = both_thumb;
     } else if (action.isPress() and k41pressed) {
-      keyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(kb, MODIFIERKEY_CTRL);
       state = one_mod;
     } else if (action.isPress() and k42pressed) {
-      keyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(kb, MODIFIERKEY_ALT);
       state = one_mod;
     }
     break;
@@ -628,42 +689,42 @@ bool thumbs(KeyEvent action) {
       serialDotPrintln("something wrong 1488853974");
     if (action.isKeyReleased(Key::k41)) {
       k41pressed = false;
-      keyboardPress(KEY_DELETE);
-      keyboardRelease(KEY_DELETE);
+      keyboardPress(kb, KEY_DELETE);
+      keyboardRelease(kb, KEY_DELETE);
       consumed = true;
       state = one_thumb_prime;
     } else if (action.isKeyReleased(Key::k42)) {
       k42pressed = false;
-      keyboardPress(KEY_ENTER);
-      keyboardRelease(KEY_ENTER);
+      keyboardPress(kb, KEY_ENTER);
+      keyboardRelease(kb, KEY_ENTER);
       consumed = true;
       state = one_thumb_prime;
     } else {
-      keyboardPress(MODIFIERKEY_CTRL);
-      keyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(kb, MODIFIERKEY_CTRL);
+      keyboardPress(kb, MODIFIERKEY_ALT);
       state = both_mod;
     }
     break;
   case both_mod:
-    okp = otherKeysPressed();
+    okp = otherKeysPressed(kb);
     if (not okp and action.isKeyReleased(Key::k41)) {
       k41pressed = false;
-      keyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(kb, MODIFIERKEY_CTRL);
       consumed = true;
       state = one_thumb_prime;
     } else if (not okp and action.isKeyReleased(Key::k42)) {
       k42pressed = false;
-      keyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(kb, MODIFIERKEY_ALT);
       consumed = true;
       state = one_thumb_prime;
     } else if (okp and action.isKeyReleased(Key::k41)) {
       k41pressed = false;
-      keyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(kb, MODIFIERKEY_CTRL);
       consumed = true;
       state = one_mod;
     } else if (okp and action.isKeyReleased(Key::k42)) {
       k42pressed = false;
-      keyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(kb, MODIFIERKEY_ALT);
       consumed = true;
       state = one_mod;
     }
@@ -673,22 +734,22 @@ bool thumbs(KeyEvent action) {
       serialDotPrintln("problem 1488855253");
     if (action.isKeyPressed(Key::k41) and !k41pressed) {
       k41pressed = true;
-      keyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(kb, MODIFIERKEY_CTRL);
       consumed = true;
       state = both_mod;
     } else if (action.isKeyPressed(Key::k42) and !k42pressed) {
       k42pressed = true;
-      keyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(kb, MODIFIERKEY_ALT);
       consumed = true;
       state = both_mod;
     } else if (action.isKeyReleased(Key::k41) and k41pressed) {
       k41pressed = false;
-      keyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(kb, MODIFIERKEY_CTRL);
       consumed = true;
       state = start;
     } else if (action.isKeyReleased(Key::k42) and k42pressed) {
       k42pressed = false;
-      keyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(kb, MODIFIERKEY_ALT);
       consumed = true;
       state = start;
     }
@@ -706,38 +767,45 @@ bool thumbs(KeyEvent action) {
       state = both_thumb;
     } else if (action.isKeyReleased(Key::k41) and k41pressed) {
       k41pressed = false;
-      keyboardRelease(MODIFIERKEY_CTRL);
+      keyboardRelease(kb, MODIFIERKEY_CTRL);
       consumed = true;
       state = start;
     } else if (action.isKeyReleased(Key::k42) and k42pressed) {
       k42pressed = false;
-      keyboardRelease(MODIFIERKEY_ALT);
+      keyboardRelease(kb, MODIFIERKEY_ALT);
       consumed = true;
       state = start;
     } else if (k41pressed) {
-      keyboardPress(MODIFIERKEY_CTRL);
+      keyboardPress(kb, MODIFIERKEY_CTRL);
       state = one_mod;
     } else if (k42pressed) {
-      keyboardPress(MODIFIERKEY_ALT);
+      keyboardPress(kb, MODIFIERKEY_ALT);
       state = one_mod;
     }
     break;
   }
   return consumed;
 }
-void push(KeyEvent event) {
-  if (recordActions.isRecording())
-    recordActions.recordRawKey(event);
+void push(KeyboardController *kb, KeyEvent event) {
+  if (kb->recordActions.isRecording())
+    kb->recordActions.recordRawKey(event);
   bool consumed = false;
   for (auto &&f : listeners) {
-    if (f(event)) {
+    if (f(kb, event)) {
       consumed = true;
     }
   }
   if (not consumed) {
-    send(event);
+    send(kb, event);
   }
   //    serialDotPrintln(actionStrings[action]);
+}
+KeyboardController *keyboardController;
+
+extern "C" {
+int _getpid() { return -1; }
+int _kill(int pid, int sig) { return -1; }
+int _write() { return -1; }
 }
 void setup() {
   // clang-format off
@@ -749,18 +817,6 @@ void setup() {
           }).build();
   // clang-format on
   serialDotBegin(9600);
-  Keyboard->begin();
-  Mouse->begin();
-  keymapLayers.push_back(modifiers);
-  keymapLayers.push_back(dvorak);
-  for (unsigned int i = 0; i < configuration->inputs.size(); i++) {
-    Core->pinMode(configuration->inputs[i], INPUT_PULLDOWN);
-  }
-  for (unsigned int i = 0; i < configuration->outputs.size(); i++) {
-    Core->pinMode(configuration->outputs[i], OUTPUT);
-    Core->digitalWrite(configuration->outputs[i], LOW);
-  }
+  keyboardController = new KeyboardController(
+      myTestableKeyboard, myTestableMouse, myTestableCore, configuration);
 }
-#undef Keyboard
-#undef Mouse
-#undef Core

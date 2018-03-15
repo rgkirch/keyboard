@@ -45,4 +45,3 @@ TEST(setup, one) {
   setup();
   ASSERT_EQ(2, keyboardController->keymapLayers.size());
 }
-
